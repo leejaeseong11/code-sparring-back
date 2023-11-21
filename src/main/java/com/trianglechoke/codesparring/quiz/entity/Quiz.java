@@ -73,5 +73,5 @@ public class Quiz {
     private String quizOutput;
 
     @OneToMany(mappedBy = "board")
-    List<Report> posts = new ArrayList<>();
+    List<Report> posts;
 }
