@@ -1,13 +1,14 @@
 name: google-java-format
-
-on: [ push, pull_request ]
-
+on: [ pull_request ]
 jobs:
-
   formatting:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
       - uses: axel-op/googlejavaformat-action@v3
         with:
-          args: "--set-exit-if-changed --aosp"
+          args: "--replace --aosp"
+          commit-message: "format: Google Java Format"
