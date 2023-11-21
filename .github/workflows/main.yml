@@ -1,17 +1,13 @@
 name: google-java-format
 
-on: [ pull_request ]
+on: [ push, pull_request ]
+
 jobs:
+
   formatting:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
       - uses: axel-op/googlejavaformat-action@v3
         with:
-          args: "--replace --aosp"
-          skip-commit: true
-      - name: Print diffs
-        run: git --no-pager diff --exit-code
+          args: "--set-exit-if-changed"
