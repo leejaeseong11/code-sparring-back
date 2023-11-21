@@ -36,7 +36,7 @@ import lombok.ToString;
         allocationSize = 1) // 증가하는 숫자
 public class Quiz {
     @Id
-    @Column(name = "quiz_no", nullable = false)
+    @Column(name = "quiz_no", nullable = false, columnDefinition = "NUMBER")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quiz_seq_generator")
     private Long quizNo;
 
@@ -45,33 +45,33 @@ public class Quiz {
     @JoinColumn(name = "member_no")
     private Member member;
 
-    @Column(name = "quiz_title", nullable = false, length = 60)
+    @Column(name = "quiz_title", nullable = false, columnDefinition = "VARCHAR2(60)")
     private String quizTitle;
 
-    @Column(name = "quiz_content", nullable = false, length = 30000)
+    @Column(name = "quiz_content", nullable = false, columnDefinition = "VARCHAR2(30000)")
     private String quizContent;
 
-    @Column(name = "quiz_tier", length = 8)
+    @Column(name = "quiz_tier", columnDefinition = "VARCHAR2(8)")
     private String quizTier;
 
-    @Column(name = "quiz_status", nullable = false, length = 1)
+    @Column(name = "quiz_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
     private Integer quizStatus;
 
-    @Column(name = "testcase_cnt", nullable = false)
+    @Column(name = "testcase_cnt", nullable = false, columnDefinition = "NUMBER")
     private Integer testcaseCnt;
 
-    @Column(name = "quiz_submit_cnt", nullable = false)
+    @Column(name = "quiz_submit_cnt", nullable = false, columnDefinition = "NUMBER default 0")
     private Integer quizSubmitCnt;
 
-    @Column(name = "quiz_success_cnt", nullable = false)
+    @Column(name = "quiz_success_cnt", nullable = false, columnDefinition = "NUMBER default 0")
     private Integer quizSuccessCnt;
 
-    @Column(name = "quiz_input", length = 500)
+    @Column(name = "quiz_input", columnDefinition = "VARCHAR2(500)")
     private String quizInput;
 
-    @Column(name = "quiz_output", length = 500)
+    @Column(name = "quiz_output",  columnDefinition = "VARCHAR2(500)")
     private String quizOutput;
 
     @OneToMany(mappedBy = "quiz")
-    List<Report> posts;
+    List<Report> reports;
 }
