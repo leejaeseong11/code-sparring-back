@@ -58,7 +58,7 @@ public class Report {
   private String reportComment;
   
   @Column(name = "report_type", length = 1)
-  private Long reportType;
+  private Integer reportType;
 
 
 }

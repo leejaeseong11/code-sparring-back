@@ -55,22 +55,22 @@ public class Quiz {
   private String quizTier;
 
   @Column(name="quiz_status", nullable = false, length = 1)
-  private Long quizStatus;
+  private Integer quizStatus;
 
   @Column(name="testcase_cnt", nullable = false)
-  private Long testcastCnt;
+  private Integer testcastCnt;
 
   @Column(name="quiz_submit_cnt", nullable = false)
-  private Long quizSubmitCnt;
+  private Integer quizSubmitCnt;
 
   @Column(name="quiz_success_cnt", nullable = false)
-  private Long quizSuccessCnt;
+  private Integer quizSuccessCnt;
 
   @Column(name="quiz_input", length = 500)
-  private Long quizInput;
+  private String quizInput;
 
   @Column(name="quiz_output", length = 500)
-  private Long quizOutput;
+  private String quizOutput;
 
 
   @OneToMany(mappedBy = "board")

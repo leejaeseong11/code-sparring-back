@@ -35,6 +35,6 @@ public class MemberCode {
   private Quiz quiz;
   
   @Column(name = "quiz_correct", nullable = false, length = 1)
-  private Long quizCorrect;
+  private Integer quizCorrect;
 
 }
