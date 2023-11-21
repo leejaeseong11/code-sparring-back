@@ -19,14 +19,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-<<<<<<< HEAD
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Date;
 
-=======
->>>>>>> dev
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,7 +38,6 @@ import java.util.Date;
         initialValue = 1,
         allocationSize = 1)
 public class Report {
-
     @Id
     @Column(name = "report_no", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "report_seq_generator")
