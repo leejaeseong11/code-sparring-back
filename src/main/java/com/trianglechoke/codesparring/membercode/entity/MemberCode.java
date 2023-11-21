@@ -15,26 +15,28 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Getter @NoArgsConstructor @AllArgsConstructor @ToString
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Builder
 @Entity
-@Table(name="MemberCode")
+@Table(name = "MemberCode")
 @DynamicInsert
 public class MemberCode {
-  
-  // 회원번호 FK(Member)
-  @Id
-  @ManyToOne
-  @JoinColumn(name = "member_no", nullable = false)
-  private Member member;
-  
-  // 문제번호 FK(Quiz)
-  @Id
-  @ManyToOne
-  @JoinColumn(name = "quiz_no", nullable = false)
-  private Quiz quiz;
-  
-  @Column(name = "quiz_correct", nullable = false, length = 1)
-  private Integer quizCorrect;
 
+    // 회원번호 FK(Member)
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "member_no", nullable = false)
+    private Member member;
+
+    // 문제번호 FK(Quiz)
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "quiz_no", nullable = false)
+    private Quiz quiz;
+
+    @Column(name = "quiz_correct", nullable = false, length = 1)
+    private Integer quizCorrect;
 }
