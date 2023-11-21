@@ -1,13 +1,15 @@
 package com.trianglechoke.codesparring.room.entity;
 
 import com.trianglechoke.codesparring.member.entity.Member;
+
+import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicInsert;
 
-import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicInsert;
 
 @Getter
 @NoArgsConstructor

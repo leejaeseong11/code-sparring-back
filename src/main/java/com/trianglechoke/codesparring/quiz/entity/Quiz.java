@@ -1,10 +1,8 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.hibernate.annotations.DynamicInsert;
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.report.entity.Report;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,11 +13,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import org.hibernate.annotations.DynamicInsert;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
