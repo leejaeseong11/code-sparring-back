@@ -19,11 +19,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+<<<<<<< HEAD
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Date;
 
+=======
+>>>>>>> dev
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

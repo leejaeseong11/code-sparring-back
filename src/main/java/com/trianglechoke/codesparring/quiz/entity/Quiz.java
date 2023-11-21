@@ -22,7 +22,6 @@ import lombok.ToString;
 
 import org.hibernate.annotations.DynamicInsert;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -40,8 +39,8 @@ import java.util.List;
         allocationSize = 1) // 증가하는 숫자
 public class Quiz {
     @Id
-    @Column(name = "quize_no", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quize_seq_generator")
+    @Column(name = "quiz_no", nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quiz_seq_generator")
     private Long quizNo;
 
     // 회원번호 FK(Member)
@@ -77,5 +76,5 @@ public class Quiz {
     private String quizOutput;
 
     @OneToMany(mappedBy = "board")
-    List<Report> posts = new ArrayList<>();
+    List<Report> posts;
 }
