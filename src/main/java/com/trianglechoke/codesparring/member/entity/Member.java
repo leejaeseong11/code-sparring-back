@@ -1,12 +1,10 @@
 package com.trianglechoke.codesparring.member.entity;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
-
 
 import jakarta.persistence.*;
 
@@ -41,13 +39,13 @@ public class Member {
     private String memberInfo;
 
     @Column(name = "member_profile_img", nullable = false, columnDefinition = "NUMBER(1) default 0")
-    private int memberProfileImg;
+    private Integer memberProfileImg;
 
     @Column(name = "member_level", nullable = false, columnDefinition = "default 1")
-    private int memberLevel;
+    private Long memberLevel;
 
     @Column(name = "member_exp", nullable = false, columnDefinition = "default 0")
-    private int memberExp;
+    private Integer memberExp;
 
     @Column(
             name = "member_tier",
@@ -68,8 +66,8 @@ public class Member {
     private Long drawCnt;
 
     @Column(name = "member_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
-    private int memberStatus;
+    private Integer memberStatus;
 
     @Column(name = "admin_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
-    private int adminStatus;
+    private Integer adminStatus;
 }
