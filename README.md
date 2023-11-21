@@ -2,6 +2,20 @@
 
 ### 연결 설정
 
+- resources/application.properties
+
+```properties
+# jpa setting
+spring.jpa.database=oracle
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.Oracle10gDialect
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+# others
+app.frontURL=*
+spring.output.ansi.enabled=always
+```
+
 - resources/db.properties
 
 ```properties
