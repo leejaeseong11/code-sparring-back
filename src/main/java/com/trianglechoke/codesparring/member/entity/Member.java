@@ -1,10 +1,12 @@
 package com.trianglechoke.codesparring.member.entity;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+
 
 import jakarta.persistence.*;
 
