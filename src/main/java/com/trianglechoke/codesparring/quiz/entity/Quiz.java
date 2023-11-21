@@ -75,6 +75,6 @@ public class Quiz {
     @Column(name = "quiz_output", length = 500)
     private String quizOutput;
 
-    @OneToMany(mappedBy = "board")
+    @OneToMany(mappedBy = "quiz")
     List<Report> posts;
 }

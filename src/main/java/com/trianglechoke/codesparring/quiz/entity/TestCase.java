@@ -1,5 +1,6 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
+import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,7 +40,7 @@ public class TestCase {
     private Long testcaseNo;
 
     // 문제번호 FK(Quiz)
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "quiz_no", nullable = false)
     private Quiz quiz;
 
