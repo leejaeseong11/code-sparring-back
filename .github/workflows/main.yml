@@ -13,4 +13,3 @@ jobs:
         with:
           args: "--replace --aosp"
           commit-message: "format: Google Java Format"
-          ref: ${{ github.ref }}
