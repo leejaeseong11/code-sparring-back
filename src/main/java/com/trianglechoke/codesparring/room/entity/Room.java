@@ -41,14 +41,14 @@ public class Room {
     private Member winMember;
 
     @Column(name = "room_pwd", columnDefinition = "NUMBER(4)")
-    private int roomPwd;
+    private Integer roomPwd;
 
     @Column(name = "code_share", nullable = false, columnDefinition = "NUMBER(1) default 1")
-    private int codeShare;
+    private Integer codeShare;
 
     @Column(name = "room_title", nullable = false, columnDefinition = "VARCHAR2(50)")
     private String roomTitle;
 
     @Column(name = "room_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
-    private int roomStatus;
+    private Integer roomStatus;
 }

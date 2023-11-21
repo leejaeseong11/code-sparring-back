@@ -36,5 +36,5 @@ public class RankGame {
     private Member member2;
 
     @Column(name = "game_result", columnDefinition = "NUMBER(1)")
-    private int gameResult;
+    private Integer gameResult;
 }

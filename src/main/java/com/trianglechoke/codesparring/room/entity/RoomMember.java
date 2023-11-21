@@ -28,5 +28,5 @@ public class RoomMember {
     private Member memberNo;
 
     @Column(name = "host_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
-    private int hostStatus;
+    private Integer hostStatus;
 }

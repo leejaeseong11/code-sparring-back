@@ -28,8 +28,11 @@ import lombok.ToString;
 @Entity
 @Table(name="Quiz")
 @DynamicInsert
+
 @SequenceGenerator(name = "quiz_seq_generator",
 sequenceName = "quiz_seq",
+
+
 initialValue = 1000, //시작 숫자
 allocationSize = 1) //증가하는 숫자
 public class Quiz {
@@ -37,7 +40,9 @@ public class Quiz {
   @Column(name="quize_no", nullable = false)
   @GeneratedValue(strategy = GenerationType.SEQUENCE,
   generator = "quize_seq_generator")
+
   private Long quizNo;
+
 
 
   //회원번호 FK(Member)
@@ -59,6 +64,8 @@ public class Quiz {
 
   @Column(name="testcase_cnt", nullable = false)
   private Integer testcaseCnt;
+
+
 
   @Column(name="quiz_submit_cnt", nullable = false)
   private Integer quizSubmitCnt;
