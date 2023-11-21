@@ -8,7 +8,7 @@
 # jpa setting
 spring.jpa.database=oracle
 spring.jpa.hibernate.ddl-auto=update
-spring.jpa.database-platform=org.hibernate.dialect.Oracle10gDialect
+spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
 # others
