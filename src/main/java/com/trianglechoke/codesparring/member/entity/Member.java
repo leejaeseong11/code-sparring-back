@@ -18,7 +18,6 @@ import javax.persistence.*;
         initialValue = 1,
         allocationSize = 1)
 public class Member {
-
     @Id
     @Column(name = "member_no")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "member_no_seq_generator")
@@ -54,9 +53,6 @@ public class Member {
     @Column(name = "tier_point", nullable = false, columnDefinition = "default 0")
     private Long tierPoint;
 
-    @Column(name = "member_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
-    private int memberStatus;
-
     @Column(name = "win_cnt", nullable = false, columnDefinition = "default 0")
     private Long winCnt;
 
@@ -65,6 +61,9 @@ public class Member {
 
     @Column(name = "draw_cnt", nullable = false, columnDefinition = "default 0")
     private Long drawCnt;
+
+    @Column(name = "member_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
+    private int memberStatus;
 
     @Column(name = "admin_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
     private int adminStatus;
