@@ -1,10 +1,8 @@
 package com.trianglechoke.codesparring.report.entity;
 
-import java.util.Date;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.DynamicInsert;
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,11 +12,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -34,7 +38,6 @@ import lombok.ToString;
         initialValue = 1,
         allocationSize = 1)
 public class Report {
-
     @Id
     @Column(name = "report_no", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "report_seq_generator")
