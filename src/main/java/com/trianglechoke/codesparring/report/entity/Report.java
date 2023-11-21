@@ -33,14 +33,14 @@ import java.util.Date;
 @Table(name = "Report")
 @DynamicInsert
 @SequenceGenerator(
-        name = "report_seq_generator",
-        sequenceName = "report_seq",
+        name = "report_no_seq_generator",
+        sequenceName = "report_no_seq",
         initialValue = 1,
         allocationSize = 1)
 public class Report {
     @Id
     @Column(name = "report_no", nullable = false, columnDefinition = "NUMBER")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "report_seq_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "report_no_seq_generator")
     private Long reportNo;
 
     // 회원번호 FK(Member)
@@ -56,7 +56,7 @@ public class Report {
     @Column(name = "report_content", nullable = false, columnDefinition = "VARCHAR2(100)")
     private String reportContent;
 
-    @Column(name = "report_date", nullable = false, columnDefinition = "DATE default SYSDATE")
+    @Column(name = "report_date", nullable = false, columnDefinition = "DATE")
     @ColumnDefault(value = "SYSDATE")
     private Date reportDate;
 

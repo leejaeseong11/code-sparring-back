@@ -33,14 +33,14 @@ import java.util.List;
 @Table(name = "Quiz")
 @DynamicInsert
 @SequenceGenerator(
-        name = "quiz_seq_generator",
-        sequenceName = "quiz_seq",
+        name = "quiz_no_seq_generator",
+        sequenceName = "quiz_no_seq",
         initialValue = 1000, // 시작 숫자
         allocationSize = 1) // 증가하는 숫자
 public class Quiz {
     @Id
     @Column(name = "quiz_no", nullable = false, columnDefinition = "NUMBER")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quiz_seq_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quiz_no_seq_generator")
     private Long quizNo;
 
     // 회원번호 FK(Member)

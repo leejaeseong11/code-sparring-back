@@ -16,7 +16,7 @@ import org.hibernate.annotations.DynamicInsert;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "rank")
+@Table(name = "rank_game")
 @DynamicInsert
 @SequenceGenerator(
         name = "rank_no_seq_generator",

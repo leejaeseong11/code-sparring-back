@@ -28,15 +28,15 @@ import org.hibernate.annotations.DynamicInsert;
 @Table(name = "TestCase")
 @DynamicInsert
 @SequenceGenerator(
-        name = "testcase_seq_generator",
-        sequenceName = "testcase_seq",
+        name = "testcase_no_seq_generator",
+        sequenceName = "testcase_no_seq",
         initialValue = 1,
         allocationSize = 1)
 public class TestCase {
 
     @Id
     @Column(name = "testcase_no", nullable = false, columnDefinition = "NUMBER")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testcase_seq_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testcase_no_seq_generator")
     private Long testcaseNo;
 
     // 문제번호 FK(Quiz)
