@@ -1,15 +1,7 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,7 +29,7 @@ public class TestCase {
     private Long testcaseNo;
 
     // 문제번호 FK(Quiz)
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "quiz_no", nullable = false)
     private Quiz quiz;
 

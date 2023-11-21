@@ -37,7 +37,7 @@ public class Report {
 
     @Id
     @Column(name = "report_no", nullable = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "board_jpa_seq_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "report_seq_generator")
     private Long reportNo;
 
     // 회원번호 FK(Member)
