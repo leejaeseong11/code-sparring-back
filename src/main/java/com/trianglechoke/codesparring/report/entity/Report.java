@@ -39,7 +39,7 @@ import java.util.Date;
         allocationSize = 1)
 public class Report {
     @Id
-    @Column(name = "report_no", nullable = false)
+    @Column(name = "report_no", nullable = false, columnDefinition = "NUMBER")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "report_seq_generator")
     private Long reportNo;
 
@@ -53,16 +53,16 @@ public class Report {
     @JoinColumn(name = "quiz_no", nullable = false)
     private Quiz quiz;
 
-    @Column(name = "report_content", nullable = false, length = 100)
+    @Column(name = "report_content", nullable = false, columnDefinition = "VARCHAR2(100)")
     private String reportContent;
 
-    @Column(name = "report_date", nullable = false)
+    @Column(name = "report_date", nullable = false, columnDefinition = "DATE default SYSDATE")
     @ColumnDefault(value = "SYSDATE")
     private Date reportDate;
 
-    @Column(name = "report_comment", length = 100)
+    @Column(name = "report_comment", columnDefinition = "VARCHAR2(100)")
     private String reportComment;
 
-    @Column(name = "report_type", length = 1)
+    @Column(name = "report_type", columnDefinition = "NUMBER(1)")
     private Integer reportType;
 }

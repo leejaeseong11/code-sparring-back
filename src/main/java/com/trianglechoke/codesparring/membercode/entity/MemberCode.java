@@ -31,15 +31,15 @@ public class MemberCode {
     // 회원번호 FK(Member)
     @Id
     @ManyToOne
-    @JoinColumn(name = "member_no", nullable = false)
+    @JoinColumn(name = "member_no")
     private Member member;
 
     // 문제번호 FK(Quiz)
     @Id
     @ManyToOne
-    @JoinColumn(name = "quiz_no", nullable = false)
+    @JoinColumn(name = "quiz_no")
     private Quiz quiz;
 
-    @Column(name = "quiz_correct", nullable = false, length = 1)
+    @Column(name = "quiz_correct", nullable = false, columnDefinition = "NUMBER(1)")
     private Integer quizCorrect;
 }
