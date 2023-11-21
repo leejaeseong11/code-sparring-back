@@ -72,7 +72,7 @@ public class Quiz {
     @Column(name = "quiz_input", columnDefinition = "VARCHAR2(500)")
     private String quizInput;
 
-    @Column(name = "quiz_output",  columnDefinition = "VARCHAR2(500)")
+    @Column(name = "quiz_output", columnDefinition = "VARCHAR2(500)")
     private String quizOutput;
 
     @OneToMany(mappedBy = "quiz")
