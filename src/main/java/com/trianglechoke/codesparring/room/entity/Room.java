@@ -22,7 +22,7 @@ import javax.persistence.*;
         sequenceName = "room_no_seq",
         initialValue = 1000,
         allocationSize = 1)
-public class Room { ////////
+public class Room {
     @Id
     @Column(name = "room_no")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "room_no_seq_generator")
