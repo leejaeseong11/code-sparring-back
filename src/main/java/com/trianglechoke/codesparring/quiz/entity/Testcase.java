@@ -25,28 +25,31 @@ import org.hibernate.annotations.DynamicInsert;
 @ToString
 @Builder
 @Entity
-@Table(name = "TestCase")
+@Table(name = "Testcase")
 @DynamicInsert
 @SequenceGenerator(
         name = "testcase_no_seq_generator",
         sequenceName = "testcase_no_seq",
         initialValue = 1,
         allocationSize = 1)
-public class TestCase {
-
+/* 테스트케이스 Entity */
+public class Testcase { // test-case 분해 안하는걸로 통일
+    // [PK] 테스트케이스 번호
     @Id
     @Column(name = "testcase_no", nullable = false, columnDefinition = "NUMBER")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testcase_no_seq_generator")
     private Long testcaseNo;
 
-    // 문제번호 FK(Quiz)
+    // [FK] 문제 번호
     @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "quiz_no")
-    private Quiz quiz;
+    private Quiz quizNo;
 
+    // 입력값
     @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")
-    private String testcase_Input;
+    private String testcaseInput; // 오타수정 (_제거)
 
+    // 출력값
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
-    private String testcase_Output;
+    private String testcaseOutput; // 오타수정 (_제거)
 }

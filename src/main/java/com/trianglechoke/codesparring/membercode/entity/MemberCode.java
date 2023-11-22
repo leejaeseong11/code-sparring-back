@@ -26,20 +26,21 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "MemberCode")
 @DynamicInsert
+// 회원이 제출한 코드 Entity
 public class MemberCode {
-
-    // 회원번호 FK(Member)
+    // [FK] 회원 번호
     @Id
     @ManyToOne
     @JoinColumn(name = "member_no")
-    private Member member;
+    private Member memberNo;
 
-    // 문제번호 FK(Quiz)
+    // [FK] 문제 번호
     @Id
     @ManyToOne
     @JoinColumn(name = "quiz_no")
-    private Quiz quiz;
+    private Quiz quizNo;
 
+    // 정답 여부 (1은 정답, 0은 오답)
     @Column(name = "quiz_correct", nullable = false, columnDefinition = "NUMBER(1)")
     private Integer quizCorrect;
 }
