@@ -1,14 +1,8 @@
 package com.trianglechoke.codesparring.membercode.entity;
 
-import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +14,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-// @ToString
 @Builder
 @Entity
 @Table(name = "MemberCode")
@@ -29,7 +22,7 @@ import org.hibernate.annotations.DynamicInsert;
 public class MemberCode {
     // [FK] 회원 번호
     @Id
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "member_no")
     private Member memberNo;
 

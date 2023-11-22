@@ -1,7 +1,6 @@
 package com.trianglechoke.codesparring.report.entity;
 
 import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +25,6 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-// @ToString
 @Builder
 @Entity
 @Table(name = "Report")
@@ -50,9 +48,8 @@ public class Report {
     private Member memberNo;
 
     // [FK] 문제 번호
-    @ManyToOne
-    @JoinColumn(name = "quiz_no", nullable = false)
-    private Quiz quizNo;
+    @Column(name = "quiz_no", nullable = false)
+    private Long quizNo;
 
     // 신고 내용
     @Column(name = "report_content", nullable = false, columnDefinition = "VARCHAR2(100)")

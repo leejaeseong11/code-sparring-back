@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -21,7 +19,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-// @ToString
 @Builder
 @Entity
 @Table(name = "Testcase")
@@ -40,9 +37,8 @@ public class Testcase {
     private Long testcaseNo;
 
     // [FK] 문제 번호
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "quiz_no")
-    private Quiz quizNo;
+    @Column(name = "quiz_no")
+    private Long quizNo;
 
     // 입력값
     @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")

@@ -1,5 +1,7 @@
 package com.trianglechoke.codesparring.member.entity;
 
+import com.trianglechoke.codesparring.membercode.entity.MemberCode;
+
 import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +10,8 @@ import jakarta.persistence.Id;
 import lombok.*;
 
 import org.hibernate.annotations.DynamicInsert;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -87,4 +91,9 @@ public class Member {
     // 회원의 관리자 여부 (0은 관리자)
     @Column(name = "admin_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
     private Integer adminStatus;
+
+    // 회원의 제출한 코드 목록
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "member_no")
+    private List<MemberCode> memberCodeList;
 }
