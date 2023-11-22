@@ -32,7 +32,7 @@ import org.hibernate.annotations.DynamicInsert;
         initialValue = 1,
         allocationSize = 1)
 /* 테스트케이스 Entity */
-public class Testcase { // test-case 분해 안하는걸로 통일
+public class Testcase {
     // [PK] 테스트케이스 번호
     @Id
     @Column(name = "testcase_no", nullable = false, columnDefinition = "NUMBER")
@@ -46,9 +46,9 @@ public class Testcase { // test-case 분해 안하는걸로 통일
 
     // 입력값
     @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")
-    private String testcaseInput; // 오타수정 (_제거)
+    private String testcaseInput;
 
     // 출력값
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
-    private String testcaseOutput; // 오타수정 (_제거)
+    private String testcaseOutput;
 }
