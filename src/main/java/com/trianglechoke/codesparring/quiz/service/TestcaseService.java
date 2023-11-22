@@ -1,15 +1,12 @@
 package com.trianglechoke.codesparring.quiz.service;
 
 import com.trianglechoke.codesparring.exception.AddException;
-import com.trianglechoke.codesparring.exception.FindException;
 import com.trianglechoke.codesparring.quiz.Repository.TestcaseRepository;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class TestcaseService {
@@ -25,10 +22,10 @@ public class TestcaseService {
     */
 
     private void addTestcase(TestcaseDTO tcDTO) throws AddException {
-        Testcase tcEntity=Testcase.builder()
-                .testcaseInput(tcDTO.getTestcaseInput())
-                .testcaseOutput(tcDTO.getTestcaseOutput())
-                .build();
+        Testcase tcEntity =
+                Testcase.builder()
+                        .testcaseInput(tcDTO.getTestcaseInput())
+                        .testcaseOutput(tcDTO.getTestcaseOutput())
+                        .build();
     }
-
 }
