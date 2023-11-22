@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.member.entity;
 
 import com.trianglechoke.codesparring.membercode.entity.MemberCode;
+
 import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;

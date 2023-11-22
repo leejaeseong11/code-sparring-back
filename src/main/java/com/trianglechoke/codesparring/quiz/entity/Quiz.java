@@ -1,7 +1,6 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
 import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.membercode.entity.MemberCode;
 import com.trianglechoke.codesparring.report.entity.Report;
 
 import jakarta.persistence.*;
