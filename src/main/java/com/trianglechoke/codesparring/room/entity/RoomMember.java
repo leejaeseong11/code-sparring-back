@@ -22,8 +22,7 @@ import org.hibernate.annotations.DynamicInsert;
 public class RoomMember {
     // [FK] 방 번호
     @Id
-    @ManyToOne
-    @JoinColumn(name = "room_no", nullable = false)
+    @Column(name = "room_no", nullable = false)
     private Room roomNo;
 
     // [FK] 회원 번호

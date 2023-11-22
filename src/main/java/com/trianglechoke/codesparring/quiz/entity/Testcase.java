@@ -40,9 +40,8 @@ public class Testcase {
     private Long testcaseNo;
 
     // [FK] 문제 번호
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "quiz_no")
-    private Quiz quizNo;
+    @Column(name = "quiz_no")
+    private Long quizNo;
 
     // 입력값
     @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")

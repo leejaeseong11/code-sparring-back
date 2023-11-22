@@ -1,18 +1,10 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.membercode.entity.MemberCode;
 import com.trianglechoke.codesparring.report.entity.Report;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.SequenceGenerator;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -89,6 +81,10 @@ public class Quiz {
     private String quizOutput;
 
     // 신고받은 목록
-    @OneToMany(mappedBy = "quizNo")
+    @OneToMany(mappedBy = "quizNo", cascade = CascadeType.REMOVE)
     List<Report> reportList;
+
+    // 테스트케이스 목록
+    @OneToMany(mappedBy = "quizNo", cascade = CascadeType.REMOVE)
+    List<Testcase> testcaseList;
 }

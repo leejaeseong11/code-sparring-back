@@ -16,6 +16,8 @@ import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -61,4 +63,8 @@ public class Room {
     // 방 상태 (1은 대기방, 0은 게임방)
     @Column(name = "room_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
     private Integer roomStatus;
+
+    // 방 멤버 목록
+    @OneToMany(mappedBy = "roomNo", cascade = CascadeType.REMOVE)
+    private List<RoomMember> roomMemberList;
 }

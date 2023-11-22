@@ -29,9 +29,8 @@ import org.hibernate.annotations.DynamicInsert;
 public class MemberCode {
     // [FK] 회원 번호
     @Id
-    @ManyToOne
-    @JoinColumn(name = "member_no")
-    private Member memberNo;
+    @Column(name = "member_no")
+    private Long memberNo;
 
     // [FK] 문제 번호
     @Id
