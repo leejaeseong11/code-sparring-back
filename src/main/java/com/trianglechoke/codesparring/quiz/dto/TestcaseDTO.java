@@ -7,4 +7,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class TestcaseDTO {}
+@Builder
+public class TestcaseDTO {
+    private Long testcaseNo;
+    private Long quizNo;
+    private String testcaseInput;
+    private String testcaseOutput;
+}
