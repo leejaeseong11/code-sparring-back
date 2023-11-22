@@ -89,6 +89,6 @@ public class Quiz {
     private String quizOutput;
 
     // 신고받은 목록
-    @OneToMany(mappedBy = "quiz")
+    @OneToMany(mappedBy = "quizNo")
     List<Report> reportList;
 }
