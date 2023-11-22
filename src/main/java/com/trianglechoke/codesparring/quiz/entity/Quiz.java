@@ -75,11 +75,11 @@ public class Quiz {
 
     // 신고받은 목록
     @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name="quiz_no")
+    @JoinColumn(name = "quiz_no")
     List<Report> reportList;
 
     // 테스트케이스 목록
     @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name="quiz_no")
+    @JoinColumn(name = "quiz_no")
     List<Testcase> testcaseList;
 }

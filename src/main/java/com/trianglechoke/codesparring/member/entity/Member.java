@@ -94,6 +94,6 @@ public class Member {
 
     // 회원의 제출한 코드 목록
     @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name="member_no")
+    @JoinColumn(name = "member_no")
     private List<MemberCode> memberCodeList;
 }
