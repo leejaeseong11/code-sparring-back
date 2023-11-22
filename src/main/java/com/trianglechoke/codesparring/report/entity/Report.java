@@ -27,7 +27,7 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+// @ToString
 @Builder
 @Entity
 @Table(name = "Report")
