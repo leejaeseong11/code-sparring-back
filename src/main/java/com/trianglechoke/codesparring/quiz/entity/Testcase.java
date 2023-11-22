@@ -19,7 +19,6 @@ import org.hibernate.annotations.DynamicInsert;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-// @ToString
 @Builder
 @Entity
 @Table(name = "Testcase")

@@ -23,7 +23,7 @@ public class RoomMember {
     // [FK] 방 번호
     @Id
     @Column(name = "room_no", nullable = false)
-    private Room roomNo;
+    private Long roomNo;
 
     // [FK] 회원 번호
     @Id

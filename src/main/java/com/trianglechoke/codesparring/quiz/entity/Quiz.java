@@ -17,7 +17,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-/* @ToString 무한루프 생길 것 같아서 주석처리 */
 @Builder
 @Entity
 @Table(name = "Quiz")
@@ -25,19 +24,18 @@ import java.util.List;
 @SequenceGenerator(
         name = "quiz_no_seq_generator",
         sequenceName = "quiz_no_seq",
-        /* initialValue = 1000, 시작 숫자 (방만 1000부터 시작하고 문제는 1부터 시작하니까 1000 -> 1로 수정) */
         initialValue = 1,
         allocationSize = 1)
 /* 문제 Entity */
 public class Quiz {
     // [PK] 문제 번호
     @Id
-    @Column(name = "quiz_no", nullable = false, columnDefinition = "NUMBER")
+    @Column(name = "quiz_no", nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quiz_no_seq_generator")
     private Long quizNo;
 
     // [FK] 문제를 제작한 회원 번호
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "member_no")
     private Member memberNo;
 
@@ -50,7 +48,6 @@ public class Quiz {
     private String quizContent;
 
     // 문제 난이도
-    /* @Column(name = "quiz_tier", columnDefinition = "VARCHAR2(8)") 확장성 감안해서 사이즈 확대 ex. grandmaster 등 */
     @Column(name = "quiz_tier", columnDefinition = "VARCHAR2(15)")
     private String quizTier;
 
@@ -58,10 +55,7 @@ public class Quiz {
     @Column(name = "quiz_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
     private Integer quizStatus;
 
-    // 테스트케이스 개수
-    /* @Column(name = "testcase_cnt", nullable = false, columnDefinition = "NUMBER") default 설정 */
-    @Column(name = "testcase_cnt", nullable = false, columnDefinition = "NUMBER default 0")
-    private Integer testcaseCnt;
+    /* 테스트케이스 개수 컬럼 삭제 : 필요없음. */
 
     // 문제가 제출된 횟수
     @Column(name = "quiz_submit_cnt", nullable = false, columnDefinition = "NUMBER default 0")
@@ -80,10 +74,12 @@ public class Quiz {
     private String quizOutput;
 
     // 신고받은 목록
-    @OneToMany(mappedBy = "quizNo", cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name="quiz_no")
     List<Report> reportList;
 
     // 테스트케이스 목록
-    @OneToMany(mappedBy = "quizNo", cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name="quiz_no")
     List<Testcase> testcaseList;
 }
