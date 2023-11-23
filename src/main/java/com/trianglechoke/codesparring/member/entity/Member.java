@@ -1,5 +1,7 @@
 package com.trianglechoke.codesparring.member.entity;
 
+import com.trianglechoke.codesparring.member.constant.Role;
+import com.trianglechoke.codesparring.member.dto.MemberDTO;
 import com.trianglechoke.codesparring.membercode.entity.MemberCode;
 
 import jakarta.persistence.*;
@@ -7,15 +9,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
-import lombok.*;
 
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Builder
 @Entity
 @Table(name = "member")
@@ -38,7 +43,7 @@ public class Member {
     private String memberId;
 
     // 회원 비밀번호
-    @Column(name = "member_pwd", nullable = false, columnDefinition = "VARCHAR2(15)")
+    @Column(name = "member_pwd", nullable = false, columnDefinition = "VARCHAR2(60)")
     private String memberPwd;
 
     // 회원 닉네임
@@ -85,8 +90,8 @@ public class Member {
     private Long drawCnt;
 
     // 회원의 활성화 상태 (0은 비활성화)
-    @Column(name = "member_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
-    private Integer memberStatus;
+//    @Column(name = "member_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
+//    private Integer memberStatus;
 
     // 회원의 관리자 여부 (0은 관리자)
     @Column(name = "admin_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
@@ -96,4 +101,20 @@ public class Member {
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "member_no")
     private List<MemberCode> memberCodeList;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    // DTO -> Entity
+    public static Member createMember(MemberDTO memberDTO, PasswordEncoder passwordEncoder){
+        Member member = Member.builder()
+                .role(Role.USER)
+                .memberId(memberDTO.getMemberId())
+                .memberPwd(passwordEncoder.encode(memberDTO.getMemberPwd()))
+                .memberName(memberDTO.getMemberName())
+                .memberInfo(memberDTO.getMemberInfo())
+                .build();
+
+        return member;
+    }
 }
