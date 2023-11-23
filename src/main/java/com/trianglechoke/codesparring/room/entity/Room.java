@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,7 +41,8 @@ public class Room {
 
     // [FK] 문제 번호
     @ManyToOne
-    @JoinColumn(name = "quiz_no", nullable = false)
+    @JoinColumn(name = "quiz_no")
+    @NotNull
     private Quiz quiz;
 
     // [FK] 우승한 회원 번호
@@ -53,15 +55,18 @@ public class Room {
     private String roomPwd;
 
     // 코드 공유 여부 (0은 코드 비공개)
-    @Column(name = "code_share", nullable = false, columnDefinition = "NUMBER(1) default 1")
+    @Column(name = "code_share", columnDefinition = "NUMBER(1) default 1")
+    @NotNull
     private Integer codeShare;
 
     // 방 제목
-    @Column(name = "room_title", nullable = false, columnDefinition = "VARCHAR2(50)")
+    @Column(name = "room_title", columnDefinition = "VARCHAR2(50)")
+    @NotNull
     private String roomTitle;
 
     // 방 상태 (1은 대기방, 0은 게임방)
-    @Column(name = "room_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
+    @Column(name = "room_status", columnDefinition = "NUMBER(1) default 1")
+    @NotNull
     private Integer roomStatus;
 
     // 방 멤버 목록
