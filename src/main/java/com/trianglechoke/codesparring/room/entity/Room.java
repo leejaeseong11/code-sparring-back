@@ -49,8 +49,8 @@ public class Room {
     private Member winMember;
 
     // 방 비밀번호 (null은 공개방)
-    @Column(name = "room_pwd", columnDefinition = "NUMBER(4)")
-    private Integer roomPwd;
+    @Column(name = "room_pwd", columnDefinition = "VARCHAR2(4)")
+    private String roomPwd;
 
     // 코드 공유 여부 (0은 코드 비공개)
     @Column(name = "code_share", nullable = false, columnDefinition = "NUMBER(1) default 1")
