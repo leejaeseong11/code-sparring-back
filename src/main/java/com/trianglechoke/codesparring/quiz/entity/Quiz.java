@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
 import jakarta.persistence.*;
@@ -37,7 +38,7 @@ public class Quiz {
     // [FK] 문제를 제작한 회원 번호
     @OneToOne
     @JoinColumn(name = "member_no")
-    private Member memberNo;
+    private Member member;
 
     // 문제 제목
     @Column(name = "quiz_title", nullable = false, columnDefinition = "VARCHAR2(60)")
@@ -48,12 +49,11 @@ public class Quiz {
     private String quizContent;
 
     // 문제 난이도
-    @Column(name = "quiz_tier", columnDefinition = "VARCHAR2(15)")
+    @Column(
+            name = "quiz_tier",
+            nullable = false,
+            columnDefinition = "VARCHAR2(15) default 'UNRANKED'")
     private String quizTier;
-
-    // 문제 검증 여부 (0은 검증ㅇ)
-    @Column(name = "quiz_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
-    private Integer quizStatus;
 
     /* 테스트케이스 개수 컬럼 삭제 : 필요없음. */
 
@@ -76,10 +76,18 @@ public class Quiz {
     // 신고받은 목록
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "quiz_no")
-    List<Report> reportList;
+    private List<Report> reportList;
 
     // 테스트케이스 목록
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "quiz_no")
-    List<Testcase> testcaseList;
+    private List<Testcase> testcaseList;
+
+    // 문제 수정 메소드
+    public void modifyQuiz(QuizDTO quizDTO) {
+        this.quizTitle = quizDTO.getQuizTitle();
+        this.quizContent = quizDTO.getQuizContent();
+        this.quizInput = quizDTO.getQuizInput();
+        this.quizOutput = quizDTO.getQuizOutput();
+    }
 }
