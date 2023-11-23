@@ -25,6 +25,12 @@ public class QuizController {
         return service.findAll();
     }
 
+    /* 문제 목록 티어별로 조회하기 */
+    @GetMapping("/list/{quizTier}")
+    public List<QuizDTO> quizListByQuizTier(@PathVariable String quizTier) throws FindException {
+        return service.findByQuizTier(quizTier);
+    }
+
     /* 문제 상세정보 조회하기 : 관리자 or 회원 */
     /* 회원이 코드 실행 시에도 사용할 Controller */
     @GetMapping("/{quizNo}")
