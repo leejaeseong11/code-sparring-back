@@ -4,7 +4,6 @@ import com.trianglechoke.codesparring.exception.AddException;
 import com.trianglechoke.codesparring.exception.FindException;
 import com.trianglechoke.codesparring.exception.ModifyException;
 import com.trianglechoke.codesparring.exception.RemoveException;
-import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.service.QuizService;
 

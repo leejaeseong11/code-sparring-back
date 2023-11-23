@@ -4,11 +4,8 @@ import com.trianglechoke.codesparring.exception.AddException;
 import com.trianglechoke.codesparring.exception.FindException;
 import com.trianglechoke.codesparring.exception.ModifyException;
 import com.trianglechoke.codesparring.exception.RemoveException;
-import com.trianglechoke.codesparring.quiz.Repository.QuizRepository;
 import com.trianglechoke.codesparring.quiz.Repository.TestcaseRepository;
-import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
 
 import org.springframework.beans.factory.annotation.Autowired;

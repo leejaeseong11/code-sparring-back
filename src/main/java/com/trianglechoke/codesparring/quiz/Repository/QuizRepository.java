@@ -24,5 +24,6 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
             String quizTitle,
             String quizContent,
             String quizInput,
-            String quizOutput) throws AddException;
+            String quizOutput)
+            throws AddException;
 }
