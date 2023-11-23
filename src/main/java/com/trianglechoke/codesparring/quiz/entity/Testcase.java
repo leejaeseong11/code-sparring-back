@@ -47,4 +47,14 @@ public class Testcase {
     // 출력값
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
     private String testcaseOutput;
+
+    // 입력값 수정 메소드
+    public void modifyInput(String input) {
+        this.testcaseInput = input;
+    }
+
+    // 출력값 수정 메소드
+    public void modifyOutput(String output) {
+        this.testcaseOutput = output;
+    }
 }
