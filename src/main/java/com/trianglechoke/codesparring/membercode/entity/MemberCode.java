@@ -23,7 +23,7 @@ import org.hibernate.annotations.DynamicInsert;
 public class MemberCode {
     // [FK] 회원 번호
     @Id
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_no", nullable = false)
     private Member member;
 
