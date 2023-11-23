@@ -40,18 +40,18 @@ public class QuizService {
     }
 
     /* TODO - quiz 필터 별 목록 조회 -> 추후 추가할 예정 : 검증된 문제 목록, 회원 출제 문제 목록, 등등 */
-    /* quiz 검증여부 별 목록 조회 */
+    /* quiz 티어 별 목록 조회 */
     public List<QuizDTO> findByQuizTier(String quizTier) throws FindException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
-        List<Quiz> quizList = repository.findAll();
-        for (Quiz quiz : quizList) {
+        List<Object[]> quizList = repository.findByQuizTier(quizTier);
+        for (Object[] objArr:quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
-                            .quizNo(quiz.getQuizNo())
-                            .quizTitle(quiz.getQuizTitle())
-                            .quizSubmitCnt(quiz.getQuizSubmitCnt())
-                            .quizSuccessCnt(quiz.getQuizSuccessCnt())
-                            .quizTier(quiz.getQuizTier())
+                            .quizNo(Long.valueOf(String.valueOf(objArr[0]))) //0
+                            .quizTitle(String.valueOf(objArr[7])) //7
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[4]))) //4
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[5]))) //5
+                            .quizTier(quizTier)
                             .build();
             quizDTOList.add(dto);
         }

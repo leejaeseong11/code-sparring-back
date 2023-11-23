@@ -27,8 +27,9 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
             String quizTitle,
             String quizContent,
             String quizInput,
-            String quizOutput) throws AddException;
+            String quizOutput)
+            throws AddException;
 
-//    @Query(value = "")
-//    public List<Object[]> findByQuizTier() throws FindException;
+    @Query(value = "SELECT * FROM quiz WHERE quiz_tier=:quizTier", nativeQuery = true)
+    public List<Object[]> findByQuizTier(String quizTier) throws FindException;
 }
