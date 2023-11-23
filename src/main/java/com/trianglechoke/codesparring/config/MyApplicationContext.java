@@ -25,8 +25,7 @@ public class MyApplicationContext implements WebMvcConfigurer {
     @Bean
     @ConfigurationProperties("spring.datasource.hikari")
     HikariConfig hikariConfig() {
-        HikariConfig config = new HikariConfig();
-        return config;
+        return new HikariConfig();
     }
 
     @Bean
