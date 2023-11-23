@@ -22,6 +22,6 @@ public class QuizDTO {
     private Integer quizSuccessCnt;
     private String quizInput;
     private String quizOutput;
-    List<ReportDTO> reportDTOList;
-    List<TestcaseDTO> testcaseDTOList;
+    private List<ReportDTO> reportDTOList;
+    private List<TestcaseDTO> testcaseDTOList;
 }
