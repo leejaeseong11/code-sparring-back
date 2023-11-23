@@ -6,8 +6,8 @@ import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-
 import jakarta.validation.constraints.NotNull;
+
 import lombok.*;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -69,9 +69,7 @@ public class Member {
     private Integer memberExp;
 
     // 회원 랭크 티어
-    @Column(
-            name = "member_tier",
-            columnDefinition = "VARCHAR2(15) default 'BRONZE'")
+    @Column(name = "member_tier", columnDefinition = "VARCHAR2(15) default 'BRONZE'")
     @NotNull
     private String memberTier;
 

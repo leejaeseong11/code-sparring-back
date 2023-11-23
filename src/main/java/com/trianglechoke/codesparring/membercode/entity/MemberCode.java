@@ -4,8 +4,8 @@ import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
 import jakarta.persistence.*;
-
 import jakarta.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
