@@ -37,7 +37,7 @@ public class Testcase {
     private Long testcaseNo;
 
     // [FK] 문제 번호
-    @Column(name = "quiz_no")
+    @Column(name = "quiz_no", nullable = false)
     private Long quizNo;
 
     // 입력값

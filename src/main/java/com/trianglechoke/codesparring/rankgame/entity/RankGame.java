@@ -33,13 +33,13 @@ public class RankGame {
 
     // [FK] 회원1 번호
     @ManyToOne
-    @JoinColumn(name = "member1_no")
-    private Member member1No;
+    @JoinColumn(name = "member1_no", nullable = false)
+    private Member member1;
 
     // [FK] 회원2 번호
     @ManyToOne
-    @JoinColumn(name = "member2_no")
-    private Member member2No;
+    @JoinColumn(name = "member2_no", nullable = false)
+    private Member member2;
 
     // 랭크 게임 결과 (0은 draw, 1은 회원1 win, 2는 회원2 win)
     @Column(name = "game_result", columnDefinition = "NUMBER(1)")

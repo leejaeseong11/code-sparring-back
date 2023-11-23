@@ -55,8 +55,6 @@ public class Quiz {
             columnDefinition = "VARCHAR2(15) default 'UNRANKED'")
     private String quizTier;
 
-    /* 테스트케이스 개수 컬럼 삭제 : 필요없음. */
-
     // 문제가 제출된 횟수
     @Column(name = "quiz_submit_cnt", nullable = false, columnDefinition = "NUMBER default 0")
     private Integer quizSubmitCnt;

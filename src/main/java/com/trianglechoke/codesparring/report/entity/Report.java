@@ -45,7 +45,7 @@ public class Report {
     // [FK] 회원 번호
     @ManyToOne
     @JoinColumn(name = "member_no", nullable = false)
-    private Member memberNo;
+    private Member member;
 
     // [FK] 문제 번호
     @Column(name = "quiz_no", nullable = false)
@@ -65,6 +65,6 @@ public class Report {
     private String reportComment;
 
     // 신고 종류 (아직 종류 어떻게 나눌지 미정)
-    @Column(name = "report_type", columnDefinition = "NUMBER(1)")
+    @Column(name = "report_type", nullable = false, columnDefinition = "NUMBER(1)")
     private Integer reportType;
 }
