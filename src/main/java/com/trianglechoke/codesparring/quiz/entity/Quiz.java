@@ -37,7 +37,7 @@ public class Quiz {
 
     // [FK] 문제를 제작한 회원 번호
     @OneToOne
-    @JoinColumn(name = "member_no")
+    @JoinColumn(name = "member_no", nullable = false)
     private Member member;
 
     // 문제 제목
@@ -54,8 +54,6 @@ public class Quiz {
             nullable = false,
             columnDefinition = "VARCHAR2(15) default 'UNRANKED'")
     private String quizTier;
-
-    /* 테스트케이스 개수 컬럼 삭제 : 필요없음. */
 
     // 문제가 제출된 횟수
     @Column(name = "quiz_submit_cnt", nullable = false, columnDefinition = "NUMBER default 0")

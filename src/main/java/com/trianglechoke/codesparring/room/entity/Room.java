@@ -40,8 +40,8 @@ public class Room {
 
     // [FK] 문제 번호
     @ManyToOne
-    @JoinColumn(name = "quiz_no")
-    private Quiz quizNo;
+    @JoinColumn(name = "quiz_no", nullable = false)
+    private Quiz quiz;
 
     // [FK] 우승한 회원 번호
     @ManyToOne
