@@ -29,7 +29,7 @@ public class RoomMember {
     @Id
     @ManyToOne
     @JoinColumn(name = "member_no", nullable = false)
-    private Member memberNo;
+    private Member member;
 
     // 방장 여부 (0은 방장)
     @Column(name = "host_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
