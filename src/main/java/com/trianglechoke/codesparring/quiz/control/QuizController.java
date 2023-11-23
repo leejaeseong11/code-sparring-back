@@ -38,25 +38,25 @@ public class QuizController {
     public ResponseEntity<?> writeQuiz(@RequestBody QuizDTO quizDTO) throws AddException {
         try {
             service.addQuiz(quizDTO);
-            String msg="문제 출제 성공";
+            String msg = "문제 출제 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (AddException e) {
-            String msg="문제 출제 실패";
+            String msg = "문제 출제 실패";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
 
     /* 문제 수정하기 : 관리자 */
     @PutMapping(value = "/{quizNo}", produces = "application/json;charset=UTF-8")
-    public ResponseEntity<?> modifyQuiz(@PathVariable Long quizNo,
-                                        @RequestBody QuizDTO quizDTO) throws ModifyException {
+    public ResponseEntity<?> modifyQuiz(@PathVariable Long quizNo, @RequestBody QuizDTO quizDTO)
+            throws ModifyException {
         quizDTO.setQuizNo(quizNo);
         try {
             service.modifyQuiz(quizDTO);
-            String msg="문제 수정 성공";
+            String msg = "문제 수정 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (ModifyException e) {
-            String msg="문제 수정 실패";
+            String msg = "문제 수정 실패";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }
@@ -66,10 +66,10 @@ public class QuizController {
     public ResponseEntity<?> removeQuiz(@PathVariable Long quizNo) throws RemoveException {
         try {
             service.removeQuiz(quizNo);
-            String msg="문제 삭제 성공";
+            String msg = "문제 삭제 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (RemoveException e) {
-            String msg="문제 삭제 실패";
+            String msg = "문제 삭제 실패";
             return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
         }
     }

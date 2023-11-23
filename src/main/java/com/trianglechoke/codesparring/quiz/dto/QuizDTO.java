@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.quiz.dto;
 
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
+
 import lombok.*;
 
 import java.util.List;
