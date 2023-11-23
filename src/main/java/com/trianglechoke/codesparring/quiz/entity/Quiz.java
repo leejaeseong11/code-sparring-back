@@ -82,4 +82,5 @@ public class Quiz {
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "quiz_no")
     List<Testcase> testcaseList;
+
 }
