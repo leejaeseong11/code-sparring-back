@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,26 +39,31 @@ import java.util.Date;
 public class Report {
     // [PK] 신고 번호
     @Id
-    @Column(name = "report_no", nullable = false, columnDefinition = "NUMBER")
+    @Column(name = "report_no", columnDefinition = "NUMBER")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "report_no_seq_generator")
+    @NotNull
     private Long reportNo;
 
     // [FK] 회원 번호
     @ManyToOne
-    @JoinColumn(name = "member_no", nullable = false)
+    @JoinColumn(name = "member_no")
+    @NotNull
     private Member member;
 
     // [FK] 문제 번호
-    @Column(name = "quiz_no", nullable = false)
+    @Column(name = "quiz_no")
+    @NotNull
     private Long quizNo;
 
     // 신고 내용
-    @Column(name = "report_content", nullable = false, columnDefinition = "VARCHAR2(100)")
+    @Column(name = "report_content", columnDefinition = "VARCHAR2(100)")
+    @NotNull
     private String reportContent;
 
     // 신고된 날짜
-    @Column(name = "report_date", nullable = false, columnDefinition = "DATE")
+    @Column(name = "report_date", columnDefinition = "DATE")
     @ColumnDefault(value = "SYSDATE")
+    @NotNull
     private Date reportDate;
 
     // 신고 코멘트
@@ -65,6 +71,7 @@ public class Report {
     private String reportComment;
 
     // 신고 종류 (아직 종류 어떻게 나눌지 미정)
-    @Column(name = "report_type", nullable = false, columnDefinition = "NUMBER(1)")
+    @Column(name = "report_type", columnDefinition = "NUMBER(1)")
+    @NotNull
     private Integer reportType;
 }

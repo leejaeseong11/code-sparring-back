@@ -4,6 +4,7 @@ import com.trianglechoke.codesparring.member.entity.Member;
 
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,16 +23,19 @@ import org.hibernate.annotations.DynamicInsert;
 public class RoomMember {
     // [FK] 방 번호
     @Id
-    @Column(name = "room_no", nullable = false)
+    @Column(name = "room_no")
+    @NotNull
     private Long roomNo;
 
     // [FK] 회원 번호
     @Id
     @ManyToOne
-    @JoinColumn(name = "member_no", nullable = false)
+    @JoinColumn(name = "member_no")
+    @NotNull
     private Member member;
 
     // 방장 여부 (0은 방장)
-    @Column(name = "host_status", nullable = false, columnDefinition = "NUMBER(1) default 1")
+    @Column(name = "host_status", columnDefinition = "NUMBER(1) default 1")
+    @NotNull
     private Integer hostStatus;
 }

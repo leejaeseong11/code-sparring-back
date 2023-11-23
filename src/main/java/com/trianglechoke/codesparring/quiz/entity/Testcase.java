@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,12 +33,14 @@ import org.hibernate.annotations.DynamicInsert;
 public class Testcase {
     // [PK] 테스트케이스 번호
     @Id
-    @Column(name = "testcase_no", nullable = false, columnDefinition = "NUMBER")
+    @Column(name = "testcase_no", columnDefinition = "NUMBER")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testcase_no_seq_generator")
+    @NotNull
     private Long testcaseNo;
 
     // [FK] 문제 번호
-    @Column(name = "quiz_no", nullable = false)
+    @Column(name = "quiz_no")
+    @NotNull
     private Long quizNo;
 
     // 입력값
