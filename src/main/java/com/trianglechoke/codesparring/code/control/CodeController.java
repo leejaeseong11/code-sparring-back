@@ -13,7 +13,9 @@ import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
@@ -24,33 +26,72 @@ import java.util.Arrays;
 @RequestMapping("/code")
 public class CodeController {
 
-    //코드실행
+    // 코드실행
     @PostMapping("/executeCode")
-    public ResponseEntity<String> executeCode(@RequestParam("code") MultipartFile file) {
-        try {
-            if (file.isEmpty()) {
-                return ResponseEntity.badRequest().body("업로드된 파일이 비어 있습니다.");
-            }
-
-            // 업로드된 파일 내용 읽어오기
-            String codeContent = new String(file.getBytes(), StandardCharsets.UTF_8);
-
-            // 테스트케이스 생성 (입력값, 예상 출력값)
-            String input = "4 5";
-            String expectedOutput = "0.8"; // 예상 출력값
-
-            // Java 코드에 입력값 삽입
-            String modifiedJavaCode = insertInputToJavaCode(codeContent, input);
-
-            // Java 코드 컴파일 및 실행
-            String actualOutput = executeJavaCode(modifiedJavaCode);
-
-            // 결과 확인
-            return ResponseEntity.ok("테스트 통과! 예상: " + expectedOutput + ", 실제: " + actualOutput);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("코드 실행 중 오류 발생.");
+    public String executeCode(@RequestParam("code") MultipartFile file) {
+        if (file.isEmpty()) {
+            return "업로드된 파일이 비어 있습니다.";
         }
+//        // 파일 저장
+//        String fileName = "HelloWorld"; // 원하는 파일명으로 변경
+//        String filePath =
+//                "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/" + fileName + ".java";
+//
+//        try {
+//            file.transferTo(new File(filePath));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return "파일 저장 중 오류가 발생했습니다.";
+//        }
+
+        // 쉘 스크립트 실행
+        String cmd = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/java.sh";
+        ProcessBuilder pb = new ProcessBuilder(cmd);
+        String result = "";
+        try {
+            Process process = pb.start();
+            BufferedReader reader =
+                    new BufferedReader(new InputStreamReader(process.getInputStream()));
+            StringBuilder builder = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+            }
+            result = builder.toString();
+            System.out.print(result);
+            System.out.println("end of script execution");
+            return result;
+        } catch (IOException e) {
+            System.out.print("error");
+            e.printStackTrace();
+            return "스크립트 실행 중 오류가 발생했습니다.";
+        }
+        //        try {
+        //            if (file.isEmpty()) {
+        //                return ResponseEntity.badRequest().body("업로드된 파일이 비어 있습니다.");
+        //            }
+        //
+        //            // 업로드된 파일 내용 읽어오기
+        //            String codeContent = new String(file.getBytes(), StandardCharsets.UTF_8);
+        //
+        //            // 테스트케이스 생성 (입력값, 예상 출력값)
+        //            String input = "4 5";
+        //            String expectedOutput = "0.8"; // 예상 출력값
+        //
+        //            // Java 코드에 입력값 삽입
+        //            String modifiedJavaCode = insertInputToJavaCode(codeContent, input);
+        //
+        //            // Java 코드 컴파일 및 실행
+        //            String actualOutput = executeJavaCode(modifiedJavaCode);
+        //
+        //            // 결과 확인
+        //            return ResponseEntity.ok("테스트 통과! 예상: " + expectedOutput + ", 실제: " +
+        // actualOutput);
+        //        } catch (Exception e) {
+        //            e.printStackTrace();
+        //            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("코드 실행 중
+        // 오류 발생.");
+        //        }
     }
 
     private String insertInputToJavaCode(String javaCode, String input) {
