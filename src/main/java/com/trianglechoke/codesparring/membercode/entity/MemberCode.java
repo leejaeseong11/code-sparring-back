@@ -4,6 +4,7 @@ import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,21 +20,24 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "MemberCode")
 @DynamicInsert
-// 회원이 제출한 코드 Entity
+/* 회원이 제출한 코드 Entity */
 public class MemberCode {
     // [FK] 회원 번호
     @Id
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_no")
-    private Member memberNo;
+    @NotNull
+    private Member member;
 
     // [FK] 문제 번호
     @Id
     @ManyToOne
     @JoinColumn(name = "quiz_no")
-    private Quiz quizNo;
+    @NotNull
+    private Quiz quiz;
 
     // 정답 여부 (1은 정답, 0은 오답)
-    @Column(name = "quiz_correct", nullable = false, columnDefinition = "NUMBER(1)")
+    @Column(name = "quiz_correct", columnDefinition = "NUMBER(1)")
+    @NotNull
     private Integer quizCorrect;
 }

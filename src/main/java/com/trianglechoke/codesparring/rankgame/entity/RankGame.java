@@ -3,6 +3,7 @@ package com.trianglechoke.codesparring.rankgame.entity;
 import com.trianglechoke.codesparring.member.entity.Member;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,12 +35,14 @@ public class RankGame {
     // [FK] 회원1 번호
     @ManyToOne
     @JoinColumn(name = "member1_no")
-    private Member member1No;
+    @NotNull
+    private Member member1;
 
     // [FK] 회원2 번호
     @ManyToOne
     @JoinColumn(name = "member2_no")
-    private Member member2No;
+    @NotNull
+    private Member member2;
 
     // 랭크 게임 결과 (0은 draw, 1은 회원1 win, 2는 회원2 win)
     @Column(name = "game_result", columnDefinition = "NUMBER(1)")
