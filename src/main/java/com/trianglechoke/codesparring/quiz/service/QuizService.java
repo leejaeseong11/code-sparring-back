@@ -44,13 +44,13 @@ public class QuizService {
     public List<QuizDTO> findByQuizTier(String quizTier) throws FindException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findByQuizTier(quizTier);
-        for (Object[] objArr:quizList) {
+        for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
-                            .quizNo(Long.valueOf(String.valueOf(objArr[0]))) //0
-                            .quizTitle(String.valueOf(objArr[7])) //7
-                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[4]))) //4
-                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[5]))) //5
+                            .quizNo(Long.valueOf(String.valueOf(objArr[0]))) // 0
+                            .quizTitle(String.valueOf(objArr[7])) // 7
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[4]))) // 4
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[5]))) // 5
                             .quizTier(quizTier)
                             .build();
             quizDTOList.add(dto);
