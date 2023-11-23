@@ -30,8 +30,8 @@ public class QuizService {
                                 .testcaseNo(Long.valueOf(String.valueOf(objArr[0])))
                                 .quizNo(Long.valueOf(String.valueOf(objArr[1])))
                                 .build();
-                if(objArr[2]!=null) dto.setTestcaseInput(String.valueOf(objArr[2]));
-                if(objArr[3]!=null) dto.setTestcaseOutput(String.valueOf(objArr[3]));
+                if (objArr[2] != null) dto.setTestcaseInput(String.valueOf(objArr[2]));
+                if (objArr[3] != null) dto.setTestcaseOutput(String.valueOf(objArr[3]));
                 tcDTOList.add(dto);
             } catch (Exception e) {
             }
