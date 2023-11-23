@@ -5,6 +5,7 @@ import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,8 +32,9 @@ import java.util.List;
 public class Quiz {
     // [PK] 문제 번호
     @Id
-    @Column(name = "quiz_no", nullable = false)
+    @Column(name = "quiz_no")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quiz_no_seq_generator")
+    @NotNull
     private Long quizNo;
 
     // [FK] 문제를 제작한 회원 번호
@@ -41,26 +43,28 @@ public class Quiz {
     private Member member;
 
     // 문제 제목
-    @Column(name = "quiz_title", nullable = false, columnDefinition = "VARCHAR2(60)")
+    @Column(name = "quiz_title", columnDefinition = "VARCHAR2(60)")
+    @NotNull
     private String quizTitle;
 
     // 문제 내용
-    @Column(name = "quiz_content", nullable = false, columnDefinition = "VARCHAR2(30000)")
+    @Column(name = "quiz_content", columnDefinition = "VARCHAR2(30000)")
+    @NotNull
     private String quizContent;
 
     // 문제 난이도
-    @Column(
-            name = "quiz_tier",
-            nullable = false,
-            columnDefinition = "VARCHAR2(15) default 'UNRANKED'")
+    @Column(name = "quiz_tier", columnDefinition = "VARCHAR2(15) default 'UNRANKED'")
+    @NotNull
     private String quizTier;
 
     // 문제가 제출된 횟수
-    @Column(name = "quiz_submit_cnt", nullable = false, columnDefinition = "NUMBER default 0")
+    @Column(name = "quiz_submit_cnt", columnDefinition = "NUMBER default 0")
+    @NotNull
     private Integer quizSubmitCnt;
 
     // 문제를 성공한 횟수
-    @Column(name = "quiz_success_cnt", nullable = false, columnDefinition = "NUMBER default 0")
+    @Column(name = "quiz_success_cnt", columnDefinition = "NUMBER default 0")
+    @NotNull
     private Integer quizSuccessCnt;
 
     // 문제 테스트케이스 입력값에 대한 내용
