@@ -46,8 +46,7 @@ public class QuizController {
             String msg = "문제 출제 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (AddException e) {
-            String msg = "문제 출제 실패";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            throw new AddException("문제 출제 실패");
         }
     }
 
@@ -61,8 +60,7 @@ public class QuizController {
             String msg = "문제 수정 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (ModifyException e) {
-            String msg = "문제 수정 실패";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            throw new ModifyException("문제 수정 실패");
         }
     }
 
@@ -74,8 +72,7 @@ public class QuizController {
             String msg = "문제 삭제 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (RemoveException e) {
-            String msg = "문제 삭제 실패";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            throw new RemoveException("문제 삭제 실패");
         }
     }
 }
