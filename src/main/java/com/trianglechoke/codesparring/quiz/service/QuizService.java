@@ -20,13 +20,12 @@ import java.util.Optional;
 
 @Service
 public class QuizService {
-    @Autowired private QuizRepository repositoryQ;
-    @Autowired private TestcaseRepository repositoryTc;
+    @Autowired private QuizRepository repository;
 
     /* quiz 전체 목록 조회 */
     public List<QuizDTO> findAll() throws FindException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
-        List<Quiz> quizList = repositoryQ.findAll();
+        List<Quiz> quizList = repository.findAll();
         for (Quiz quiz : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -45,7 +44,7 @@ public class QuizService {
 
     /* quiz 상세정보 조회 : quiz + testcaseList */
     public QuizDTO findByQuizNo(Long quizNo) throws FindException {
-        Optional<Quiz> optQ = repositoryQ.findById(quizNo);
+        Optional<Quiz> optQ = repository.findById(quizNo);
         Quiz quizEntity = optQ.get();
         QuizDTO quizDTO =
                 QuizDTO.builder()
@@ -76,7 +75,7 @@ public class QuizService {
 
     /* quiz 추가 */
     public void addQuiz(QuizDTO quizDTO) throws AddException {
-        repositoryQ.saveQuiz(
+        repository.saveQuiz(
                 quizDTO.getMemberNo(),
                 quizDTO.getQuizTitle(),
                 quizDTO.getQuizContent(),
@@ -86,60 +85,16 @@ public class QuizService {
 
     /* quiz 수정 : title, content, input, output */
     public void modifyQuiz(QuizDTO quizDTO) throws ModifyException {
-        Optional<Quiz> optQ = repositoryQ.findById(quizDTO.getQuizNo());
+        Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
         Quiz quizEntity = optQ.get();
         quizEntity.modifyQuiz(quizDTO);
-        repositoryQ.save(quizEntity);
+        repository.save(quizEntity);
     }
 
     /* TODO - 문제 제출 횟수, 정답 횟수 증가, 티어 변경 등 추후 추가 */
 
     /* quiz 삭제 */
     public void removeQuiz(Long quizNo) throws RemoveException {
-        repositoryQ.deleteById(quizNo);
-    }
-
-    /* quizNo에 해당하는 testcase 목록 조회 */
-    public List<TestcaseDTO> findAllByQuizNo(Long quizNo) throws FindException {
-        List<TestcaseDTO> tcDTOList = new ArrayList<>();
-        List<Object[]> list = repositoryTc.findAllByQuizNo(quizNo);
-        for (Object[] objArr : list) {
-            try {
-                TestcaseDTO dto =
-                        TestcaseDTO.builder()
-                                .testcaseNo(Long.valueOf(String.valueOf(objArr[0])))
-                                .quizNo(Long.valueOf(String.valueOf(objArr[1])))
-                                .build();
-                if (objArr[2] != null) dto.setTestcaseInput(String.valueOf(objArr[2]));
-                if (objArr[3] != null) dto.setTestcaseOutput(String.valueOf(objArr[3]));
-                tcDTOList.add(dto);
-            } catch (Exception e) {
-            }
-        }
-        return tcDTOList;
-    }
-
-    /* testcase 추가 */
-    public void addTestcase(TestcaseDTO tcDTO) throws AddException {
-        Testcase tcEntity =
-                Testcase.builder()
-                        .quizNo(tcDTO.getQuizNo())
-                        .testcaseInput(tcDTO.getTestcaseInput())
-                        .testcaseOutput(tcDTO.getTestcaseOutput())
-                        .build();
-        repositoryTc.save(tcEntity);
-    }
-
-    /* testcase 수정 */
-    public void modifyTestcase(TestcaseDTO tcDTO) throws ModifyException {
-        Optional<Testcase> optTc = repositoryTc.findById(tcDTO.getTestcaseNo());
-        Testcase tcEntity = optTc.get();
-        tcEntity.modifyInputAndOutput(tcDTO.getTestcaseInput(), tcDTO.getTestcaseOutput());
-        repositoryTc.save(tcEntity);
-    }
-
-    /* testcase 삭제 */
-    public void removeTestcase(Long testcaseNo) throws RemoveException {
-        repositoryTc.deleteById(testcaseNo);
+        repository.deleteById(quizNo);
     }
 }
