@@ -54,8 +54,7 @@ public class QuizService {
     public void modifyTestcase(TestcaseDTO tcDTO) throws ModifyException {
         Optional<Testcase> optTc = repository.findById(tcDTO.getTestcaseNo());
         Testcase tcEntity = optTc.get();
-        tcEntity.modifyInput(tcDTO.getTestcaseInput());
-        tcEntity.modifyOutput(tcDTO.getTestcaseOutput());
+        tcEntity.modifyInputAndOutput(tcDTO.getTestcaseInput(), tcDTO.getTestcaseOutput());
         repository.save(tcEntity);
     }
 
