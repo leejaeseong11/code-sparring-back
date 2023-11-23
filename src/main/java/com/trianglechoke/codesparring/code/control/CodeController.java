@@ -17,21 +17,27 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 @RestController
 @RequestMapping("/code")
 public class CodeController {
 
+    //코드실행
     @PostMapping("/executeCode")
-    public ResponseEntity<String> executeCode(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> executeCode(@RequestParam("code") MultipartFile file) {
         try {
+            if (file.isEmpty()) {
+                return ResponseEntity.badRequest().body("업로드된 파일이 비어 있습니다.");
+            }
+
             // 업로드된 파일 내용 읽어오기
-            String codeContent = new String(file.getBytes(), "UTF-8");
+            String codeContent = new String(file.getBytes(), StandardCharsets.UTF_8);
 
             // 테스트케이스 생성 (입력값, 예상 출력값)
             String input = "4 5";
-            String expectedOutput = "0.8";  // 예상 출력값
+            String expectedOutput = "0.8"; // 예상 출력값
 
             // Java 코드에 입력값 삽입
             String modifiedJavaCode = insertInputToJavaCode(codeContent, input);
@@ -40,11 +46,10 @@ public class CodeController {
             String actualOutput = executeJavaCode(modifiedJavaCode);
 
             // 결과 확인
-            return ResponseEntity.ok("Test Passed! Expected: " + expectedOutput + ", Actual: " + actualOutput);
-
-        } catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            return ResponseEntity.ok("테스트 통과! 예상: " + expectedOutput + ", 실제: " + actualOutput);
+        } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error during code execution.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("코드 실행 중 오류 발생.");
         }
     }
 
@@ -53,19 +58,25 @@ public class CodeController {
         return javaCode.replace("// INSERT_INPUT_HERE", "String[] args = {\"" + input + "\"};");
     }
 
-    private String executeJavaCode(String javaCode) throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+    private String executeJavaCode(String javaCode)
+            throws IOException,
+                    ClassNotFoundException,
+                    IllegalAccessException,
+                    InstantiationException {
         // Java 컴파일러 가져오기
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
 
         // 메모리 상의 클래스 파일에 저장
-        JavaFileObject javaFileObject = (JavaFileObject) new JavaSourceFromString("DynamicCode", javaCode);
+        JavaFileObject javaFileObject =
+                (JavaFileObject) new JavaSourceFromString("DynamicCode", javaCode);
 
         // 컴파일 옵션 설정
         Iterable<String> options = Arrays.asList("-d", "./out/classes");
 
         // 컴파일 수행
-        compiler.getTask(null, fileManager, null, options, null, Arrays.asList(javaFileObject)).call();
+        compiler.getTask(null, fileManager, null, options, null, Arrays.asList(javaFileObject))
+                .call();
         fileManager.close();
 
         // 컴파일된 클래스를 동적으로 로드
@@ -82,7 +93,9 @@ public class CodeController {
 
         // 실행 결과 출력
         try {
-            loadedClass.getMethod("main", String[].class).invoke(instance, (Object) new String[]{});
+            loadedClass
+                    .getMethod("main", String[].class)
+                    .invoke(instance, (Object) new String[] {});
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -101,7 +114,11 @@ public class CodeController {
         final String code;
 
         JavaSourceFromString(String name, String code) {
-            super(URI.create("string:///" + name.replace('.', '/') + JavaFileObject.Kind.SOURCE.extension),
+            super(
+                    URI.create(
+                            "string:///"
+                                    + name.replace('.', '/')
+                                    + JavaFileObject.Kind.SOURCE.extension),
                     JavaFileObject.Kind.SOURCE);
             this.code = code;
         }
@@ -111,7 +128,4 @@ public class CodeController {
             return code;
         }
     }
-
-
-
 }

@@ -35,7 +35,7 @@ public class Quiz {
     private Long quizNo;
 
     // [FK] 문제를 제작한 회원 번호
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "member_no")
     private Member memberNo;
 
