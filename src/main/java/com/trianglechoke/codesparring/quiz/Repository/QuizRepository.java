@@ -1,7 +1,6 @@
 package com.trianglechoke.codesparring.quiz.Repository;
 
 import com.trianglechoke.codesparring.exception.AddException;
-import com.trianglechoke.codesparring.exception.FindException;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
 import jakarta.transaction.Transactional;
@@ -9,8 +8,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
     @Modifying
@@ -27,8 +24,9 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
             String quizTitle,
             String quizContent,
             String quizInput,
-            String quizOutput) throws AddException;
+            String quizOutput)
+            throws AddException;
 
-//    @Query(value = "")
-//    public List<Object[]> findByQuizTier() throws FindException;
+    //    @Query(value = "")
+    //    public List<Object[]> findByQuizTier() throws FindException;
 }
