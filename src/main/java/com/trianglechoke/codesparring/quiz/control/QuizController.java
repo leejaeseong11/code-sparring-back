@@ -34,7 +34,7 @@ public class QuizController {
     }
 
     /* 문제 추가하기 : 관리자 or 출제 회원 */
-    @PostMapping(value = "", produces = "application/json;charset=UTF-8")
+    @PostMapping()
     public ResponseEntity<?> writeQuiz(@RequestBody QuizDTO quizDTO) throws AddException {
         try {
             service.addQuiz(quizDTO);
@@ -47,7 +47,7 @@ public class QuizController {
     }
 
     /* 문제 수정하기 : 관리자 */
-    @PutMapping(value = "/{quizNo}", produces = "application/json;charset=UTF-8")
+    @PutMapping("/{quizNo}")
     public ResponseEntity<?> modifyQuiz(@PathVariable Long quizNo, @RequestBody QuizDTO quizDTO)
             throws ModifyException {
         quizDTO.setQuizNo(quizNo);
@@ -62,7 +62,7 @@ public class QuizController {
     }
 
     /* 문제 삭제하기 : 관리자 */
-    @DeleteMapping(value = "/{quizNo}", produces = "application/json;charset=UTF-8")
+    @DeleteMapping("/{quizNo}")
     public ResponseEntity<?> removeQuiz(@PathVariable Long quizNo) throws RemoveException {
         try {
             service.removeQuiz(quizNo);
@@ -81,7 +81,7 @@ public class QuizController {
     }
 
     /* 문제에 테스트케이스 추가하기 : 관리자 */
-    @PostMapping(value = "/testcase/{quizNo}", produces = "application/json;charset=UTF-8")
+    @PostMapping("/testcase/{quizNo}")
     public ResponseEntity<?> writeTestcase(
             @PathVariable Long quizNo, @RequestBody TestcaseDTO testcaseDTO) throws AddException {
         testcaseDTO.setQuizNo(quizNo);
@@ -96,7 +96,7 @@ public class QuizController {
     }
 
     /* 테스트케이스 수정하기 : 관리자 */
-    @PutMapping(value = "/testcase/{testcaseNo}", produces = "application/json;charset=UTF-8")
+    @PutMapping("/testcase/{testcaseNo}")
     public ResponseEntity<?> modifyTestcase(
             @PathVariable Long testcaseNo, @RequestBody TestcaseDTO testcaseDTO)
             throws ModifyException {
@@ -112,7 +112,7 @@ public class QuizController {
     }
 
     /* 테스트케이스 삭제하기 : 관리자 */
-    @DeleteMapping(value = "/testcase/{testcaseNo}", produces = "application/json;charset=UTF-8")
+    @DeleteMapping("/testcase/{testcaseNo}")
     public ResponseEntity<?> removeTestcase(@PathVariable Long testcaseNo) throws RemoveException {
         try {
             service.removeTestcase(testcaseNo);
