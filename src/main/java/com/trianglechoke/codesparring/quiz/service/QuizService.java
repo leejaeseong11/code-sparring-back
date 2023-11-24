@@ -39,7 +39,6 @@ public class QuizService {
         return quizDTOList;
     }
 
-    /* TODO - quiz 필터 별 목록 조회 -> 추후 추가할 예정 : 검증된 문제 목록, 회원 출제 문제 목록, 등등 */
     /* quiz 티어 별 목록 조회 */
     public List<QuizDTO> findByQuizTier(String quizTier) throws FindException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
@@ -57,6 +56,8 @@ public class QuizService {
         }
         return quizDTOList;
     }
+
+    /* TODO - quiz 필터 별 목록 조회 -> 추후 더 추가할 예정 */
 
     /* quiz 상세정보 조회 : quiz + testcaseList */
     public QuizDTO findByQuizNo(Long quizNo) throws FindException {
@@ -79,7 +80,6 @@ public class QuizService {
             TestcaseDTO dto =
                     TestcaseDTO.builder()
                             .testcaseNo(tc.getTestcaseNo())
-                            .testcaseInput(tc.getTestcaseInput())
                             .testcaseOutput(tc.getTestcaseOutput())
                             .build();
             testcaseDTOList.add(dto);

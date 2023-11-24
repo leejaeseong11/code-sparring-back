@@ -30,7 +30,7 @@ public class TestcaseService {
                                 .testcaseNo(Long.valueOf(String.valueOf(objArr[0])))
                                 .quizNo(Long.valueOf(String.valueOf(objArr[1])))
                                 .build();
-                if (objArr[2] != null) dto.setTestcaseInput(String.valueOf(objArr[2]));
+
                 if (objArr[3] != null) dto.setTestcaseOutput(String.valueOf(objArr[3]));
                 tcDTOList.add(dto);
             } catch (Exception e) {
@@ -44,7 +44,6 @@ public class TestcaseService {
         Testcase tcEntity =
                 Testcase.builder()
                         .quizNo(tcDTO.getQuizNo())
-                        .testcaseInput(tcDTO.getTestcaseInput())
                         .testcaseOutput(tcDTO.getTestcaseOutput())
                         .build();
         repository.save(tcEntity);
@@ -54,7 +53,6 @@ public class TestcaseService {
     public void modifyTestcase(TestcaseDTO tcDTO) throws ModifyException {
         Optional<Testcase> optTc = repository.findById(tcDTO.getTestcaseNo());
         Testcase tcEntity = optTc.get();
-        tcEntity.modifyInputAndOutput(tcDTO.getTestcaseInput(), tcDTO.getTestcaseOutput());
         repository.save(tcEntity);
     }
 

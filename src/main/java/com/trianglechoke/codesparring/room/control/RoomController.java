@@ -1,7 +1,7 @@
 package com.trianglechoke.codesparring.room.control;
 
-import com.trianglechoke.codesparring.exception.AddException;
-import com.trianglechoke.codesparring.exception.FindException;
+import com.trianglechoke.codesparring.exception.ErrorCode;
+import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
 
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/room")
 public class RoomController {
     @GetMapping
-    public RoomDTO find() throws FindException {
-        //        throw new FindException("한글 테스트");
+    public RoomDTO find() {
+
         RoomDTO room = new RoomDTO();
         room.setRoomPwd("0000");
         room.setRoomTitle("테스트 방");
@@ -19,7 +19,7 @@ public class RoomController {
     }
 
     @PostMapping
-    public void add(@RequestBody RoomDTO room) throws AddException {
-        //        System.out.println(room);
+    public void add(@RequestBody RoomDTO room) {
+        throw new MyException(ErrorCode.ALREADY_STARTED_ROOM);
     }
 }
