@@ -46,8 +46,7 @@ public class Member {
     private String memberId;
 
     // 회원 비밀번호
-
-    @Column(name = "member_pwd", columnDefinition = "VARCHAR2(60)")
+    @Column(name = "member_pwd", columnDefinition = "VARCHAR2(100)")
     @NotNull
     private String memberPwd;
 

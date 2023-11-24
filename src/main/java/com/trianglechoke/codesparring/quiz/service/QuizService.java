@@ -80,7 +80,6 @@ public class QuizService {
             TestcaseDTO dto =
                     TestcaseDTO.builder()
                             .testcaseNo(tc.getTestcaseNo())
-                            .testcaseInput(tc.getTestcaseInput())
                             .testcaseOutput(tc.getTestcaseOutput())
                             .build();
             testcaseDTOList.add(dto);

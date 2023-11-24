@@ -2,17 +2,15 @@ package com.trianglechoke.codesparring.quiz.dto;
 
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Builder
-public class TestcaseDTO {
+public class TestcaseInputDTO {
+    private Long inputNo;
     private Long testcaseNo;
-    private Long quizNo;
-    private String testcaseOutput;
-    private List<TestcaseInputDTO> testcaseInputDTOList;
+    private String inputVar;
+    private String testcaseInput;
 }

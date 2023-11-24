@@ -3,10 +3,7 @@ package com.trianglechoke.codesparring.quiz.entity;
 import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,6 +13,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.DynamicInsert;
+
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -33,9 +32,8 @@ import org.hibernate.annotations.DynamicInsert;
 public class Testcase {
     // [PK] 테스트케이스 번호
     @Id
-    @Column(name = "testcase_no", columnDefinition = "NUMBER")
+    @Column(name = "testcase_no")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testcase_no_seq_generator")
-    @NotNull
     private Long testcaseNo;
 
     // [FK] 문제 번호
@@ -43,17 +41,12 @@ public class Testcase {
     @NotNull
     private Long quizNo;
 
-    // 입력값
-    @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")
-    private String testcaseInput;
-
     // 출력값
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
     private String testcaseOutput;
 
-    // 테스트케이스 수정 메소드
-    public void modifyInputAndOutput(String input, String output) {
-        this.testcaseInput = input;
-        this.testcaseOutput = output;
-    }
+    // 입력값 목록
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "testcase_no")
+    private List<TestcaseInput> testcaseInputList;
 }
