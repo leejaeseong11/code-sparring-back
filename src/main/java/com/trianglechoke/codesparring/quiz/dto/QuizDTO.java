@@ -13,7 +13,6 @@ import java.util.List;
 @ToString
 @Builder
 public class QuizDTO {
-    private Long quizNo;
     private Long memberNo;
     private String quizTitle;
     private String quizContent;
