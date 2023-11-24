@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,17 +26,10 @@ import org.hibernate.annotations.DynamicInsert;
 @Entity
 @Table(name = "Testcase")
 @DynamicInsert
-@SequenceGenerator(
-        name = "testcase_no_seq_generator",
-        sequenceName = "testcase_no_seq",
-        initialValue = 1,
-        allocationSize = 1)
 /* 테스트케이스 Entity */
 public class Testcase {
     // [PK] 테스트케이스 번호
     @Id
-    @Column(name = "testcase_no", columnDefinition = "NUMBER")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testcase_no_seq_generator")
     @NotNull
     private Long testcaseNo;
 
@@ -43,17 +38,11 @@ public class Testcase {
     @NotNull
     private Long quizNo;
 
-    // 입력값
-    @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")
-    private String testcaseInput;
-
     // 출력값
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
     private String testcaseOutput;
 
-    // 테스트케이스 수정 메소드
-    public void modifyInputAndOutput(String input, String output) {
-        this.testcaseInput = input;
-        this.testcaseOutput = output;
-    }
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "testcase_no")
+    private List<TestcaseInput> testcaseInputList;
 }
