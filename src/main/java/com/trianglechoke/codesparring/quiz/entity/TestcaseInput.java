@@ -35,12 +35,12 @@ public class TestcaseInput {
     private Long testcaseNo;
 
     // 매개변수
-    @Column(name = "input_var")
+    @Column(name = "input_var", columnDefinition = "VARCHAR2(100)")
     @NotNull
     private String inputVar;
 
     // 입력값
-    @Column(name = "testcase_input")
+    @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")
     @NotNull
     private String testcaseInput;
 }
