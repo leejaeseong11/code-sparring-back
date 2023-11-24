@@ -1,6 +1,5 @@
 package com.trianglechoke.codesparring.member.entity;
 
-import com.trianglechoke.codesparring.member.constant.Role;
 import com.trianglechoke.codesparring.member.dto.MemberDTO;
 import com.trianglechoke.codesparring.membercode.entity.MemberCode;
 
@@ -16,6 +15,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
+
+import static com.trianglechoke.codesparring.member.entity.Role.USER;
 
 @Getter
 @Setter
@@ -100,35 +101,49 @@ public class Member {
     private Long drawCnt;
 
     // 회원의 활성화 상태 (0은 비활성화)
-
     @Column(name = "member_status", columnDefinition = "NUMBER(1) default 1")
     @NotNull
     private Integer memberStatus;
 
 
     // 회원의 관리자 여부 (0은 관리자)
-    @Column(name = "admin_status", columnDefinition = "NUMBER(1) default 1")
+//    @Column(name = "admin_status", columnDefinition = "NUMBER(1) default 1")
+//    @NotNull
+//    private Integer adminStatus;
+
+    // 회원의 권한
+    @Column(name = "admin_status")
     @NotNull
-    private Integer adminStatus;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     // 회원의 제출한 코드 목록
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "member_no")
     private List<MemberCode> memberCodeList;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
     // DTO -> Entity
-    public static Member createMember(MemberDTO memberDTO, PasswordEncoder passwordEncoder){
+    public static Member memberDTOToEntity(MemberDTO memberDTO, PasswordEncoder passwordEncoder){
         Member member = Member.builder()
-                .role(Role.USER)
+                .role(USER)
                 .memberId(memberDTO.getMemberId())
                 .memberPwd(passwordEncoder.encode(memberDTO.getMemberPwd()))
                 .memberName(memberDTO.getMemberName())
                 .memberInfo(memberDTO.getMemberInfo())
+                .memberProfileImg(memberDTO.getMemberProfileImg() != null ? memberDTO.getMemberProfileImg() : 0)
+                .memberLevel(memberDTO.getMemberLevel() != null ? memberDTO.getMemberLevel() : 1L)
+                .memberExp(memberDTO.getMemberExp() != null ? memberDTO.getMemberExp() : 0)
+                .memberTier(memberDTO.getMemberTier() != null ? memberDTO.getMemberTier() : "BRONZE")
+                .tierPoint(memberDTO.getTierPoint() != null ? memberDTO.getTierPoint() : 0L)
+                .winCnt(memberDTO.getWinCnt() != null ? memberDTO.getWinCnt() : 0L)
+                .loseCnt(memberDTO.getLoseCnt() != null ? memberDTO.getLoseCnt() : 0L)
+                .drawCnt(memberDTO.getDrawCnt() != null ? memberDTO.getDrawCnt() : 0L)
+                .memberStatus(memberDTO.getMemberStatus() != null ? memberDTO.getMemberStatus() : 1)
+                .role(memberDTO.getRole() != null ? memberDTO.getRole() : USER)
                 .build();
 
         return member;
     }
+
+
 }

@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.beans.Transient;
-
 @SpringBootTest
 @Transactional
 class MemberServiceTest {
@@ -28,7 +26,7 @@ class MemberServiceTest {
                 .memberPwd("1111")
                 .memberName("홍길동")
                 .build();
-        Member member = Member.createMember(dto, passwordEncoder);
+        Member member = Member.memberDTOToEntity(dto, passwordEncoder);
         return member;
     }
 
@@ -45,10 +43,19 @@ class MemberServiceTest {
     void saveMemberTest2() {
         Member member1 = createMember();
         Member member2 = createMember();
+        System.out.println(memberService.saveMember(member1));
+        System.out.println(memberService.saveMember(member2));
+    }
+
+    @Test
+    @DisplayName("중복 회원 에외 발생 테스트2")
+    void saveMemberTest3() {
+        Member member1 = createMember();
+        Member member2 = createMember();
         memberService.saveMember(member1);
-        Throwable e = Assertions.assertThrows(IllegalStateException.class, () -> {
+        Throwable e = Assertions.assertThrows(IllegalStateException.class, () ->{
             memberService.saveMember(member2);
         });
-        Assertions.assertEquals("이미 존재하는 회원입니다.", e.getMessage());
+        Assertions.assertEquals("이미 존재하는 회원입니다.", e.getMessage()); // 기대값, 실제값
     }
 }
