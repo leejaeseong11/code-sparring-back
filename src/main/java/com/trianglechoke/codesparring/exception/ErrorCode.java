@@ -22,7 +22,6 @@ public enum ErrorCode {
     QUIZ_NOT_FOUND(NOT_FOUND, "해당 문제를 찾을 수 없습니다."),
     ROOM_NOT_FOUND(NOT_FOUND, "해당 방 정보를 찾을 수 없습니다.");
 
-
     private final HttpStatus httpStatus;
     private final String detail;
 }
