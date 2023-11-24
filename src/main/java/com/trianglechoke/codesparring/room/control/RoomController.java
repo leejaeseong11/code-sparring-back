@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 public class RoomController {
     @GetMapping
     public RoomDTO find() {
-
         RoomDTO room = new RoomDTO();
         room.setRoomPwd("0000");
         room.setRoomTitle("테스트 방");
