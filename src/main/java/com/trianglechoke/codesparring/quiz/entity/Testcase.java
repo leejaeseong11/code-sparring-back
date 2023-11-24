@@ -3,10 +3,7 @@ package com.trianglechoke.codesparring.quiz.entity;
 import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -29,9 +26,7 @@ import java.util.List;
 /* 테스트케이스 Entity */
 public class Testcase {
     // [PK] 테스트케이스 번호
-    @Id
-    @NotNull
-    private Long testcaseNo;
+    @Id @NotNull private Long testcaseNo;
 
     // [FK] 문제 번호
     @Column(name = "quiz_no")
