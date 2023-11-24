@@ -35,8 +35,7 @@ public class TestcaseController {
             String msg = "테스트케이스 추가 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (AddException e) {
-            String msg = "테스트케이스 추가 실패";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            throw new AddException("테스트케이스 추가 실패");
         }
     }
 
@@ -51,8 +50,7 @@ public class TestcaseController {
             String msg = "테스트케이스 수정 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (ModifyException e) {
-            String msg = "테스트케이스 수정 실패";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            throw new ModifyException("테스트케이스 수정 실패");
         }
     }
 
@@ -64,8 +62,7 @@ public class TestcaseController {
             String msg = "테스트케이스 삭제 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (RemoveException e) {
-            String msg = "테스트케이스 수정 실패";
-            return new ResponseEntity<>(msg, HttpStatus.BAD_REQUEST);
+            throw new RemoveException("테스트케이스 삭제 실패");
         }
     }
 }
