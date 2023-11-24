@@ -23,10 +23,18 @@ import java.util.List;
 @Entity
 @Table(name = "Testcase")
 @DynamicInsert
+@SequenceGenerator(
+        name = "testcase_no_seq_generator",
+        sequenceName = "testcase_no_seq",
+        initialValue = 1,
+        allocationSize = 1)
 /* 테스트케이스 Entity */
 public class Testcase {
     // [PK] 테스트케이스 번호
-    @Id @NotNull private Long testcaseNo;
+    @Id
+    @Column(name = "testcase_no")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "testcase_no_seq_generator")
+    private Long testcaseNo;
 
     // [FK] 문제 번호
     @Column(name = "quiz_no")
@@ -37,6 +45,7 @@ public class Testcase {
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
     private String testcaseOutput;
 
+    // 입력값 목록
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "testcase_no")
     private List<TestcaseInput> testcaseInputList;

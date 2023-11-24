@@ -22,13 +22,12 @@ import org.hibernate.annotations.DynamicInsert;
         sequenceName = "input_no_seq",
         initialValue = 1,
         allocationSize = 1)
-/* 문제 Entity */
+/* 입력값 Entity */
 public class TestcaseInput {
     // [PK] 입력값 번호
     @Id
     @Column(name = "input_no")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "input_no_seq_generator")
-    @NotNull
     private Long inputNo;
 
     // [FK] 테스트케이스 번호
@@ -43,6 +42,5 @@ public class TestcaseInput {
 
     // 입력값
     @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")
-    @NotNull
     private String testcaseInput;
 }
