@@ -41,6 +41,11 @@ public class Testcase {
     @NotNull
     private Long quizNo;
 
+    // 출력값
+    @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
+    private String testcaseOutput;
+
+    // 입력값 목록
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "testcase_no")
     private List<TestcaseInput> testcaseInputList;
