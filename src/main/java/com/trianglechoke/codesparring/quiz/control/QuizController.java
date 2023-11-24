@@ -1,9 +1,6 @@
 package com.trianglechoke.codesparring.quiz.control;
 
-import com.trianglechoke.codesparring.exception.AddException;
-import com.trianglechoke.codesparring.exception.FindException;
-import com.trianglechoke.codesparring.exception.ModifyException;
-import com.trianglechoke.codesparring.exception.RemoveException;
+import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.service.QuizService;
 
@@ -21,14 +18,31 @@ public class QuizController {
 
     /* 문제 전체 목록 조회하기 */
     @GetMapping("/list")
-    public List<QuizDTO> quizList() throws FindException {
-        return service.findAll();
+    public List<QuizDTO> quizList() {
+        try {
+            return service.findAll();
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+        }
     }
 
     /* 문제 목록 티어별로 조회하기 */
     @GetMapping("/list/{quizTier}")
-    public List<QuizDTO> quizListByQuizTier(@PathVariable String quizTier) throws FindException {
-        return service.findByQuizTier(quizTier);
+    public List<QuizDTO> quizListByQuizTier(@PathVariable String quizTier) {
+        try {
+            return service.findByQuizTier(quizTier);
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/list/correct")
+    public List<QuizDTO> quizListOrderByCorrect() {
+        try {
+            return service.findOrderByCorrect();
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+        }
     }
 
     /* 문제 상세정보 조회하기 : 관리자 or 회원 */
