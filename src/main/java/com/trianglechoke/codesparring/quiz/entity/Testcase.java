@@ -41,7 +41,6 @@ public class Testcase {
     @NotNull
     private Long quizNo;
 
-
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "testcase_no")
     private List<TestcaseInput> testcaseInputList;
