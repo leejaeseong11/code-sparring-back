@@ -84,13 +84,13 @@ public class QuizController {
 
     /* 문제 삭제하기 : 관리자 */
     @DeleteMapping("/{quizNo}")
-    public ResponseEntity<?> removeQuiz(@PathVariable Long quizNo) throws RemoveException {
+    public ResponseEntity<?> removeQuiz(@PathVariable Long quizNo) throws MyException {
         try {
             service.removeQuiz(quizNo);
             String msg = "문제 삭제 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
-        } catch (RemoveException e) {
-            throw new RemoveException("문제 삭제 실패");
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_NOT_FOUND);
         }
     }
 }
