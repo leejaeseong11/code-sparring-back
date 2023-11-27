@@ -4,9 +4,13 @@ import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.quiz.Repository.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
+import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
 
+import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
+import com.trianglechoke.codesparring.report.dto.ReportDTO;
+import com.trianglechoke.codesparring.report.entity.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,9 +91,20 @@ public class QuizService {
                         .quizSubmitCnt(quizEntity.getQuizSubmitCnt())
                         .quizSuccessCnt(quizEntity.getQuizSuccessCnt())
                         .quizTier(quizEntity.getQuizTier())
-                        .memberNo((quizEntity.getMember().getMemberNo()))
+                        .memberNo(quizEntity.getMember().getMemberNo())
+                        .memberName(quizEntity.getMember().getMemberName())
                         .outputType(quizEntity.getOutputType())
                         .build();
+        List<ReportDTO> reportDTOList = new ArrayList<>();
+        for (Report r : quizEntity.getReportList()) {
+            ReportDTO dto= ReportDTO.builder()
+                    .reportNo(r.getReportNo())
+                    .memberName(r.getMember().getMemberName())
+                    .reportComment(r.getReportComment())
+                    .build();
+            reportDTOList.add(dto);
+        }
+        quizDTO.setReportDTOList(reportDTOList);
         List<TestcaseDTO> testcaseDTOList = new ArrayList<>();
         for (Testcase tc : quizEntity.getTestcaseList()) {
             TestcaseDTO dto =
@@ -97,10 +112,19 @@ public class QuizService {
                             .testcaseNo(tc.getTestcaseNo())
                             .testcaseOutput(tc.getTestcaseOutput())
                             .build();
+            List<TestcaseInputDTO> testcaseInputDTOList=new ArrayList<>();
+            for(TestcaseInput input:tc.getTestcaseInputList()) {
+                TestcaseInputDTO dtoIn= TestcaseInputDTO.builder()
+                        .inputNo(input.getInputNo())
+                        .inputVar(input.getInputVar())
+                        .testcaseInput(input.getTestcaseInput())
+                        .build();
+                testcaseInputDTOList.add(dtoIn);
+            }
+            dto.setTestcaseInputDTOList(testcaseInputDTOList);
             testcaseDTOList.add(dto);
         }
         quizDTO.setTestcaseDTOList(testcaseDTOList);
-        // TODO - reportList 추가
         return quizDTO;
     }
 

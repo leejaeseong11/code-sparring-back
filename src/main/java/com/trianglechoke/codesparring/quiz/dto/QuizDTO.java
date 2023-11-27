@@ -15,6 +15,7 @@ import java.util.List;
 public class QuizDTO {
     private Long quizNo;
     private Long memberNo;
+    private String memberName;
     private String quizTitle;
     private String quizContent;
     private String quizTier;
