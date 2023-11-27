@@ -4,7 +4,12 @@ import lombok.*;
 
 @Getter
 @Setter
-// @AllArgsConstructor
-// @NoArgsConstructor
 @ToString
-public class RoomMemberDTO {}
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class RoomMemberDTO {
+    private Long roomNo;
+    private Long memberNo;
+    private Integer hostStatus;
+}
