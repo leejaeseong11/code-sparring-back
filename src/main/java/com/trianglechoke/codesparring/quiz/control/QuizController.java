@@ -63,7 +63,7 @@ public class QuizController {
             service.addQuiz(quizDTO);
             String msg = "문제 출제 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
-        } catch (AddException e) {
+        } catch (Exception e) {
             throw new MyException(ErrorCode.QUIZ_NOT_SAVED);
         }
     }
@@ -71,14 +71,14 @@ public class QuizController {
     /* 문제 수정하기 : 관리자 */
     @PutMapping("/{quizNo}")
     public ResponseEntity<?> modifyQuiz(@PathVariable Long quizNo, @RequestBody QuizDTO quizDTO)
-            throws ModifyException {
+            throws MyException {
         quizDTO.setQuizNo(quizNo);
         try {
             service.modifyQuiz(quizDTO);
             String msg = "문제 수정 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
-        } catch (ModifyException e) {
-            throw new ModifyException("문제 수정 실패");
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_NOT_MODIFIED);
         }
     }
 
