@@ -15,16 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class TestcaseController {
     @Autowired private TestcaseService service;
 
-    /* 문제에 해당하는 테스트케이스 목록 조회하기 : 관리자 */
-    //    @GetMapping("/{quizNo}")
-    //    public List<TestcaseDTO> testcaseList(@PathVariable Long quizNo) throws FindException {
-    //        return service.findAllByQuizNo(quizNo);
-    //    }
-
     /* 문제에 테스트케이스 추가하기 : 관리자 */
     @PostMapping("/{quizNo}")
     public ResponseEntity<?> writeTestcase(
-            @PathVariable Long quizNo, @RequestBody TestcaseDTO testcaseDTO) throws MyException {
+            @PathVariable Long quizNo, @RequestBody TestcaseDTO testcaseDTO) {
         testcaseDTO.setQuizNo(quizNo);
         try {
             service.addTestcase(testcaseDTO);
@@ -38,8 +32,7 @@ public class TestcaseController {
     /* 테스트케이스 수정하기 : 관리자 */
     @PutMapping("/{testcaseNo}")
     public ResponseEntity<?> modifyTestcase(
-            @PathVariable Long testcaseNo, @RequestBody TestcaseDTO testcaseDTO)
-            throws MyException {
+            @PathVariable Long testcaseNo, @RequestBody TestcaseDTO testcaseDTO) {
         testcaseDTO.setTestcaseNo(testcaseNo);
         try {
             service.modifyTestcase(testcaseDTO);
@@ -52,7 +45,7 @@ public class TestcaseController {
 
     /* 테스트케이스 삭제하기 : 관리자 */
     @DeleteMapping("/{testcaseNo}")
-    public ResponseEntity<?> removeTestcase(@PathVariable Long testcaseNo) throws MyException {
+    public ResponseEntity<?> removeTestcase(@PathVariable Long testcaseNo) {
         try {
             service.removeTestcase(testcaseNo);
             String msg = "테스트케이스 삭제 성공";
