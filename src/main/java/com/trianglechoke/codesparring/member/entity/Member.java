@@ -144,5 +144,9 @@ public class Member {
         return member;
     }
 
+    public boolean isActivated() {
+        return memberStatus != null && memberStatus == 1;
+    }
+
 
 }

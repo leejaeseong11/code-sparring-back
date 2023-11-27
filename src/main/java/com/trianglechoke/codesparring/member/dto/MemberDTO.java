@@ -1,8 +1,11 @@
 package com.trianglechoke.codesparring.member.dto;
 
+import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.member.entity.Role;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -28,5 +31,17 @@ public class MemberDTO {
     private Integer memberStatus;
     private Role role;
 
+    public static MemberDTO from(Member member) {
+        if(member == null) return null;
+
+        return MemberDTO.builder()
+                .memberId(member.getMemberId())
+                .memberName(member.getMemberName())
+                .role(member.getRole())
+                .build();
+    }
 
 }
+
+
+
