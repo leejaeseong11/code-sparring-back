@@ -33,9 +33,9 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
     @Query(
             value =
                     "INSERT INTO quiz (quiz_no, member_no, quiz_title, quiz_content, quiz_input,"
-                            + " quiz_output)\n"
+                            + " quiz_output, output_type)\n"
                             + "VALUES (quiz_no_seq.NEXTVAL, :memberNo, :quizTitle, :quizContent,"
-                            + " :quizInput, :quizOutput)",
+                            + " :quizInput, :quizOutput, :outputType)",
             nativeQuery = true)
     @Transactional
     public void saveQuiz(
@@ -43,5 +43,5 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
             String quizTitle,
             String quizContent,
             String quizInput,
-            String quizOutput);
+            String quizOutput, String outputType);
 }

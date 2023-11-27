@@ -111,7 +111,8 @@ public class QuizService {
                 quizDTO.getQuizTitle(),
                 quizDTO.getQuizContent(),
                 quizDTO.getQuizInput(),
-                quizDTO.getQuizOutput());
+                quizDTO.getQuizOutput(),
+                quizDTO.getOutputType());
     }
 
     /* quiz 수정 : title, content, input, output */

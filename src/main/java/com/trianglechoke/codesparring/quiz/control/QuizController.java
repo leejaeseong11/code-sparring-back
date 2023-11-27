@@ -58,13 +58,13 @@ public class QuizController {
 
     /* 문제 추가하기 : 관리자 or 출제 회원 */
     @PostMapping()
-    public ResponseEntity<?> writeQuiz(@RequestBody QuizDTO quizDTO) throws AddException {
+    public ResponseEntity<?> writeQuiz(@RequestBody QuizDTO quizDTO) throws MyException {
         try {
             service.addQuiz(quizDTO);
             String msg = "문제 출제 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (AddException e) {
-            throw new AddException("문제 출제 실패");
+            throw new MyException(ErrorCode.QUIZ_NOT_SAVED);
         }
     }
 
