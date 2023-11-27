@@ -56,22 +56,22 @@ public class QuizService {
     }
 
     /* quiz 전체 목록 조회_정답률순 정렬 */
-//    public List<QuizDTO> findOrderByCorrect() throws MyException {
-//        List<QuizDTO> quizDTOList = new ArrayList<>();
-//        List<Object[]> quizList = repository.findOrderByCorrect();
-//        for (Object[] objArr : quizList) {
-//            QuizDTO dto =
-//                    QuizDTO.builder()
-//                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
-//                            .quizTitle(String.valueOf(objArr[8]))
-//                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
-//                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
-//                            .quizTier(String.valueOf(objArr[7]))
-//                            .build();
-//            quizDTOList.add(dto);
-//        }
-//        return quizDTOList;
-//    }
+    //    public List<QuizDTO> findOrderByCorrect() throws MyException {
+    //        List<QuizDTO> quizDTOList = new ArrayList<>();
+    //        List<Object[]> quizList = repository.findOrderByCorrect();
+    //        for (Object[] objArr : quizList) {
+    //            QuizDTO dto =
+    //                    QuizDTO.builder()
+    //                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
+    //                            .quizTitle(String.valueOf(objArr[8]))
+    //                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
+    //                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
+    //                            .quizTier(String.valueOf(objArr[7]))
+    //                            .build();
+    //            quizDTOList.add(dto);
+    //        }
+    //        return quizDTOList;
+    //    }
 
     /* quiz 상세정보 조회 : quiz + reportList + testcaseList */
     public QuizDTO findByQuizNo(Long quizNo) throws MyException {
