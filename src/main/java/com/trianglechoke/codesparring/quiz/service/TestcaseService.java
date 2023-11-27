@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -29,8 +30,8 @@ public class TestcaseService {
                         .testcaseOutput(tcDTO.getTestcaseOutput())
                         .build();
         testcaseRepository.save(tcEntity);
-        log.error("{}",tcDTO.getTestcaseInputDTOList().size());
-        for(TestcaseInputDTO input:tcDTO.getTestcaseInputDTOList()) {
+        log.error("{}", tcDTO.getTestcaseInputDTOList().size());
+        for (TestcaseInputDTO input : tcDTO.getTestcaseInputDTOList()) {
             TestcaseInput inputEntity =
                     TestcaseInput.builder()
                             .testcaseNo(tcEntity.getTestcaseNo())
@@ -42,14 +43,20 @@ public class TestcaseService {
     }
 
     /* testcase 수정 */
-    //    public void modifyTestcase(TestcaseDTO tcDTO) throws ModifyException {
-    //        Optional<Testcase> optTc = repository.findById(tcDTO.getTestcaseNo());
-    //        Testcase tcEntity = optTc.get();
-    //        repository.save(tcEntity);
-    //    }
+    public void modifyTestcase(TestcaseDTO tcDTO) throws MyException {
+        Optional<Testcase> optTc = testcaseRepository.findById(tcDTO.getTestcaseNo());
+        Testcase tcEntity = optTc.get();
+        tcEntity.modifyOutput(tcDTO.getTestcaseOutput());
+        for (int i = 0; i < tcDTO.getTestcaseInputDTOList().size(); i++) {
+            tcEntity.getTestcaseInputList()
+                    .get(i)
+                    .modifyInput(tcDTO.getTestcaseInputDTOList().get(i));
+        }
+        testcaseRepository.save(tcEntity);
+    }
 
     /* testcase 삭제 */
-    //    public void removeTestcase(Long testcaseNo) throws RemoveException {
-    //        repository.deleteById(testcaseNo);
-    //    }
+    public void removeTestcase(Long testcaseNo) throws MyException {
+        testcaseRepository.deleteById(testcaseNo);
+    }
 }

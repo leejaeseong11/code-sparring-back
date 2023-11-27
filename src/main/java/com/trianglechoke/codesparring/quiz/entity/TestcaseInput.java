@@ -1,5 +1,6 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
+import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -43,4 +44,9 @@ public class TestcaseInput {
     // 입력값
     @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")
     private String testcaseInput;
+
+    public void modifyInput(TestcaseInputDTO testcaseInput) {
+        this.inputVar=testcaseInput.getInputVar();
+        this.testcaseInput=testcaseInput.getTestcaseInput();
+    }
 }

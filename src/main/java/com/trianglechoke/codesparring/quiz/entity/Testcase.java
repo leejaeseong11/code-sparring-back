@@ -48,4 +48,8 @@ public class Testcase {
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "testcase_no")
     private List<TestcaseInput> testcaseInputList;
+
+    public void modifyOutput(String output) {
+        this.testcaseOutput=output;
+    }
 }

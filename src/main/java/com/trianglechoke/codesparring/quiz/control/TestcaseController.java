@@ -22,45 +22,43 @@ public class TestcaseController {
     //    }
 
     /* 문제에 테스트케이스 추가하기 : 관리자 */
-        @PostMapping("/{quizNo}")
-        public ResponseEntity<?> writeTestcase(
-                @PathVariable Long quizNo, @RequestBody TestcaseDTO testcaseDTO) throws
-                MyException {
-            testcaseDTO.setQuizNo(quizNo);
-            try {
-                service.addTestcase(testcaseDTO);
-                String msg = "테스트케이스 추가 성공";
-                return new ResponseEntity<>(msg, HttpStatus.OK);
-            } catch (MyException e) {
-                throw new MyException(ErrorCode.TESTCASE_NOT_SAVED);
-            }
+    @PostMapping("/{quizNo}")
+    public ResponseEntity<?> writeTestcase(
+            @PathVariable Long quizNo, @RequestBody TestcaseDTO testcaseDTO) throws MyException {
+        testcaseDTO.setQuizNo(quizNo);
+        try {
+            service.addTestcase(testcaseDTO);
+            String msg = "테스트케이스 추가 성공";
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.TESTCASE_NOT_SAVED);
         }
+    }
 
     /* 테스트케이스 수정하기 : 관리자 */
-    //    @PutMapping("/{testcaseNo}")
-    //    public ResponseEntity<?> modifyTestcase(
-    //            @PathVariable Long testcaseNo, @RequestBody TestcaseDTO testcaseDTO)
-    //            throws ModifyException {
-    //        testcaseDTO.setTestcaseNo(testcaseNo);
-    //        try {
-    //            service.modifyTestcase(testcaseDTO);
-    //            String msg = "테스트케이스 수정 성공";
-    //            return new ResponseEntity<>(msg, HttpStatus.OK);
-    //        } catch (ModifyException e) {
-    //            throw new ModifyException("테스트케이스 수정 실패");
-    //        }
-    //    }
+    @PutMapping("/{testcaseNo}")
+    public ResponseEntity<?> modifyTestcase(
+            @PathVariable Long testcaseNo, @RequestBody TestcaseDTO testcaseDTO)
+            throws MyException {
+        testcaseDTO.setTestcaseNo(testcaseNo);
+        try {
+            service.modifyTestcase(testcaseDTO);
+            String msg = "테스트케이스 수정 성공";
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.TESTCASE_NOT_MODIFIED);
+        }
+    }
 
     /* 테스트케이스 삭제하기 : 관리자 */
-    //    @DeleteMapping("/{testcaseNo}")
-    //    public ResponseEntity<?> removeTestcase(@PathVariable Long testcaseNo) throws
-    // RemoveException {
-    //        try {
-    //            service.removeTestcase(testcaseNo);
-    //            String msg = "테스트케이스 삭제 성공";
-    //            return new ResponseEntity<>(msg, HttpStatus.OK);
-    //        } catch (RemoveException e) {
-    //            throw new RemoveException("테스트케이스 삭제 실패");
-    //        }
-    //    }
+    @DeleteMapping("/{testcaseNo}")
+    public ResponseEntity<?> removeTestcase(@PathVariable Long testcaseNo) throws MyException {
+        try {
+            service.removeTestcase(testcaseNo);
+            String msg = "테스트케이스 삭제 성공";
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.TESTCASE_NOT_FOUND);
+        }
+    }
 }

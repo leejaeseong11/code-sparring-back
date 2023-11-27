@@ -21,10 +21,12 @@ public enum ErrorCode {
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     QUIZ_LIST_NOT_FOUND(NOT_FOUND, "문제 목록을 찾을 수 없습니다."),
     QUIZ_NOT_FOUND(NOT_FOUND, "해당 문제를 찾을 수 없습니다."),
+    TESTCASE_NOT_FOUND(NOT_FOUND, "테스트케이스를 찾을 수 없습니다."),
     ROOM_NOT_FOUND(NOT_FOUND, "해당 방 정보를 찾을 수 없습니다."),
 
     /* 304 NOT_MODIFIED : 클라이언트가 가지고 있는 Resource 가 수정되지 않았음 */
-    QUIZ_NOT_MODIFIED(NOT_MODIFIED, "해당 문제를 수정할 수 없습니다.");
+    QUIZ_NOT_MODIFIED(NOT_MODIFIED, "해당 문제를 수정할 수 없습니다."),
+    TESTCASE_NOT_MODIFIED(NOT_MODIFIED, "해당 테스트케이스를 수정할 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;
