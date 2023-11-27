@@ -11,10 +11,10 @@ public class TestcaseController {
     @Autowired private TestcaseService service;
 
     /* 문제에 해당하는 테스트케이스 목록 조회하기 : 관리자 */
-//    @GetMapping("/{quizNo}")
-//    public List<TestcaseDTO> testcaseList(@PathVariable Long quizNo) throws FindException {
-//        return service.findAllByQuizNo(quizNo);
-//    }
+    //    @GetMapping("/{quizNo}")
+    //    public List<TestcaseDTO> testcaseList(@PathVariable Long quizNo) throws FindException {
+    //        return service.findAllByQuizNo(quizNo);
+    //    }
 
     /* 문제에 테스트케이스 추가하기 : 관리자 */
     //    @PostMapping("/{quizNo}")
