@@ -48,8 +48,12 @@ public class QuizController {
     /* 문제 상세정보 조회하기 : 관리자 or 회원 */
     /* 회원이 코드 실행 시에도 사용할 Controller */
     @GetMapping("/{quizNo}")
-    public QuizDTO quiz(@PathVariable Long quizNo) throws FindException {
-        return service.findByQuizNo(quizNo);
+    public QuizDTO quiz(@PathVariable Long quizNo) throws MyException {
+        try {
+            return service.findByQuizNo(quizNo);
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_NOT_FOUND);
+        }
     }
 
     /* 문제 추가하기 : 관리자 or 출제 회원 */

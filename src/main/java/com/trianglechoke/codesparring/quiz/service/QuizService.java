@@ -73,7 +73,7 @@ public class QuizService {
         return quizDTOList;
     }
 
-    /* quiz 상세정보 조회 : quiz + testcaseList */
+    /* quiz 상세정보 조회 : quiz + reportList + testcaseList */
     public QuizDTO findByQuizNo(Long quizNo) throws FindException {
         Optional<Quiz> optQ = repository.findById(quizNo);
         Quiz quizEntity = optQ.get();
@@ -88,6 +88,7 @@ public class QuizService {
                         .quizSuccessCnt(quizEntity.getQuizSuccessCnt())
                         .quizTier(quizEntity.getQuizTier())
                         .memberNo((quizEntity.getMember().getMemberNo()))
+                        .outputType(quizEntity.getOutputType())
                         .build();
         List<TestcaseDTO> testcaseDTOList = new ArrayList<>();
         for (Testcase tc : quizEntity.getTestcaseList()) {
