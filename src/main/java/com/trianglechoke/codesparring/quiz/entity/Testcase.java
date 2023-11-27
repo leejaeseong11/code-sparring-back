@@ -50,6 +50,6 @@ public class Testcase {
     private List<TestcaseInput> testcaseInputList;
 
     public void modifyOutput(String output) {
-        this.testcaseOutput=output;
+        this.testcaseOutput = output;
     }
 }

@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
 import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -46,7 +47,7 @@ public class TestcaseInput {
     private String testcaseInput;
 
     public void modifyInput(TestcaseInputDTO testcaseInput) {
-        this.inputVar=testcaseInput.getInputVar();
-        this.testcaseInput=testcaseInput.getTestcaseInput();
+        this.inputVar = testcaseInput.getInputVar();
+        this.testcaseInput = testcaseInput.getTestcaseInput();
     }
 }

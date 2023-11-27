@@ -3,17 +3,16 @@ package com.trianglechoke.codesparring.quiz.service;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.quiz.Repository.TestcaseInputRepository;
 import com.trianglechoke.codesparring.quiz.Repository.TestcaseRepository;
-
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
 import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
