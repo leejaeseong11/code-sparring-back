@@ -98,4 +98,13 @@ public class Quiz {
         this.quizOutput = quizDTO.getQuizOutput();
         this.outputType = quizDTO.getOutputType();
     }
+
+    public void modifyQuizSubmit(QuizDTO quizDTO, boolean correct) {
+        this.quizSubmitCnt++;
+        if(correct) this.quizSuccessCnt++;
+    }
+
+    public void modifyQuizTier(String tier) {
+        this.quizTier=tier;
+    }
 }

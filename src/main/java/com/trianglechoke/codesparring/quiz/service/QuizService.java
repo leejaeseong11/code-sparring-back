@@ -56,22 +56,22 @@ public class QuizService {
     }
 
     /* quiz 전체 목록 조회_정답률순 정렬 */
-    //    public List<QuizDTO> findOrderByCorrect() throws MyException {
-    //        List<QuizDTO> quizDTOList = new ArrayList<>();
-    //        List<Object[]> quizList = repository.findOrderByCorrect();
-    //        for (Object[] objArr : quizList) {
-    //            QuizDTO dto =
-    //                    QuizDTO.builder()
-    //                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
-    //                            .quizTitle(String.valueOf(objArr[8]))
-    //                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
-    //                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
-    //                            .quizTier(String.valueOf(objArr[7]))
-    //                            .build();
-    //            quizDTOList.add(dto);
-    //        }
-    //        return quizDTOList;
-    //    }
+    public List<QuizDTO> findOrderByCorrect() throws MyException {
+        List<QuizDTO> quizDTOList = new ArrayList<>();
+        List<Object[]> quizList = repository.findOrderByCorrect();
+        for (Object[] objArr : quizList) {
+            QuizDTO dto =
+                    QuizDTO.builder()
+                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
+                            .quizTitle(String.valueOf(objArr[8]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
+                            .quizTier(String.valueOf(objArr[7]))
+                            .build();
+            quizDTOList.add(dto);
+        }
+        return quizDTOList;
+    }
 
     /* quiz 상세정보 조회 : quiz + reportList + testcaseList */
     public QuizDTO findByQuizNo(Long quizNo) throws MyException {
@@ -123,7 +123,21 @@ public class QuizService {
         repository.save(quizEntity);
     }
 
-    /* TODO - 문제 제출 횟수, 정답 횟수 증가, 티어 변경 등 추후 추가 */
+    /* 문제 제출 : 문제 제출 횟수 증가, 정답 유무에 따른 정답 횟수 증가 (정답인 경우, correct=true) */
+    public void modifyQuizSubmit(QuizDTO quizDTO, boolean correct) throws MyException {
+        Optional<Quiz> optQ=repository.findById(quizDTO.getQuizNo());
+        Quiz quizEntity=optQ.get();
+        quizEntity.modifyQuizSubmit(quizDTO, correct);
+        repository.save(quizEntity);
+    }
+
+    /* 문제 티어 변경 */
+    public void modifyQuizTier(Long quizNo, String tier) throws MyException {
+        Optional<Quiz> optQ=repository.findById(quizNo);
+        Quiz quizEntity=optQ.get();
+        quizEntity.modifyQuizTier(tier);
+        repository.save(quizEntity);
+    }
 
     /* quiz 삭제 */
     public void removeQuiz(Long quizNo) throws MyException {
