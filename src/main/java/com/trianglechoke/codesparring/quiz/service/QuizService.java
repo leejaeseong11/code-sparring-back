@@ -74,7 +74,7 @@ public class QuizService {
     }
 
     /* quiz 상세정보 조회 : quiz + reportList + testcaseList */
-    public QuizDTO findByQuizNo(Long quizNo) throws FindException {
+    public QuizDTO findByQuizNo(Long quizNo) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizNo);
         Quiz quizEntity = optQ.get();
         QuizDTO quizDTO =
@@ -105,7 +105,7 @@ public class QuizService {
     }
 
     /* quiz 추가 */
-    public void addQuiz(QuizDTO quizDTO) throws AddException {
+    public void addQuiz(QuizDTO quizDTO) throws MyException {
         repository.saveQuiz(
                 quizDTO.getMemberNo(),
                 quizDTO.getQuizTitle(),
@@ -116,7 +116,7 @@ public class QuizService {
     }
 
     /* quiz 수정 : title, content, input, output */
-    public void modifyQuiz(QuizDTO quizDTO) throws ModifyException {
+    public void modifyQuiz(QuizDTO quizDTO) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
         Quiz quizEntity = optQ.get();
         quizEntity.modifyQuiz(quizDTO);
@@ -126,7 +126,7 @@ public class QuizService {
     /* TODO - 문제 제출 횟수, 정답 횟수 증가, 티어 변경 등 추후 추가 */
 
     /* quiz 삭제 */
-    public void removeQuiz(Long quizNo) throws RemoveException {
+    public void removeQuiz(Long quizNo) throws MyException {
         repository.deleteById(quizNo);
     }
 }
