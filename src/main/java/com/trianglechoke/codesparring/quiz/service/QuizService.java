@@ -1,9 +1,6 @@
 package com.trianglechoke.codesparring.quiz.service;
 
-import com.trianglechoke.codesparring.exception.AddException;
-import com.trianglechoke.codesparring.exception.FindException;
-import com.trianglechoke.codesparring.exception.ModifyException;
-import com.trianglechoke.codesparring.exception.RemoveException;
+import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.quiz.Repository.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
@@ -22,9 +19,10 @@ public class QuizService {
     @Autowired private QuizRepository repository;
 
     /* quiz 전체 목록 조회 */
-    public List<QuizDTO> findAll() throws FindException {
+    public List<QuizDTO> findAll() throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Quiz> quizList = repository.findAll();
+
         for (Quiz quiz : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -40,16 +38,16 @@ public class QuizService {
     }
 
     /* quiz 티어 별 목록 조회 */
-    public List<QuizDTO> findByQuizTier(String quizTier) throws FindException {
+    public List<QuizDTO> findByQuizTier(String quizTier) throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
-        List<Object[]> quizList = repository.findByQuizTier(quizTier);
+        List<Object[]> quizList = repository.findListByQuizTier(quizTier);
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
-                            .quizNo(Long.valueOf(String.valueOf(objArr[0]))) // 0
-                            .quizTitle(String.valueOf(objArr[7])) // 7
-                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[4]))) // 4
-                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[5]))) // 5
+                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
+                            .quizTitle(String.valueOf(objArr[8]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
                             .quizTier(quizTier)
                             .build();
             quizDTOList.add(dto);
@@ -57,7 +55,23 @@ public class QuizService {
         return quizDTOList;
     }
 
-    /* TODO - quiz 필터 별 목록 조회 -> 추후 더 추가할 예정 */
+    /* quiz 전체 목록 조회_정답률순 정렬 */
+    public List<QuizDTO> findOrderByCorrect() throws MyException {
+        List<QuizDTO> quizDTOList = new ArrayList<>();
+        List<Object[]> quizList = repository.findOrderByCorrect();
+        for (Object[] objArr : quizList) {
+            QuizDTO dto =
+                    QuizDTO.builder()
+                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
+                            .quizTitle(String.valueOf(objArr[8]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
+                            .quizTier(String.valueOf(objArr[7]))
+                            .build();
+            quizDTOList.add(dto);
+        }
+        return quizDTOList;
+    }
 
     /* quiz 상세정보 조회 : quiz + testcaseList */
     public QuizDTO findByQuizNo(Long quizNo) throws FindException {
