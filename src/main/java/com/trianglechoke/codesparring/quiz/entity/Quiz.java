@@ -101,10 +101,10 @@ public class Quiz {
 
     public void modifyQuizSubmit(QuizDTO quizDTO, boolean correct) {
         this.quizSubmitCnt++;
-        if(correct) this.quizSuccessCnt++;
+        if (correct) this.quizSuccessCnt++;
     }
 
     public void modifyQuizTier(String tier) {
-        this.quizTier=tier;
+        this.quizTier = tier;
     }
 }

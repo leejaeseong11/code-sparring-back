@@ -125,16 +125,16 @@ public class QuizService {
 
     /* 문제 제출 : 문제 제출 횟수 증가, 정답 유무에 따른 정답 횟수 증가 (정답인 경우, correct=true) */
     public void modifyQuizSubmit(QuizDTO quizDTO, boolean correct) throws MyException {
-        Optional<Quiz> optQ=repository.findById(quizDTO.getQuizNo());
-        Quiz quizEntity=optQ.get();
+        Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
+        Quiz quizEntity = optQ.get();
         quizEntity.modifyQuizSubmit(quizDTO, correct);
         repository.save(quizEntity);
     }
 
     /* 문제 티어 변경 */
     public void modifyQuizTier(Long quizNo, String tier) throws MyException {
-        Optional<Quiz> optQ=repository.findById(quizNo);
-        Quiz quizEntity=optQ.get();
+        Optional<Quiz> optQ = repository.findById(quizNo);
+        Quiz quizEntity = optQ.get();
         quizEntity.modifyQuizTier(tier);
         repository.save(quizEntity);
     }
