@@ -56,25 +56,25 @@ public class QuizService {
     }
 
     /* quiz 전체 목록 조회_정답률순 정렬 */
-    public List<QuizDTO> findOrderByCorrect() throws MyException {
-        List<QuizDTO> quizDTOList = new ArrayList<>();
-        List<Object[]> quizList = repository.findOrderByCorrect();
-        for (Object[] objArr : quizList) {
-            QuizDTO dto =
-                    QuizDTO.builder()
-                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
-                            .quizTitle(String.valueOf(objArr[8]))
-                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
-                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
-                            .quizTier(String.valueOf(objArr[7]))
-                            .build();
-            quizDTOList.add(dto);
-        }
-        return quizDTOList;
-    }
+    //    public List<QuizDTO> findOrderByCorrect() throws MyException {
+    //        List<QuizDTO> quizDTOList = new ArrayList<>();
+    //        List<Object[]> quizList = repository.findOrderByCorrect();
+    //        for (Object[] objArr : quizList) {
+    //            QuizDTO dto =
+    //                    QuizDTO.builder()
+    //                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
+    //                            .quizTitle(String.valueOf(objArr[8]))
+    //                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
+    //                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
+    //                            .quizTier(String.valueOf(objArr[7]))
+    //                            .build();
+    //            quizDTOList.add(dto);
+    //        }
+    //        return quizDTOList;
+    //    }
 
-    /* quiz 상세정보 조회 : quiz + testcaseList */
-    public QuizDTO findByQuizNo(Long quizNo) throws FindException {
+    /* quiz 상세정보 조회 : quiz + reportList + testcaseList */
+    public QuizDTO findByQuizNo(Long quizNo) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizNo);
         Quiz quizEntity = optQ.get();
         QuizDTO quizDTO =
@@ -88,6 +88,7 @@ public class QuizService {
                         .quizSuccessCnt(quizEntity.getQuizSuccessCnt())
                         .quizTier(quizEntity.getQuizTier())
                         .memberNo((quizEntity.getMember().getMemberNo()))
+                        .outputType(quizEntity.getOutputType())
                         .build();
         List<TestcaseDTO> testcaseDTOList = new ArrayList<>();
         for (Testcase tc : quizEntity.getTestcaseList()) {
@@ -104,17 +105,18 @@ public class QuizService {
     }
 
     /* quiz 추가 */
-    public void addQuiz(QuizDTO quizDTO) throws AddException {
+    public void addQuiz(QuizDTO quizDTO) throws MyException {
         repository.saveQuiz(
                 quizDTO.getMemberNo(),
                 quizDTO.getQuizTitle(),
                 quizDTO.getQuizContent(),
                 quizDTO.getQuizInput(),
-                quizDTO.getQuizOutput());
+                quizDTO.getQuizOutput(),
+                quizDTO.getOutputType());
     }
 
     /* quiz 수정 : title, content, input, output */
-    public void modifyQuiz(QuizDTO quizDTO) throws ModifyException {
+    public void modifyQuiz(QuizDTO quizDTO) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
         Quiz quizEntity = optQ.get();
         quizEntity.modifyQuiz(quizDTO);
@@ -124,7 +126,7 @@ public class QuizService {
     /* TODO - 문제 제출 횟수, 정답 횟수 증가, 티어 변경 등 추후 추가 */
 
     /* quiz 삭제 */
-    public void removeQuiz(Long quizNo) throws RemoveException {
+    public void removeQuiz(Long quizNo) throws MyException {
         repository.deleteById(quizNo);
     }
 }
