@@ -1,6 +1,5 @@
 package com.trianglechoke.codesparring.quiz.Repository;
 
-import com.trianglechoke.codesparring.exception.AddException;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
 import jakarta.transaction.Transactional;
@@ -43,5 +42,6 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
             String quizTitle,
             String quizContent,
             String quizInput,
-            String quizOutput, String outputType);
+            String quizOutput,
+            String outputType);
 }

@@ -1,11 +1,11 @@
 package com.trianglechoke.codesparring.exception;
 
+import static org.springframework.http.HttpStatus.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import org.springframework.http.HttpStatus;
-
-import static org.springframework.http.HttpStatus.*;
 
 @Getter
 @AllArgsConstructor
