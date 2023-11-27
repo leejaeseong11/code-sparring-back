@@ -1,15 +1,7 @@
 #!/bin/bash
 
-## 사용자로부터 자바 파일명 입력 받기
-#echo "Enter the Java file name (without the .java extension):"
-#read javaFileName
+cd src/main/resources
 
-cd src
-cd main
-cd resources
-
-ls
-pwd
 # 자바 파일명 고정
 javaFileName="Main"
 
@@ -17,10 +9,14 @@ javaFileName="Main"
 javac "${javaFileName}.java" -encoding UTF8
 
 # 컴파일된 자바 파일 실행
-java "${javaFileName}"
+result=$(java "${javaFileName}" 4 5)
+#echo $result
+#파일로 저장
+echo $result > result.txt
+cat result.txt
 
-java Main 4 5
+
 # 실행이 완료되면 생성된 클래스 파일 및 실행 파일 삭제 (선택사항)
-#rm "${javaFileName}.class"
+rm "${javaFileName}.class"
 
 

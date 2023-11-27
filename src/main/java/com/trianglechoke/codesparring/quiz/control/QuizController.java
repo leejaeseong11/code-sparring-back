@@ -36,14 +36,14 @@ public class QuizController {
         }
     }
 
-    @GetMapping("/list/correct")
-    public List<QuizDTO> quizListOrderByCorrect() {
-        try {
-            return service.findOrderByCorrect();
-        } catch (Exception e) {
-            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
-        }
-    }
+//    @GetMapping("/list/correct")
+//    public List<QuizDTO> quizListOrderByCorrect() {
+//        try {
+//            return service.findOrderByCorrect();
+//        } catch (Exception e) {
+//            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+//        }
+//    }
 
     /* 문제 상세정보 조회하기 : 관리자 or 회원 */
     /* 회원이 코드 실행 시에도 사용할 Controller */

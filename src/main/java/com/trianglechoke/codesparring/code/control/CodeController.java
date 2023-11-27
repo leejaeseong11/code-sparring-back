@@ -1,15 +1,10 @@
 package com.trianglechoke.codesparring.code.control;
 
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
-
+import java.util.*;
 
 @RestController
 @RequestMapping("/code")
@@ -17,84 +12,104 @@ public class CodeController {
 
     // 코드실행
     @PostMapping("/executeCode")
-    public String executeCode(@RequestParam("code") MultipartFile file) {
-        // 파일이 비었는지 확인
+    public String executeCode(@RequestPart("Main")
+                                  @RequestPart MultipartFile file) {
+        // 전달받은 파일이 비었는지 확인
         if (file.isEmpty()) {
             return "업로드된 파일이 비어 있습니다.";
         }
 
-        //-----------------------------------------------------------------------------------------------
-        // 파일 저장(저장해야 그 파일을 실행시키니까?)
-//        String fileName = "Main"; // 원하는 파일명으로 변경
-//        String filePath =
-//                "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/" + fileName + ".java";
-//        try {
-//            file.transferTo(new File(filePath));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return "파일 저장 중 오류가 발생했습니다.";
-//        }
-        //-----------------------------------------------------------------------------------------------
+        // 파일 저장
+        String fileName = file.getName(); // 원하는 파일명으로 변경
+        String filePath =
+                "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
+        File f = new File(filePath,  fileName + ".java");
+
+        try {
+            file.transferTo(f);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "파일 저장 중 오류가 발생했습니다.";
+        }
+
+        if(!f.exists()){
+            return "파일이 존재하지 않음!";
+        }
+
+        String input = "4 5"; //입력값
+        String expectedOutput = "0.8"; //예상 출력값
+        String compileResult = "";
+        String result = "";
 
 
-        // 쉘 스크립트 실행
+        //-------------------------------컴파일 시작-------------------------------
         String cmd = "cmd.exe";
         String arg = "/c";
-        String scriptPath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/java.sh";
-        ProcessBuilder pb = new ProcessBuilder(cmd, arg, scriptPath);
-
-//        java.sh로 code.txt파일을 실행시킬때 "4 5"값을 전달하면 0.8의 결과값이 나온다 이를 비교한다
-        String result = "";
-//        String inputString  = "4 5";
-        String expectedOutput = "0.8"; // 예상 출력값
-
+        ProcessBuilder pb = new ProcessBuilder(cmd, arg,
+                "javac "+ f.getAbsolutePath() +" -encoding UTF8");
 
         try{
-            // MultipartFile에서 스트림을 읽어서 프로세스에 전달
-//            pb.redirectInput(ProcessBuilder.Redirect.from(input));
-//            pb.redirectInput(ProcessBuilder.Redirect.PIPE);
-//            pb.redirectOutput(ProcessBuilder.Redirect.PIPE);
-            Process process = pb.start();
-//            try(OutputStream outputStream = process.getOutputStream()){
-//                outputStream.write(inputString.getBytes(StandardCharsets.UTF_8));
-//            }
-            // 프로세스의 출력 스트림을 읽어 결과를 얻습니다.
-//            try (InputStream inputStream = process.getInputStream();
-//                 Scanner scanner = new Scanner(inputStream).useDelimiter("\\A")) {
-//                result = scanner.hasNext() ? scanner.next() : "";
-//            }
+            Process p = pb.start();
+            int exitCode = p.waitFor();
+            System.out.println("Process start exitCode="+ exitCode);
 
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            StringBuilder builder = new StringBuilder();
-            String line = null;
-            System.out.println("???");
-            System.out.println(reader.readLine());
-            while ( (line = reader.readLine()) != null) {
+            InputStream is = p.getInputStream();
+            Scanner sc = new Scanner(is);
+            StringBuilder compileBuilder = new StringBuilder();
+            //true라는 것은 오류 메시지가 발생했을때 (컴파일 성공하면 메시지가 안뜸)
+            while(sc.hasNextLine()){
+                String line = sc.nextLine();
                 System.out.println(line);
-                builder.append(line);
-                builder.append(System.getProperty("line.separator"));
+                compileBuilder.append(line).append(System.getProperty("line.separator"));
             }
-            result = builder.toString();
-
-            System.out.println("스크립트 정상 실행!"+result);
-
-            // 결과값이 예상 출력값과 동일한지 확인
-            if (result.trim().equals(expectedOutput.trim())) {
-                return "테스트 통과! 출력값: " + result;
-            } else {
-                return "테스트 실패! 예상 출력값: " + expectedOutput + ", 실제 출력값: " + result;
+            //컴파일 실패된 경우
+            if (!compileBuilder.toString().isEmpty()) {
+                return "컴파일 실패 = " + compileBuilder.toString();
             }
 
+            sc.close();
+            is.close();
 
-        } catch (IOException e) {
-            System.out.println("에러");
+        }catch(Exception e){
             e.printStackTrace();
-            return "스크립트 실행 중 오류가 발생했습니다.";
-        } catch (Exception e) {
-            System.out.println("에러");
-            e.printStackTrace();
-            return "입력 리디렉션 중 오류가 발생했습니다.";
         }
+        //-------------------------------컴파일 끝-------------------------------
+
+
+        //-------------------------------실행 시작-------------------------------
+        cmd = "cmd.exe";
+        arg = "/c";
+        pb = new ProcessBuilder(cmd, arg,
+                "java -cp C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/ "+ fileName + " 4 5");
+
+        try{
+            Process p = pb.start();
+            int exitCode = p.waitFor();
+            System.out.println("실행용 Process start exitCode="+ exitCode);
+
+            InputStream is = p.getInputStream();
+            Scanner sc = new Scanner(is);
+            StringBuilder resultBuilder = new StringBuilder();
+
+            //결과값 얻어오기
+            while(sc.hasNextLine()){
+                String resultLine = sc.next();
+                System.out.println(sc.nextLine());
+                resultBuilder.append(resultLine).append(System.getProperty("line.separator"));
+            }
+            result = resultBuilder.toString();
+
+            if(result.trim().equals(expectedOutput.trim())){
+                return "테스트 통과! 출력값:" + result;
+            }else{
+                return "테스트 실패! 예상 출력값:" + expectedOutput + ", 실제 출력값:" + result;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        //-------------------------------실행 끝-------------------------------
+
+
+        return "";
     }
 }
