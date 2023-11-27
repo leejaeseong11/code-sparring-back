@@ -1,9 +1,6 @@
 package com.trianglechoke.codesparring.quiz.service;
 
-import com.trianglechoke.codesparring.exception.AddException;
-import com.trianglechoke.codesparring.exception.FindException;
-import com.trianglechoke.codesparring.exception.ModifyException;
-import com.trianglechoke.codesparring.exception.RemoveException;
+import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.quiz.Repository.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
@@ -22,9 +19,10 @@ public class QuizService {
     @Autowired private QuizRepository repository;
 
     /* quiz 전체 목록 조회 */
-    public List<QuizDTO> findAll() throws FindException {
+    public List<QuizDTO> findAll() throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Quiz> quizList = repository.findAll();
+
         for (Quiz quiz : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -40,16 +38,16 @@ public class QuizService {
     }
 
     /* quiz 티어 별 목록 조회 */
-    public List<QuizDTO> findByQuizTier(String quizTier) throws FindException {
+    public List<QuizDTO> findByQuizTier(String quizTier) throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
-        List<Object[]> quizList = repository.findByQuizTier(quizTier);
+        List<Object[]> quizList = repository.findListByQuizTier(quizTier);
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
-                            .quizNo(Long.valueOf(String.valueOf(objArr[0]))) // 0
-                            .quizTitle(String.valueOf(objArr[7])) // 7
-                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[4]))) // 4
-                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[5]))) // 5
+                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
+                            .quizTitle(String.valueOf(objArr[8]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
                             .quizTier(quizTier)
                             .build();
             quizDTOList.add(dto);
@@ -57,10 +55,26 @@ public class QuizService {
         return quizDTOList;
     }
 
-    /* TODO - quiz 필터 별 목록 조회 -> 추후 더 추가할 예정 */
+    /* quiz 전체 목록 조회_정답률순 정렬 */
+    //    public List<QuizDTO> findOrderByCorrect() throws MyException {
+    //        List<QuizDTO> quizDTOList = new ArrayList<>();
+    //        List<Object[]> quizList = repository.findOrderByCorrect();
+    //        for (Object[] objArr : quizList) {
+    //            QuizDTO dto =
+    //                    QuizDTO.builder()
+    //                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
+    //                            .quizTitle(String.valueOf(objArr[8]))
+    //                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
+    //                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
+    //                            .quizTier(String.valueOf(objArr[7]))
+    //                            .build();
+    //            quizDTOList.add(dto);
+    //        }
+    //        return quizDTOList;
+    //    }
 
-    /* quiz 상세정보 조회 : quiz + testcaseList */
-    public QuizDTO findByQuizNo(Long quizNo) throws FindException {
+    /* quiz 상세정보 조회 : quiz + reportList + testcaseList */
+    public QuizDTO findByQuizNo(Long quizNo) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizNo);
         Quiz quizEntity = optQ.get();
         QuizDTO quizDTO =
@@ -74,13 +88,13 @@ public class QuizService {
                         .quizSuccessCnt(quizEntity.getQuizSuccessCnt())
                         .quizTier(quizEntity.getQuizTier())
                         .memberNo((quizEntity.getMember().getMemberNo()))
+                        .outputType(quizEntity.getOutputType())
                         .build();
         List<TestcaseDTO> testcaseDTOList = new ArrayList<>();
         for (Testcase tc : quizEntity.getTestcaseList()) {
             TestcaseDTO dto =
                     TestcaseDTO.builder()
                             .testcaseNo(tc.getTestcaseNo())
-                            .testcaseInput(tc.getTestcaseInput())
                             .testcaseOutput(tc.getTestcaseOutput())
                             .build();
             testcaseDTOList.add(dto);
@@ -91,17 +105,18 @@ public class QuizService {
     }
 
     /* quiz 추가 */
-    public void addQuiz(QuizDTO quizDTO) throws AddException {
+    public void addQuiz(QuizDTO quizDTO) throws MyException {
         repository.saveQuiz(
                 quizDTO.getMemberNo(),
                 quizDTO.getQuizTitle(),
                 quizDTO.getQuizContent(),
                 quizDTO.getQuizInput(),
-                quizDTO.getQuizOutput());
+                quizDTO.getQuizOutput(),
+                quizDTO.getOutputType());
     }
 
     /* quiz 수정 : title, content, input, output */
-    public void modifyQuiz(QuizDTO quizDTO) throws ModifyException {
+    public void modifyQuiz(QuizDTO quizDTO) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
         Quiz quizEntity = optQ.get();
         quizEntity.modifyQuiz(quizDTO);
@@ -111,7 +126,7 @@ public class QuizService {
     /* TODO - 문제 제출 횟수, 정답 횟수 증가, 티어 변경 등 추후 추가 */
 
     /* quiz 삭제 */
-    public void removeQuiz(Long quizNo) throws RemoveException {
+    public void removeQuiz(Long quizNo) throws MyException {
         repository.deleteById(quizNo);
     }
 }

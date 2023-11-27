@@ -75,6 +75,11 @@ public class Quiz {
     @Column(name = "quiz_output", columnDefinition = "VARCHAR2(500)")
     private String quizOutput;
 
+    // 출력값(리턴) 타입
+    @Column(name = "output_type", columnDefinition = "VARCHAR2(20)")
+    @NotNull
+    private String outputType;
+
     // 신고받은 목록
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "quiz_no")
@@ -91,5 +96,6 @@ public class Quiz {
         this.quizContent = quizDTO.getQuizContent();
         this.quizInput = quizDTO.getQuizInput();
         this.quizOutput = quizDTO.getQuizOutput();
+        this.outputType = quizDTO.getOutputType();
     }
 }
