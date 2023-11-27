@@ -1,6 +1,8 @@
 package com.trianglechoke.codesparring.room.dto;
 
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.quiz.entity.Quiz;
+import com.trianglechoke.codesparring.room.entity.RoomMember;
 
 import jakarta.persistence.*;
 
@@ -16,11 +18,11 @@ import java.util.List;
 @Builder
 public class RoomDTO {
     private Long roomNo;
-    private Long quizNo;
+    private Quiz quiz;
     private Member winMember;
     private String roomPwd;
     private Integer codeShare;
     private String roomTitle;
     private Integer roomStatus;
-    private List<Long> roommemberNoList;
+    private List<RoomMember> roommemberList;
 }
