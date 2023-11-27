@@ -1,7 +1,7 @@
 package com.trianglechoke.codesparring.room.dto;
 
-import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
+import com.trianglechoke.codesparring.room.entity.RoomMember;
 
 import jakarta.persistence.*;
 
@@ -22,6 +22,5 @@ public class RoomDTO {
     private Integer codeShare;
     private String roomTitle;
     private Integer roomStatus;
-    private List<Member> memberList;
-    private Long hostNo;
+    private List<RoomMember> roomMemberList;
 }

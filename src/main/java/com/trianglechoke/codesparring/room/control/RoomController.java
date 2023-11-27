@@ -1,24 +1,43 @@
 package com.trianglechoke.codesparring.room.control;
 
-import com.trianglechoke.codesparring.exception.ErrorCode;
-import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
+import com.trianglechoke.codesparring.room.service.RoomService;
 
+import jakarta.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/room")
 public class RoomController {
+    @Autowired private RoomService roomService;
+
+    @GetMapping("/{roomNo}")
+    public RoomDTO find(@PathVariable Long roomNo) {
+        return roomService.findRoomByRoomNo(roomNo);
+    }
+
     @GetMapping
-    public RoomDTO find() {
-        RoomDTO room = new RoomDTO();
-        room.setRoomPwd("0000");
-        room.setRoomTitle("테스트 방");
-        return room;
+    public List<RoomDTO> findAll(@RequestParam(name = "status", required = false) Integer status) {
+        return roomService.findRoomList(status);
     }
 
     @PostMapping
-    public void add(@RequestBody RoomDTO room) {
-        throw new MyException(ErrorCode.ALREADY_STARTED_ROOM);
+    @Transactional
+    public Long add(@RequestBody RoomDTO roomDTO) {
+        System.out.println("is it called?");
+        System.out.println(roomDTO);
+        return roomService.addRoom(roomDTO);
+    }
+
+    @PutMapping("/{roomNo}")
+    public void modify(@PathVariable Long roomNo) {}
+
+    @DeleteMapping("/{roomNo}")
+    public void remove(@PathVariable Long roomNo) {
+        roomService.removeRoomByRoomNo(roomNo);
     }
 }
