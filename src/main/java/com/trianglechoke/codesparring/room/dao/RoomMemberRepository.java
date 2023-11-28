@@ -5,7 +5,8 @@ import com.trianglechoke.codesparring.room.entity.RoomMemberKey;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface RoomMemberRepository extends JpaRepository<RoomMember, RoomMemberKey> {
-    //    @Query(value = "")
-    //    public Long checkMemberInRoom();
+    public Optional<RoomMember> findByMemberNo(Long memberNo);
 }
