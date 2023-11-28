@@ -2,15 +2,17 @@ package com.trianglechoke.codesparring.room.dao;
 
 import com.trianglechoke.codesparring.room.entity.Room;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    public List<Room> findAllByRoomStatus(Integer roomStatus);
+    public Page<Room> findAll(Pageable pageable);
+
+    public Page<Room> findAllByRoomStatus(Integer roomStatus, Pageable pageable);
 
     @Modifying
     @Query(

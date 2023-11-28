@@ -11,6 +11,8 @@ import com.trianglechoke.codesparring.room.entity.Room;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -43,13 +45,13 @@ public class RoomService {
     }
 
     /* 대기방 목록 조회 */
-    public List<RoomDTO> findRoomList(Integer status) {
+    public List<RoomDTO> findRoomList(Integer status, Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
-        List<Room> roomList;
+        Page<Room> roomList;
         if (status == null) {
-            roomList = repository.findAll();
+            roomList = repository.findAll(pageable);
         } else {
-            roomList = repository.findAllByRoomStatus(status);
+            roomList = repository.findAllByRoomStatus(status, pageable);
         }
 
         for (Room room : roomList) {

@@ -3,7 +3,7 @@ package com.trianglechoke.codesparring.room;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.entity.Member;
@@ -19,8 +19,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +77,22 @@ public class RoomServiceTest {
                         .build();
 
         roomList.add(room);
+        roomList.add(
+                Room.builder()
+                        .roomNo(2L)
+                        .quiz(Quiz.builder().build())
+                        .codeShare(1)
+                        .roomTitle("테스트 방2")
+                        .roomStatus(0)
+                        .build());
+        roomList.add(
+                Room.builder()
+                        .roomNo(3L)
+                        .quiz(Quiz.builder().build())
+                        .codeShare(1)
+                        .roomTitle("테스트 방3")
+                        .roomStatus(0)
+                        .build());
     }
 
     @Test
@@ -90,27 +108,31 @@ public class RoomServiceTest {
     @Test
     @DisplayName("대기방 상세 조회 - 조회할 방이 없는 경우")
     void findRoomException() {
-        assertThatThrownBy(() -> service.findRoomByRoomNo(2L)).isInstanceOf(MyException.class);
+        assertThatThrownBy(() -> service.findRoomByRoomNo(10L)).isInstanceOf(MyException.class);
     }
 
     @Test
     @DisplayName("대기방 전체 조회")
     void findAllRoom() {
-        when(repository.findAll()).thenReturn(roomList);
+        Page<Room> mockRoomPage = new PageImpl(roomList);
+        when(repository.findAll(any(Pageable.class))).thenReturn(mockRoomPage);
 
-        List<RoomDTO> roomDTOs = service.findRoomList(null);
+        List<RoomDTO> roomDTOs = service.findRoomList(null, Pageable.unpaged());
 
-        assertThat(roomDTOs.size()).isEqualTo(1);
+        assertThat(roomDTOs.size()).isEqualTo(3);
     }
 
     @Test
-    @DisplayName("대기방 전체 조회 - 대기 중인 방")
-    void findAllRoomInGame() {
-        when(repository.findAllByRoomStatus(1)).thenReturn(roomList);
+    @DisplayName("대기방 전체 조회 - 게임 중인 방")
+    void findAllRoomPaging() {
+        List<Room> testRoomList =
+                roomList.stream().filter(r -> r.getRoomStatus().equals(0)).toList();
+        Page<Room> mockRoomPage = new PageImpl(testRoomList);
+        when(repository.findAllByRoomStatus(eq(0), any(Pageable.class))).thenReturn(mockRoomPage);
 
-        List<RoomDTO> roomDTOs = service.findRoomList(1);
+        List<RoomDTO> roomDTOs = service.findRoomList(0, Pageable.unpaged());
 
-        assertThat(roomDTOs.size()).isEqualTo(1);
+        assertThat(roomDTOs.size()).isEqualTo(2);
     }
 
     @Test
@@ -118,10 +140,10 @@ public class RoomServiceTest {
     void createRoom() {
         Room testRoom =
                 Room.builder()
-                        .roomNo(2L)
+                        .roomNo(10L)
                         .quiz(Quiz.builder().build())
                         .codeShare(1)
-                        .roomTitle("테스트 방2")
+                        .roomTitle("테스트 방3")
                         .roomStatus(0)
                         .build();
         when(repository.save(any())).thenReturn(testRoom);
@@ -129,14 +151,14 @@ public class RoomServiceTest {
         Long registeredRoomNo =
                 service.addRoom(
                         RoomDTO.builder()
-                                .roomNo(2L)
+                                .roomNo(10L)
                                 .quiz(Quiz.builder().build())
                                 .codeShare(1)
-                                .roomTitle("테스트 방2")
+                                .roomTitle("테스트 방3")
                                 .roomStatus(0)
                                 .build());
 
-        assertThat(registeredRoomNo).isEqualTo(2L);
+        assertThat(registeredRoomNo).isEqualTo(10L);
     }
 
     @Test
@@ -146,7 +168,7 @@ public class RoomServiceTest {
 
         service.modifyRoomStatusByRoomNo(1L);
 
-        Mockito.verify(repository, Mockito.times(1)).updateRoom(1L);
+        verify(repository, times(1)).updateRoom(1L);
     }
 
     @Test
@@ -165,7 +187,7 @@ public class RoomServiceTest {
 
         service.removeRoomByRoomNo(1L);
 
-        Mockito.verify(repository, Mockito.times(1)).deleteById(1L);
+        verify(repository, times(1)).deleteById(1L);
     }
 
     @Test
