@@ -43,23 +43,24 @@ public class RankGameService {
         List<Object[]> list = repository.findListByMemberNo(memberNo);
         List<MyRankDTO> rankGameDTOList = new ArrayList<>();
         for (Object[] objArr : list) {
-            if(objArr[5]==null) continue;
-            Long result=Long.valueOf(String.valueOf(objArr[5]));
-            Long member1No=Long.valueOf(String.valueOf(objArr[1]));
-            Long member2No=Long.valueOf(String.valueOf(objArr[3]));
-            MyRankDTO dto= MyRankDTO.builder().rankNo(Long.valueOf(String.valueOf(objArr[0]))).build();
-            if(memberNo==member1No) {
+            if (objArr[5] == null) continue;
+            Long result = Long.valueOf(String.valueOf(objArr[5]));
+            Long member1No = Long.valueOf(String.valueOf(objArr[1]));
+            Long member2No = Long.valueOf(String.valueOf(objArr[3]));
+            MyRankDTO dto =
+                    MyRankDTO.builder().rankNo(Long.valueOf(String.valueOf(objArr[0]))).build();
+            if (memberNo == member1No) {
                 dto.setOpposingNo(member2No);
                 dto.setOpposingName(String.valueOf(objArr[4]));
-                if(result==0) dto.setGameResult("DRAW");
-                else if(result==1) dto.setGameResult("WIN");
-                else if(result==2) dto.setGameResult("LOSE");
+                if (result == 0) dto.setGameResult("DRAW");
+                else if (result == 1) dto.setGameResult("WIN");
+                else if (result == 2) dto.setGameResult("LOSE");
             } else {
                 dto.setOpposingNo(member1No);
                 dto.setOpposingName(String.valueOf(objArr[2]));
-                if(result==0) dto.setGameResult("DRAW");
-                else if(result==1) dto.setGameResult("LOSE");
-                else if(result==2) dto.setGameResult("WIN");
+                if (result == 0) dto.setGameResult("DRAW");
+                else if (result == 1) dto.setGameResult("LOSE");
+                else if (result == 2) dto.setGameResult("WIN");
             }
             rankGameDTOList.add(dto);
         }
