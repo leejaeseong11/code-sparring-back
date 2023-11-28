@@ -68,10 +68,10 @@ public class QuizService {
             QuizDTO dto =
                     QuizDTO.builder()
                             .quizNo(Long.valueOf(String.valueOf(objArr[0])))
-                            .quizTitle(String.valueOf(objArr[8]))
-                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[5])))
-                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[6])))
-                            .quizTier(String.valueOf(objArr[7]))
+                            .quizTitle(String.valueOf(objArr[1]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[2])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[3])))
+                            .quizTier(String.valueOf(objArr[4]))
                             .build();
             quizDTOList.add(dto);
         }

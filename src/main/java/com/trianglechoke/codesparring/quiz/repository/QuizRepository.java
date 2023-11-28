@@ -16,7 +16,7 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
     /* 정답률순 조회 */
     @Query(
             value =
-                    "SELECT *\n"
+                    "SELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt, quiz_tier\n"
                             + "FROM quiz\n"
                             + "ORDER BY \n"
                             + "    CASE \n"
