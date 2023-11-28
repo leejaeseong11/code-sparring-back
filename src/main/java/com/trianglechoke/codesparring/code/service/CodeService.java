@@ -2,7 +2,6 @@ package com.trianglechoke.codesparring.code.service;
 
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.repository.CodeRepository;
-import com.trianglechoke.codesparring.exception.FindException;
 import com.trianglechoke.codesparring.quiz.repository.TestcaseInputRepository;
 import com.trianglechoke.codesparring.quiz.repository.TestcaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class CodeService {
 
 
     //quizNo에 해당하는 testcase_no, testcase_output, testcase_input 가져오기
-    public List<CodeTestcaseDTO> findByQuizNo(String quizNo) throws FindException {
+    public List<CodeTestcaseDTO> findByQuizNo(String quizNo) {
         List<CodeTestcaseDTO> ctDTOList = new ArrayList<>();
         List<Object[]> list = repository.findByQuizNo(Long.valueOf(quizNo));
 
