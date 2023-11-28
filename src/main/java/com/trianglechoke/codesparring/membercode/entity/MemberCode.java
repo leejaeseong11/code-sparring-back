@@ -22,19 +22,11 @@ import org.hibernate.annotations.DynamicInsert;
 @DynamicInsert
 /* 회원이 제출한 코드 Entity */
 public class MemberCode {
-    // [FK] 회원 번호
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "member_no")
-    @NotNull
-    private Member member;
 
+    // [FK] 회원 번호
     // [FK] 문제 번호
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "quiz_no")
-    @NotNull
-    private Quiz quiz;
+    @EmbeddedId
+    private MemberCodeEmbedded id = new MemberCodeEmbedded();
 
     // 정답 여부 (1은 정답, 0은 오답)
     @Column(name = "quiz_correct", columnDefinition = "NUMBER(1)")

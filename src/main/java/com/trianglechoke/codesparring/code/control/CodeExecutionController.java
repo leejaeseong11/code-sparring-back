@@ -1,19 +1,35 @@
 package com.trianglechoke.codesparring.code.control;
 
 
+import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
+import com.trianglechoke.codesparring.code.service.CodeService;
+import com.trianglechoke.codesparring.exception.FindException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 @RestController
 @RequestMapping("/code")
-public class CodeController {
+public class CodeExecutionController {
 
-    // 코드실행
+    @Autowired
+    private CodeService service;
+
+    StringBuilder a = new StringBuilder();
+
+    // 코드실행(테스트케이스 3개)
     @PostMapping("/executeCode")
-    public String executeCode(@RequestPart("Main")
-                                  @RequestPart MultipartFile file) {
+    public String executeCode(
+            @RequestPart("quiz_no") String quizNo, @RequestPart("Main") MultipartFile file)
+            throws FindException, IOException {
+
+        String output = "";
+        String input = "";
+
         // 전달받은 파일이 비었는지 확인
         if (file.isEmpty()) {
             return "업로드된 파일이 비어 있습니다.";
@@ -36,7 +52,34 @@ public class CodeController {
             return "파일이 존재하지 않음!";
         }
 
-        String input = "4 5"; //입력값
+        //문제번호에 해당하는 테스트케이스 가져오기(input, expectedOutput에 넣어주기)
+        List<CodeTestcaseDTO> list = service.findByQuizNo(quizNo);
+        System.out.println(list.size() + " 12개 맞나?"); //12개가 나와야 하는데..
+
+        int count = 0;
+        for (CodeTestcaseDTO dto : list) {
+            if (count < 3) {
+                output = dto.getTestcaseOutput();
+                input = dto.getTestcaseInput();
+
+                executeCode2(fileName, f, output, input);
+                count++;
+            } else {
+                //파일삭제
+                Files.delete(Path.of("C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/" + fileName + ".java"));
+                Files.delete(Path.of("C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/" + fileName + ".class"));
+                return String.valueOf(a);
+            }
+
+        }
+
+
+        return "";
+    }
+
+    public void executeCode2(String fileName, File f, String output, String input){
+
+        String input2 = " " + input; //입력값
         String expectedOutput = "0.8"; //예상 출력값
         String compileResult = "";
         String result = "";
@@ -64,7 +107,7 @@ public class CodeController {
             }
             //컴파일 실패된 경우
             if (!compileBuilder.toString().isEmpty()) {
-                return "컴파일 실패 = " + compileBuilder.toString();
+                return;
             }
 
             sc.close();
@@ -80,7 +123,7 @@ public class CodeController {
         cmd = "cmd.exe";
         arg = "/c";
         pb = new ProcessBuilder(cmd, arg,
-                "java -cp C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/ "+ fileName + " 4 5");
+                "java -cp C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/ "+ fileName + input2);
 
         try{
             Process p = pb.start();
@@ -99,17 +142,20 @@ public class CodeController {
             }
             result = resultBuilder.toString();
 
+
+
+            //실행 결과를 한번에 리턴하기 위해 StringBuilder사용
             if(result.trim().equals(expectedOutput.trim())){
-                return "테스트 통과! 출력값:" + result;
+                a.append("테스트 통과! 출력값:").append(result);;
             }else{
-                return "테스트 실패! 예상 출력값:" + expectedOutput + ", 실제 출력값:" + result;
+                a.append("테스트 실패! 예상 출력값:").append(expectedOutput).append(", 실제 출력값:").append(result);
             }
+
         }catch(Exception e){
             e.printStackTrace();
         }
         //-------------------------------실행 끝-------------------------------
 
 
-        return "";
     }
 }
