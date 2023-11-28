@@ -2,6 +2,7 @@ package com.trianglechoke.codesparring.rankgame;
 
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.service.RankGameService;
 
@@ -44,7 +45,7 @@ public class RankGameController {
     }
 
     @GetMapping("/{memberNo}")
-    public List<RankGameDTO> list(@PathVariable Long memberNo) {
+    public List<MyRankDTO> list(@PathVariable Long memberNo) {
         try {
             return service.findAllByMemberNo(memberNo);
         } catch (Exception e) {
