@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class RankGameDTO {
     private Long rankNo;
     private Long member1No;
