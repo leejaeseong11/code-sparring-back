@@ -107,4 +107,21 @@ public class Member {
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "member_no")
     private List<MemberCode> memberCodeList;
+
+    // rankGame 이후 point 변경
+    public void modifyPoint(Integer point) {
+        this.tierPoint += point;
+    }
+
+    // point 에 따른 tier 변경
+    public void modifyTier(String tier) {
+        this.memberTier = tier;
+    }
+
+    // rankGame 결과에 따른 승률 변경 WIN-winCnt++, LOSE-loseCnt++, DRAW-drawCnt++
+    public void modifyCnt(Integer gameResult) {
+        if (gameResult == 0) this.drawCnt++;
+        else if (gameResult == 1) this.winCnt++;
+        else if (gameResult == -1) this.loseCnt++;
+    }
 }

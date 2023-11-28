@@ -4,7 +4,15 @@ import lombok.*;
 
 @Getter
 @Setter
-// @AllArgsConstructor
-// @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class RankGameDTO {}
+@Builder
+public class RankGameDTO {
+    private Long rankNo;
+    private Long member1No;
+    private Long member2No;
+    private String member1Name;
+    private String member2Name;
+    private Integer gameResult; // 0, 1, 2
+}

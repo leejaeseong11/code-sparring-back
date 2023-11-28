@@ -1,6 +1,5 @@
 package com.trianglechoke.codesparring.room.dto;
 
-import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.room.entity.RoomMember;
 
@@ -12,14 +11,14 @@ import java.util.List;
 
 @Getter
 @Setter
-// @AllArgsConstructor
-// @NoArgsConstructor
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class RoomDTO {
 
     private Long roomNo;
-    private Quiz quizNo;
-    private Member winMember;
+    private Quiz quiz;
     private String roomPwd;
     private Integer codeShare;
     private String roomTitle;

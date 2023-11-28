@@ -1,11 +1,16 @@
 package com.trianglechoke.codesparring.quiz.service;
 
 import com.trianglechoke.codesparring.exception.*;
-import com.trianglechoke.codesparring.quiz.Repository.QuizRepository;
+import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
+import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
+import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
+import com.trianglechoke.codesparring.quiz.repository.QuizRepository;
+import com.trianglechoke.codesparring.report.dto.ReportDTO;
+import com.trianglechoke.codesparring.report.entity.Report;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,8 +78,8 @@ public class QuizService {
 //        return quizDTOList;
 //    }
 
-    /* quiz 상세정보 조회 : quiz + testcaseList */
-    public QuizDTO findByQuizNo(Long quizNo) throws FindException {
+    /* quiz 상세정보 조회 : quiz + reportList + testcaseList */
+    public QuizDTO findByQuizNo(Long quizNo) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizNo);
         Quiz quizEntity = optQ.get();
         QuizDTO quizDTO =
@@ -87,8 +92,21 @@ public class QuizService {
                         .quizSubmitCnt(quizEntity.getQuizSubmitCnt())
                         .quizSuccessCnt(quizEntity.getQuizSuccessCnt())
                         .quizTier(quizEntity.getQuizTier())
-                        .memberNo((quizEntity.getMember().getMemberNo()))
+                        .memberNo(quizEntity.getMember().getMemberNo())
+                        .memberName(quizEntity.getMember().getMemberName())
+                        .outputType(quizEntity.getOutputType())
                         .build();
+        List<ReportDTO> reportDTOList = new ArrayList<>();
+        for (Report r : quizEntity.getReportList()) {
+            ReportDTO dto =
+                    ReportDTO.builder()
+                            .reportNo(r.getReportNo())
+                            .memberName(r.getMember().getMemberName())
+                            .reportComment(r.getReportComment())
+                            .build();
+            reportDTOList.add(dto);
+        }
+        quizDTO.setReportDTOList(reportDTOList);
         List<TestcaseDTO> testcaseDTOList = new ArrayList<>();
         for (Testcase tc : quizEntity.getTestcaseList()) {
             TestcaseDTO dto =
@@ -96,35 +114,68 @@ public class QuizService {
                             .testcaseNo(tc.getTestcaseNo())
                             .testcaseOutput(tc.getTestcaseOutput())
                             .build();
+            List<TestcaseInputDTO> testcaseInputDTOList = new ArrayList<>();
+            for (TestcaseInput input : tc.getTestcaseInputList()) {
+                TestcaseInputDTO dtoIn =
+                        TestcaseInputDTO.builder()
+                                .inputNo(input.getInputNo())
+                                .inputVar(input.getInputVar())
+                                .testcaseInput(input.getTestcaseInput())
+                                .build();
+                testcaseInputDTOList.add(dtoIn);
+            }
+            dto.setTestcaseInputDTOList(testcaseInputDTOList);
             testcaseDTOList.add(dto);
         }
         quizDTO.setTestcaseDTOList(testcaseDTOList);
-        // TODO - reportList 추가
         return quizDTO;
     }
 
     /* quiz 추가 */
-    public void addQuiz(QuizDTO quizDTO) throws AddException {
-        repository.saveQuiz(
-                quizDTO.getMemberNo(),
-                quizDTO.getQuizTitle(),
-                quizDTO.getQuizContent(),
-                quizDTO.getQuizInput(),
-                quizDTO.getQuizOutput());
+    public Long addQuiz(QuizDTO quizDTO) throws MyException {
+        Member m = Member.builder().memberNo(quizDTO.getMemberNo()).build();
+        Quiz quizEntity =
+                Quiz.builder()
+                        .member(m)
+                        .quizTitle(quizDTO.getQuizTitle())
+                        .quizContent(quizDTO.getQuizContent())
+                        .quizTier("UNRANKED")
+                        .quizSubmitCnt(0)
+                        .quizSuccessCnt(0)
+                        .quizInput(quizDTO.getQuizInput())
+                        .quizOutput(quizDTO.getQuizOutput())
+                        .outputType(quizDTO.getOutputType())
+                        .build();
+        repository.save(quizEntity);
+        return quizEntity.getQuizNo();
     }
 
     /* quiz 수정 : title, content, input, output */
-    public void modifyQuiz(QuizDTO quizDTO) throws ModifyException {
+    public void modifyQuiz(QuizDTO quizDTO) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
         Quiz quizEntity = optQ.get();
         quizEntity.modifyQuiz(quizDTO);
         repository.save(quizEntity);
     }
 
-    /* TODO - 문제 제출 횟수, 정답 횟수 증가, 티어 변경 등 추후 추가 */
+    /* 문제 제출 : 문제 제출 횟수 증가, 정답 유무에 따른 정답 횟수 증가 (정답인 경우, correct=true) */
+    public void modifyQuizSubmit(QuizDTO quizDTO, boolean correct) throws MyException {
+        Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
+        Quiz quizEntity = optQ.get();
+        quizEntity.modifyQuizSubmit(quizDTO, correct);
+        repository.save(quizEntity);
+    }
+
+    /* 문제 티어 변경 */
+    public void modifyQuizTier(Long quizNo, String tier) throws MyException {
+        Optional<Quiz> optQ = repository.findById(quizNo);
+        Quiz quizEntity = optQ.get();
+        quizEntity.modifyQuizTier(tier);
+        repository.save(quizEntity);
+    }
 
     /* quiz 삭제 */
-    public void removeQuiz(Long quizNo) throws RemoveException {
+    public void removeQuiz(Long quizNo) throws MyException {
         repository.deleteById(quizNo);
     }
 }

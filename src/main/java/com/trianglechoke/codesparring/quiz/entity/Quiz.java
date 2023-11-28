@@ -78,7 +78,7 @@ public class Quiz {
     // 출력값(리턴) 타입
     @Column(name = "output_type", columnDefinition = "VARCHAR2(20)")
     @NotNull
-    private String OutputType;
+    private String outputType;
 
     // 신고받은 목록
     @OneToMany(cascade = CascadeType.REMOVE)
@@ -96,6 +96,16 @@ public class Quiz {
         this.quizContent = quizDTO.getQuizContent();
         this.quizInput = quizDTO.getQuizInput();
         this.quizOutput = quizDTO.getQuizOutput();
+        this.outputType = quizDTO.getOutputType();
+    }
+
+    public void modifyQuizSubmit(QuizDTO quizDTO, boolean correct) {
+        this.quizSubmitCnt++;
+        if (correct) this.quizSuccessCnt++;
+    }
+
+    public void modifyQuizTier(String tier) {
+        this.quizTier = tier;
     }
 
 }

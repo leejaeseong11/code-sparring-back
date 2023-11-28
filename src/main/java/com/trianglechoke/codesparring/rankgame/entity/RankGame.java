@@ -47,4 +47,8 @@ public class RankGame {
     // 랭크 게임 결과 (0은 draw, 1은 회원1 win, 2는 회원2 win)
     @Column(name = "game_result", columnDefinition = "NUMBER(1)")
     private Integer gameResult;
+
+    public void modifyGameResult(Integer result) {
+        this.gameResult = result;
+    }
 }
