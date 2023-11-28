@@ -1,6 +1,5 @@
 package com.trianglechoke.codesparring.room.entity;
 
-import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
 import jakarta.persistence.*;
@@ -44,11 +43,6 @@ public class Room {
     @JoinColumn(name = "quiz_no")
     @NotNull
     private Quiz quiz;
-
-    // [FK] 우승한 회원 번호
-    @ManyToOne
-    @JoinColumn(name = "win_member")
-    private Member winMember;
 
     // 방 비밀번호 (null은 공개방)
     @Column(name = "room_pwd", columnDefinition = "VARCHAR2(4)")
