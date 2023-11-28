@@ -2,7 +2,11 @@ package com.trianglechoke.codesparring.quiz.control;
 
 import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
+import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.service.QuizService;
+import com.trianglechoke.codesparring.quiz.service.TestcaseService;
+
+import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,7 @@ import java.util.List;
 @RequestMapping("/quiz")
 public class QuizController {
     @Autowired private QuizService service;
+    @Autowired private TestcaseService serviceTc;
 
     /* 문제 전체 목록 조회하기 */
     @GetMapping("/list")
@@ -58,9 +63,14 @@ public class QuizController {
 
     /* 문제 추가하기 : 관리자 or 출제 회원 */
     @PostMapping()
+    @Transactional
     public ResponseEntity<?> writeQuiz(@RequestBody QuizDTO quizDTO) {
         try {
-            service.addQuiz(quizDTO);
+            Long quizNo = service.addQuiz(quizDTO);
+            for (TestcaseDTO tcDTO : quizDTO.getTestcaseDTOList()) {
+                tcDTO.setQuizNo(quizNo);
+                serviceTc.addTestcase(tcDTO);
+            }
             String msg = "문제 출제 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (Exception e) {
@@ -70,6 +80,7 @@ public class QuizController {
 
     /* 문제 수정하기 : 관리자 */
     @PutMapping("/{quizNo}")
+    @Transactional
     public ResponseEntity<?> modifyQuiz(@PathVariable Long quizNo, @RequestBody QuizDTO quizDTO) {
         quizDTO.setQuizNo(quizNo);
         try {
@@ -83,6 +94,7 @@ public class QuizController {
 
     /* 문제 삭제하기 : 관리자 */
     @DeleteMapping("/{quizNo}")
+    @Transactional
     public ResponseEntity<?> removeQuiz(@PathVariable Long quizNo) {
         try {
             service.removeQuiz(quizNo);
