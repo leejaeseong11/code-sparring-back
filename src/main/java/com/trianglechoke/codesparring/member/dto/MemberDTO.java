@@ -1,6 +1,5 @@
 package com.trianglechoke.codesparring.member.dto;
 
-
 import lombok.*;
 
 import org.hibernate.annotations.DynamicInsert;
