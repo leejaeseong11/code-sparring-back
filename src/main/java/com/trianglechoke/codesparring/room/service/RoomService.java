@@ -3,7 +3,6 @@ package com.trianglechoke.codesparring.room.service;
 import static com.trianglechoke.codesparring.exception.ErrorCode.ROOM_NOT_FOUND;
 
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.quiz.Repository.QuizRepository;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.room.dao.RoomRepository;
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
@@ -19,10 +18,6 @@ import java.util.Optional;
 @Service
 public class RoomService {
     @Autowired private RoomRepository repository;
-
-    @Autowired private QuizRepository quizRepository;
-
-    //    @Autowired private MemberRepository memberRepository;
 
     /* 대기방 상세 조회 */
     public RoomDTO findRoomByRoomNo(Long roomNo) {
@@ -74,26 +69,21 @@ public class RoomService {
 
     /* 대기방 생성 */
     public Long addRoom(RoomDTO roomDTO) {
-        Long test =
-                repository
-                        .save(
-                                Room.builder()
-                                        .quiz(roomDTO.getQuiz())
-                                        .roomPwd(roomDTO.getRoomPwd())
-                                        .codeShare(roomDTO.getCodeShare())
-                                        .roomTitle(roomDTO.getRoomTitle())
-                                        .roomMemberList(roomDTO.getRoomMemberList())
-                                        .build())
-                        .getRoomNo();
-
-        System.out.println(test);
-        return test;
+        return repository
+                .save(
+                        Room.builder()
+                                .quiz(roomDTO.getQuiz())
+                                .roomPwd(roomDTO.getRoomPwd())
+                                .codeShare(roomDTO.getCodeShare())
+                                .roomTitle(roomDTO.getRoomTitle())
+                                .roomStatus(1)
+                                .build())
+                .getRoomNo();
     }
 
     /* 대기방 수정 - 게임방으로 변경 */
     public void modifyRoomStatusByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
-
         if (room.isPresent()) {
             repository.updateRoom(roomNo);
         } else {

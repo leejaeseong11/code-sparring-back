@@ -28,15 +28,17 @@ public class RoomController {
     @PostMapping
     @Transactional
     public Long add(@RequestBody RoomDTO roomDTO) {
-        System.out.println("is it called?");
-        System.out.println(roomDTO);
         return roomService.addRoom(roomDTO);
     }
 
     @PutMapping("/{roomNo}")
-    public void modify(@PathVariable Long roomNo) {}
+    @Transactional
+    public void modify(@PathVariable Long roomNo) {
+        roomService.modifyRoomStatusByRoomNo(roomNo);
+    }
 
     @DeleteMapping("/{roomNo}")
+    @Transactional
     public void remove(@PathVariable Long roomNo) {
         roomService.removeRoomByRoomNo(roomNo);
     }
