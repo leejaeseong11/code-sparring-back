@@ -6,6 +6,7 @@ import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.service.RankGameService;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class RankGameController {
 
     /* 랭크게임 매칭 완료되어 랭크게임에 랭크정보 추가됨 */
     @PostMapping()
+    @Transactional
     public ResponseEntity<?> add(@RequestBody RankGameDTO rankGameDTO) {
         try {
             service.addRankGame(rankGameDTO);
@@ -32,6 +34,7 @@ public class RankGameController {
 
     /* 랭크게임 종료되어 랭크게임에 게임결과 업데이트됨 */
     @PutMapping("/{rankNo}")
+    @Transactional
     public ResponseEntity<?> modify(
             @PathVariable Long rankNo, @RequestBody RankGameDTO rankGameDTO) {
         try {

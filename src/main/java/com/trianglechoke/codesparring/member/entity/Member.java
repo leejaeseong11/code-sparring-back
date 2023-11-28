@@ -107,4 +107,8 @@ public class Member {
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "member_no")
     private List<MemberCode> memberCodeList;
+
+    public void modifyPoint(Integer point) {
+        this.tierPoint+=point;
+    }
 }
