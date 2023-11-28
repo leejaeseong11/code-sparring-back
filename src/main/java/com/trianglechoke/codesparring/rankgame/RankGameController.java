@@ -47,7 +47,7 @@ public class RankGameController {
     public List<RankGameDTO> list(@PathVariable Long memberNo) {
         try {
             return service.findAllByMemberNo(memberNo);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
         }
     }

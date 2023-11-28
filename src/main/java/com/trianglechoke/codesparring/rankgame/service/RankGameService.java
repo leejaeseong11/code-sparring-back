@@ -39,18 +39,19 @@ public class RankGameService {
 
     /* read: 랭크게임 전적 조회 */
     public List<RankGameDTO> findAllByMemberNo(Long memberNo) throws MyException {
-        List<Object[]> list=repository.findListByMemberNo(memberNo);
-        List<RankGameDTO> rankGameDTOList=new ArrayList<>();
-        for(Object[] objArr:list) {
-            if(objArr[5]==null) continue;
-            RankGameDTO dto=RankGameDTO.builder()
-                    .rankNo(Long.valueOf(String.valueOf(objArr[0])))
-                    .member1No(Long.valueOf(String.valueOf(objArr[1])))
-                    .member1Name(String.valueOf(objArr[2]))
-                    .member2No(Long.valueOf(String.valueOf(objArr[3])))
-                    .member2Name(String.valueOf(objArr[4]))
-                    .gameResult(Integer.valueOf(String.valueOf(objArr[5])))
-                    .build();
+        List<Object[]> list = repository.findListByMemberNo(memberNo);
+        List<RankGameDTO> rankGameDTOList = new ArrayList<>();
+        for (Object[] objArr : list) {
+            if (objArr[5] == null) continue;
+            RankGameDTO dto =
+                    RankGameDTO.builder()
+                            .rankNo(Long.valueOf(String.valueOf(objArr[0])))
+                            .member1No(Long.valueOf(String.valueOf(objArr[1])))
+                            .member1Name(String.valueOf(objArr[2]))
+                            .member2No(Long.valueOf(String.valueOf(objArr[3])))
+                            .member2Name(String.valueOf(objArr[4]))
+                            .gameResult(Integer.valueOf(String.valueOf(objArr[5])))
+                            .build();
             rankGameDTOList.add(dto);
         }
         return rankGameDTOList;

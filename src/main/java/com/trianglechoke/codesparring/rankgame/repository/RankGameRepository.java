@@ -22,11 +22,12 @@ public interface RankGameRepository extends JpaRepository<RankGame, Long> {
 
     @Query(
             value =
-                    "SELECT r.rank_no, r.member1_no, m1.member_name, r.member2_no, m2.member_name, game_result \n"
-                            + "FROM rank_game r\n"
-                            + "JOIN \"MEMBER\" m1 ON r.member1_no=m1.member_no\n"
-                            + "JOIN \"MEMBER\" m2 ON r.member2_no=m2.member_no\n"
-                            + "WHERE member1_no=:memberNo OR member2_no=:memberNo ORDER BY rank_no",
+                    "SELECT r.rank_no, r.member1_no, m1.member_name, r.member2_no, m2.member_name,"
+                        + " game_result \n"
+                        + "FROM rank_game r\n"
+                        + "JOIN \"MEMBER\" m1 ON r.member1_no=m1.member_no\n"
+                        + "JOIN \"MEMBER\" m2 ON r.member2_no=m2.member_no\n"
+                        + "WHERE member1_no=:memberNo OR member2_no=:memberNo ORDER BY rank_no",
             nativeQuery = true)
     public List<Object[]> findListByMemberNo(Long memberNo);
 }
