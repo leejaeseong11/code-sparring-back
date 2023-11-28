@@ -49,6 +49,6 @@ public class RankGame {
     private Integer gameResult;
 
     public void modifyGameResult(Integer result) {
-        this.gameResult=result;
+        this.gameResult = result;
     }
 }
