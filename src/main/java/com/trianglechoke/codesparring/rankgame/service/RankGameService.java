@@ -10,6 +10,7 @@ import com.trianglechoke.codesparring.rankgame.entity.RankGame;
 import com.trianglechoke.codesparring.rankgame.repository.RankGameRepository;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +42,7 @@ public class RankGameService {
         rankGameEntity.modifyGameResult(rankGameDTO.getGameResult());
         repository.save(rankGameEntity);
 
-        if(rankGameDTO.getGameResult()==0) {
+        if (rankGameDTO.getGameResult() == 0) {
             modifyCnt(rankGameEntity.getMember1().getMemberNo(), 0);
             modifyCnt(rankGameEntity.getMember2().getMemberNo(), 0);
             return;
@@ -77,51 +78,50 @@ public class RankGameService {
         return rankGameDTOList;
     }
 
-    @Autowired
-    private MemberRepository memberRepository;
+    @Autowired private MemberRepository memberRepository;
 
     /* RankGame - member point modify */
     private void modifyPoint(Long memberNo, Integer point) {
-        Optional<Member> optM=memberRepository.findById(memberNo);
-        Member memberEntity=optM.get();
+        Optional<Member> optM = memberRepository.findById(memberNo);
+        Member memberEntity = optM.get();
         memberEntity.modifyPoint(point);
-        String tier=calculateTier(memberEntity.getTierPoint());
+        String tier = calculateTier(memberEntity.getTierPoint());
         memberEntity.modifyTier(tier);
         memberRepository.save(memberEntity);
     }
 
     /* RankGame - member cnt modify : winCnt, loseCnt, drawCnt */
     private void modifyCnt(Long memberNo, Integer gameResult) {
-        Optional<Member> optM=memberRepository.findById(memberNo);
-        Member memberEntity=optM.get();
+        Optional<Member> optM = memberRepository.findById(memberNo);
+        Member memberEntity = optM.get();
         memberEntity.modifyCnt(gameResult);
         memberRepository.save(memberEntity);
     }
 
     /* RankGame - member tier calculate */
     private String calculateTier(Long point) {
-        if(point>15000L) return "PLATINUM";
-        else if(point>5000L) return "GOLD";
-        else if(point>1000L) return "SILVER";
+        if (point > 15000L) return "PLATINUM";
+        else if (point > 5000L) return "GOLD";
+        else if (point > 1000L) return "SILVER";
         else return "BRONZE";
     }
 
     /* point 적용 메소드 */
     private void calculateRankPoint(RankGameDTO rankGameDTO) throws MyException {
-        Optional<RankGame> optRG=repository.findById(rankGameDTO.getRankNo());
-        RankGame rankGame=optRG.get();
+        Optional<RankGame> optRG = repository.findById(rankGameDTO.getRankNo());
+        RankGame rankGame = optRG.get();
         // member 간 tier 계산
-        String tier1=rankGame.getMember1().getMemberTier();
-        String tier2=rankGame.getMember2().getMemberTier();
+        String tier1 = rankGame.getMember1().getMemberTier();
+        String tier2 = rankGame.getMember2().getMemberTier();
 
-        if(tier1.equals(tier2)) {
+        if (tier1.equals(tier2)) {
             // 동일한 tier : 100만큼 증가하거나 감소
-            if(rankGameDTO.getGameResult()==1) {
+            if (rankGameDTO.getGameResult() == 1) {
                 modifyPoint(rankGame.getMember1().getMemberNo(), 100);
                 modifyPoint(rankGame.getMember2().getMemberNo(), -100);
                 modifyCnt(rankGame.getMember1().getMemberNo(), 1);
                 modifyCnt(rankGame.getMember2().getMemberNo(), -1);
-            } else if(rankGameDTO.getGameResult()==2) {
+            } else if (rankGameDTO.getGameResult() == 2) {
                 modifyPoint(rankGame.getMember1().getMemberNo(), -100);
                 modifyPoint(rankGame.getMember2().getMemberNo(), 100);
                 modifyCnt(rankGame.getMember1().getMemberNo(), -1);
@@ -130,27 +130,27 @@ public class RankGameService {
         } else {
             // 다른 tier : 100*(tier 차이+1)만큼 증가하거나 감소
             // 더 높은 tier 가 이기거나 더 낮은 tier 가 지는 경우 : 50 증가/감소로 고정
-            String[] tiers={"BRONZE", "SILVER", "GOLD", "PLATINUM"};
-            int idx1=-1, idx2=-1;
-            for(int i=0;i<tiers.length;i++) {
-                if(tier1.equals(tiers[i])) idx1=i;
-                if(tier2.equals(tiers[i])) idx2=i;
+            String[] tiers = {"BRONZE", "SILVER", "GOLD", "PLATINUM"};
+            int idx1 = -1, idx2 = -1;
+            for (int i = 0; i < tiers.length; i++) {
+                if (tier1.equals(tiers[i])) idx1 = i;
+                if (tier2.equals(tiers[i])) idx2 = i;
             }
 
-            if(rankGameDTO.getGameResult()==1) {
-                if(idx1>idx2) {
+            if (rankGameDTO.getGameResult() == 1) {
+                if (idx1 > idx2) {
                     modifyPoint(rankGame.getMember1().getMemberNo(), 50);
                     modifyPoint(rankGame.getMember2().getMemberNo(), -50);
                 } else {
-                    modifyPoint(rankGame.getMember1().getMemberNo(), 100*(idx2-idx1+1));
-                    modifyPoint(rankGame.getMember2().getMemberNo(), -100*(idx2-idx1+1));
+                    modifyPoint(rankGame.getMember1().getMemberNo(), 100 * (idx2 - idx1 + 1));
+                    modifyPoint(rankGame.getMember2().getMemberNo(), -100 * (idx2 - idx1 + 1));
                 }
                 modifyCnt(rankGame.getMember1().getMemberNo(), 1);
                 modifyCnt(rankGame.getMember2().getMemberNo(), -1);
-            } else if(rankGameDTO.getGameResult()==2) {
-                if(idx1>idx2) {
-                    modifyPoint(rankGame.getMember1().getMemberNo(), -100*(idx1-idx2+1));
-                    modifyPoint(rankGame.getMember2().getMemberNo(), 100*(idx1-idx2+1));
+            } else if (rankGameDTO.getGameResult() == 2) {
+                if (idx1 > idx2) {
+                    modifyPoint(rankGame.getMember1().getMemberNo(), -100 * (idx1 - idx2 + 1));
+                    modifyPoint(rankGame.getMember2().getMemberNo(), 100 * (idx1 - idx2 + 1));
                 } else {
                     modifyPoint(rankGame.getMember1().getMemberNo(), -50);
                     modifyPoint(rankGame.getMember2().getMemberNo(), 50);
