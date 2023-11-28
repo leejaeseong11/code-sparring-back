@@ -22,6 +22,14 @@ public class MemberService {
         repository.save(memberEntity);
     }
 
+    /* RankGame - member cnt modify : winCnt, loseCnt, drawCnt */
+    public void modifyCnt(Long memberNo, Integer gameResult) {
+        Optional<Member> optM=repository.findById(memberNo);
+        Member memberEntity=optM.get();
+        memberEntity.modifyCnt(gameResult);
+        repository.save(memberEntity);
+    }
+
     /* RankGame - member tier calculate */
     private String calculateTier(Long point) {
         if(point>15000L) return "PLATINUM";

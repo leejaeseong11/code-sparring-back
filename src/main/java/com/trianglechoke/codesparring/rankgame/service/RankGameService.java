@@ -40,8 +40,11 @@ public class RankGameService {
         rankGameEntity.modifyGameResult(rankGameDTO.getGameResult());
         repository.save(rankGameEntity);
 
-        if(rankGameDTO.getGameResult()==0) return;
-        else calculateRankPoint(rankGameDTO);
+        if(rankGameDTO.getGameResult()==0) {
+            memberService.modifyCnt(rankGameEntity.getMember1().getMemberNo(), 0);
+            memberService.modifyCnt(rankGameEntity.getMember2().getMemberNo(), 0);
+            return;
+        } else calculateRankPoint(rankGameDTO);
     }
 
     /* read: 랭크게임 전적 조회 */
@@ -88,9 +91,13 @@ public class RankGameService {
             if(rankGameDTO.getGameResult()==1) {
                 memberService.modifyPoint(rankGame.getMember1().getMemberNo(), 100);
                 memberService.modifyPoint(rankGame.getMember2().getMemberNo(), -100);
+                memberService.modifyCnt(rankGame.getMember1().getMemberNo(), 1);
+                memberService.modifyCnt(rankGame.getMember2().getMemberNo(), -1);
             } else if(rankGameDTO.getGameResult()==2) {
                 memberService.modifyPoint(rankGame.getMember1().getMemberNo(), -100);
                 memberService.modifyPoint(rankGame.getMember2().getMemberNo(), 100);
+                memberService.modifyCnt(rankGame.getMember1().getMemberNo(), -1);
+                memberService.modifyCnt(rankGame.getMember2().getMemberNo(), 1);
             }
         } else {
             // 다른 tier : 100*(tier 차이+1)만큼 증가하거나 감소
@@ -110,6 +117,8 @@ public class RankGameService {
                     memberService.modifyPoint(rankGame.getMember1().getMemberNo(), 100*(idx2-idx1+1));
                     memberService.modifyPoint(rankGame.getMember2().getMemberNo(), -100*(idx2-idx1+1));
                 }
+                memberService.modifyCnt(rankGame.getMember1().getMemberNo(), 1);
+                memberService.modifyCnt(rankGame.getMember2().getMemberNo(), -1);
             } else if(rankGameDTO.getGameResult()==2) {
                 if(idx1>idx2) {
                     memberService.modifyPoint(rankGame.getMember1().getMemberNo(), -100*(idx1-idx2+1));
@@ -118,6 +127,8 @@ public class RankGameService {
                     memberService.modifyPoint(rankGame.getMember1().getMemberNo(), -50);
                     memberService.modifyPoint(rankGame.getMember2().getMemberNo(), 50);
                 }
+                memberService.modifyCnt(rankGame.getMember1().getMemberNo(), -1);
+                memberService.modifyCnt(rankGame.getMember2().getMemberNo(), 1);
             }
         }
     }
