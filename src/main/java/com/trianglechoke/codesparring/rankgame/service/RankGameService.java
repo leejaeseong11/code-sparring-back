@@ -2,7 +2,8 @@ package com.trianglechoke.codesparring.rankgame.service;
 
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.member.service.MemberService;
+import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.member.repository.MemberRepository;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.entity.RankGame;
@@ -42,8 +43,8 @@ public class RankGameService {
         repository.save(rankGameEntity);
 
         if (rankGameDTO.getGameResult() == 0) {
-            memberService.modifyCnt(rankGameEntity.getMember1().getMemberNo(), 0);
-            memberService.modifyCnt(rankGameEntity.getMember2().getMemberNo(), 0);
+            modifyCnt(rankGameEntity.getMember1().getMemberNo(), 0);
+            modifyCnt(rankGameEntity.getMember2().getMemberNo(), 0);
             return;
         } else calculateRankPoint(rankGameDTO);
     }
@@ -77,7 +78,33 @@ public class RankGameService {
         return rankGameDTOList;
     }
 
-    @Autowired private MemberService memberService;
+    @Autowired private MemberRepository memberRepository;
+
+    /* RankGame - member point modify */
+    private void modifyPoint(Long memberNo, Integer point) {
+        Optional<Member> optM = memberRepository.findById(memberNo);
+        Member memberEntity = optM.get();
+        memberEntity.modifyPoint(point);
+        String tier = calculateTier(memberEntity.getTierPoint());
+        memberEntity.modifyTier(tier);
+        memberRepository.save(memberEntity);
+    }
+
+    /* RankGame - member cnt modify : winCnt, loseCnt, drawCnt */
+    private void modifyCnt(Long memberNo, Integer gameResult) {
+        Optional<Member> optM = memberRepository.findById(memberNo);
+        Member memberEntity = optM.get();
+        memberEntity.modifyCnt(gameResult);
+        memberRepository.save(memberEntity);
+    }
+
+    /* RankGame - member tier calculate */
+    private String calculateTier(Long point) {
+        if (point > 15000L) return "PLATINUM";
+        else if (point > 5000L) return "GOLD";
+        else if (point > 1000L) return "SILVER";
+        else return "BRONZE";
+    }
 
     /* point 적용 메소드 */
     private void calculateRankPoint(RankGameDTO rankGameDTO) throws MyException {
@@ -90,15 +117,15 @@ public class RankGameService {
         if (tier1.equals(tier2)) {
             // 동일한 tier : 100만큼 증가하거나 감소
             if (rankGameDTO.getGameResult() == 1) {
-                memberService.modifyPoint(rankGame.getMember1().getMemberNo(), 100);
-                memberService.modifyPoint(rankGame.getMember2().getMemberNo(), -100);
-                memberService.modifyCnt(rankGame.getMember1().getMemberNo(), 1);
-                memberService.modifyCnt(rankGame.getMember2().getMemberNo(), -1);
+                modifyPoint(rankGame.getMember1().getMemberNo(), 100);
+                modifyPoint(rankGame.getMember2().getMemberNo(), -100);
+                modifyCnt(rankGame.getMember1().getMemberNo(), 1);
+                modifyCnt(rankGame.getMember2().getMemberNo(), -1);
             } else if (rankGameDTO.getGameResult() == 2) {
-                memberService.modifyPoint(rankGame.getMember1().getMemberNo(), -100);
-                memberService.modifyPoint(rankGame.getMember2().getMemberNo(), 100);
-                memberService.modifyCnt(rankGame.getMember1().getMemberNo(), -1);
-                memberService.modifyCnt(rankGame.getMember2().getMemberNo(), 1);
+                modifyPoint(rankGame.getMember1().getMemberNo(), -100);
+                modifyPoint(rankGame.getMember2().getMemberNo(), 100);
+                modifyCnt(rankGame.getMember1().getMemberNo(), -1);
+                modifyCnt(rankGame.getMember2().getMemberNo(), 1);
             }
         } else {
             // 다른 tier : 100*(tier 차이+1)만큼 증가하거나 감소
@@ -112,28 +139,24 @@ public class RankGameService {
 
             if (rankGameDTO.getGameResult() == 1) {
                 if (idx1 > idx2) {
-                    memberService.modifyPoint(rankGame.getMember1().getMemberNo(), 50);
-                    memberService.modifyPoint(rankGame.getMember2().getMemberNo(), -50);
+                    modifyPoint(rankGame.getMember1().getMemberNo(), 50);
+                    modifyPoint(rankGame.getMember2().getMemberNo(), -50);
                 } else {
-                    memberService.modifyPoint(
-                            rankGame.getMember1().getMemberNo(), 100 * (idx2 - idx1 + 1));
-                    memberService.modifyPoint(
-                            rankGame.getMember2().getMemberNo(), -100 * (idx2 - idx1 + 1));
+                    modifyPoint(rankGame.getMember1().getMemberNo(), 100 * (idx2 - idx1 + 1));
+                    modifyPoint(rankGame.getMember2().getMemberNo(), -100 * (idx2 - idx1 + 1));
                 }
-                memberService.modifyCnt(rankGame.getMember1().getMemberNo(), 1);
-                memberService.modifyCnt(rankGame.getMember2().getMemberNo(), -1);
+                modifyCnt(rankGame.getMember1().getMemberNo(), 1);
+                modifyCnt(rankGame.getMember2().getMemberNo(), -1);
             } else if (rankGameDTO.getGameResult() == 2) {
                 if (idx1 > idx2) {
-                    memberService.modifyPoint(
-                            rankGame.getMember1().getMemberNo(), -100 * (idx1 - idx2 + 1));
-                    memberService.modifyPoint(
-                            rankGame.getMember2().getMemberNo(), 100 * (idx1 - idx2 + 1));
+                    modifyPoint(rankGame.getMember1().getMemberNo(), -100 * (idx1 - idx2 + 1));
+                    modifyPoint(rankGame.getMember2().getMemberNo(), 100 * (idx1 - idx2 + 1));
                 } else {
-                    memberService.modifyPoint(rankGame.getMember1().getMemberNo(), -50);
-                    memberService.modifyPoint(rankGame.getMember2().getMemberNo(), 50);
+                    modifyPoint(rankGame.getMember1().getMemberNo(), -50);
+                    modifyPoint(rankGame.getMember2().getMemberNo(), 50);
                 }
-                memberService.modifyCnt(rankGame.getMember1().getMemberNo(), -1);
-                memberService.modifyCnt(rankGame.getMember2().getMemberNo(), 1);
+                modifyCnt(rankGame.getMember1().getMemberNo(), -1);
+                modifyCnt(rankGame.getMember2().getMemberNo(), 1);
             }
         }
     }
