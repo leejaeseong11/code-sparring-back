@@ -6,6 +6,7 @@ import com.trianglechoke.codesparring.room.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 @RestController
@@ -19,8 +20,9 @@ public class RoomController {
     }
 
     @GetMapping
-    public List<RoomDTO> findAll(@RequestParam(name = "status", required = false) Integer status) {
-        return roomService.findRoomList(status);
+    public List<RoomDTO> findAll(
+            @RequestParam(name = "status", required = false) Integer status, Pageable pageable) {
+        return roomService.findRoomList(status, pageable);
     }
 
     @PostMapping

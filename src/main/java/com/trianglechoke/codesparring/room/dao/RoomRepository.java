@@ -7,10 +7,11 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 public interface RoomRepository extends JpaRepository<Room, Long> {
-    public List<Room> findAllByRoomStatus(Integer roomStatus);
+    public List<Room> findAllByRoomStatus(Integer roomStatus, Pageable pageable);
 
     @Modifying
     @Query(

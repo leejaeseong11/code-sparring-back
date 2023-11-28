@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,13 +44,13 @@ public class RoomService {
     }
 
     /* 대기방 목록 조회 */
-    public List<RoomDTO> findRoomList(Integer status) {
+    public List<RoomDTO> findRoomList(Integer status, Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
         List<Room> roomList;
         if (status == null) {
             roomList = repository.findAll();
         } else {
-            roomList = repository.findAllByRoomStatus(status);
+            roomList = repository.findAllByRoomStatus(status, pageable);
         }
 
         for (Room room : roomList) {
