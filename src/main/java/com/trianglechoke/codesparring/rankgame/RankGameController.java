@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/rankgame")
 public class RankGameController {
@@ -38,6 +40,15 @@ public class RankGameController {
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (Exception e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_MODIFIED);
+        }
+    }
+
+    @GetMapping("/{memberNo}")
+    public List<RankGameDTO> list(@PathVariable Long memberNo) {
+        try {
+            return service.findAllByMemberNo(memberNo);
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
         }
     }
 }
