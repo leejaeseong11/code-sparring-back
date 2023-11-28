@@ -24,5 +24,4 @@ public class RoomDTO {
     private String roomTitle;
     private Integer roomStatus;
     private List<RoomMember> roomMemberList;
-
 }

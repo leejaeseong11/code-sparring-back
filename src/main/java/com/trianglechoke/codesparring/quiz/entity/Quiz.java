@@ -107,5 +107,4 @@ public class Quiz {
     public void modifyQuizTier(String tier) {
         this.quizTier = tier;
     }
-
 }

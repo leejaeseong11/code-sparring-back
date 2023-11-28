@@ -1,17 +1,17 @@
-//package com.trianglechoke.codesparring.code.control;
+// package com.trianglechoke.codesparring.code.control;
 //
 //
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.RestController;
-//import org.springframework.web.multipart.MultipartFile;
-//import java.io.*;
+// import org.springframework.web.bind.annotation.PostMapping;
+// import org.springframework.web.bind.annotation.RequestMapping;
+// import org.springframework.web.bind.annotation.RequestParam;
+// import org.springframework.web.bind.annotation.RestController;
+// import org.springframework.web.multipart.MultipartFile;
+// import java.io.*;
 //
 //
-//@RestController
-//@RequestMapping("/code")
-//public class CodeControllerOld {
+// @RestController
+// @RequestMapping("/code")
+// public class CodeControllerOld {
 //
 //    // 코드실행
 //    @PostMapping("/executeCode")
@@ -24,7 +24,8 @@
 //        // 파일 저장
 //        String fileName = file.getName(); // 원하는 파일명으로 변경
 //        String filePath =
-//                "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/" + fileName + ".java";
+//                "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/" + fileName +
+// ".java";
 //        try {
 //            file.transferTo(new File(filePath));
 //        } catch (IOException e) {
@@ -36,7 +37,8 @@
 //        // 외부프로그램인 쉘 스크립트 실행
 //        String cmd = "cmd.exe";
 //        String arg = "/c";
-////        String scriptPath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/java.sh";
+////        String scriptPath =
+// "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/java.sh";
 //        ProcessBuilder pb = new ProcessBuilder(cmd, arg, scriptPath);
 //
 ////        java.sh로 code.txt파일을 실행시킬때 "4 5"값을 전달하면 0.8의 결과값이 나온다 이를 비교한다
@@ -52,10 +54,12 @@
 //            // 프로세스가 성공적으로 종료되었는지 확인
 //
 //            // 프로세스의 출력 스트림을 읽어오기 위한 BufferedReader 생성
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+//            BufferedReader reader = new BufferedReader(new
+// InputStreamReader(process.getInputStream()));
 //
 ////                //오류 메시지 확인
-////                BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+////                BufferedReader errorReader = new BufferedReader(new
+// InputStreamReader(process.getErrorStream()));
 ////                String errorLine;
 ////                while ((errorLine = errorReader.readLine()) != null) {
 ////                    System.err.println("Error: " + errorLine);
@@ -97,4 +101,4 @@
 //
 ////        return result;
 //    }
-//}
+// }

@@ -1,7 +1,5 @@
 package com.trianglechoke.codesparring.membercode.entity;
 
-import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -25,8 +23,7 @@ public class MemberCode {
 
     // [FK] 회원 번호
     // [FK] 문제 번호
-    @EmbeddedId
-    private MemberCodeEmbedded id = new MemberCodeEmbedded();
+    @EmbeddedId private MemberCodeEmbedded id = new MemberCodeEmbedded();
 
     // 정답 여부 (1은 정답, 0은 오답)
     @Column(name = "quiz_correct", columnDefinition = "NUMBER(1)")
