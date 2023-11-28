@@ -3,8 +3,6 @@ package com.trianglechoke.codesparring.room.control;
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
 import com.trianglechoke.codesparring.room.service.RoomService;
 
-import jakarta.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,19 +24,16 @@ public class RoomController {
     }
 
     @PostMapping
-    @Transactional
     public Long add(@RequestBody RoomDTO roomDTO) {
         return roomService.addRoom(roomDTO);
     }
 
     @PutMapping("/{roomNo}")
-    @Transactional
     public void modify(@PathVariable Long roomNo) {
         roomService.modifyRoomStatusByRoomNo(roomNo);
     }
 
     @DeleteMapping("/{roomNo}")
-    @Transactional
     public void remove(@PathVariable Long roomNo) {
         roomService.removeRoomByRoomNo(roomNo);
     }

@@ -8,6 +8,8 @@ import com.trianglechoke.codesparring.room.dao.RoomRepository;
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
 import com.trianglechoke.codesparring.room.entity.Room;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +70,7 @@ public class RoomService {
     }
 
     /* 대기방 생성 */
+    @Transactional
     public Long addRoom(RoomDTO roomDTO) {
         return repository
                 .save(
@@ -82,6 +85,7 @@ public class RoomService {
     }
 
     /* 대기방 수정 - 게임방으로 변경 */
+    @Transactional
     public void modifyRoomStatusByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
         if (room.isPresent()) {
@@ -92,6 +96,7 @@ public class RoomService {
     }
 
     /* 대기방 삭제 */
+    @Transactional
     public void removeRoomByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
 
