@@ -2,13 +2,13 @@ package com.trianglechoke.codesparring.quiz.service;
 
 import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.quiz.repository.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
 import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
+import com.trianglechoke.codesparring.quiz.repository.QuizRepository;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
@@ -133,7 +133,7 @@ public class QuizService {
 
     /* quiz 추가 */
     public Long addQuiz(QuizDTO quizDTO) throws MyException {
-        Member m= Member.builder().memberNo(quizDTO.getMemberNo()).build();
+        Member m = Member.builder().memberNo(quizDTO.getMemberNo()).build();
         Quiz quizEntity =
                 Quiz.builder()
                         .member(m)

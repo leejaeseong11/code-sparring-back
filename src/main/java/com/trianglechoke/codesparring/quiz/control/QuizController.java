@@ -3,13 +3,11 @@ package com.trianglechoke.codesparring.quiz.control;
 import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.entity.Quiz;
-import com.trianglechoke.codesparring.quiz.entity.Testcase;
 import com.trianglechoke.codesparring.quiz.service.QuizService;
-
 import com.trianglechoke.codesparring.quiz.service.TestcaseService;
+
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -68,8 +66,8 @@ public class QuizController {
     @Transactional
     public ResponseEntity<?> writeQuiz(@RequestBody QuizDTO quizDTO) {
         try {
-            Long quizNo=service.addQuiz(quizDTO);
-            for(TestcaseDTO tcDTO : quizDTO.getTestcaseDTOList()) {
+            Long quizNo = service.addQuiz(quizDTO);
+            for (TestcaseDTO tcDTO : quizDTO.getTestcaseDTOList()) {
                 tcDTO.setQuizNo(quizNo);
                 serviceTc.addTestcase(tcDTO);
             }
