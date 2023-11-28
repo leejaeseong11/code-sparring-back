@@ -3,7 +3,6 @@ package com.trianglechoke.codesparring.code.control;
 
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.service.CodeService;
-import com.trianglechoke.codesparring.exception.FindException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +24,7 @@ public class CodeExecutionController {
     @PostMapping("/executeCode")
     public String executeCode(
             @RequestPart("quiz_no") String quizNo, @RequestPart("Main") MultipartFile file)
-            throws FindException, IOException {
+            throws IOException {
 
         String output = "";
         String input = "";

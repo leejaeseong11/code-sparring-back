@@ -3,17 +3,13 @@ package com.trianglechoke.codesparring.code.service;
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.repository.CodeRepository;
 import com.trianglechoke.codesparring.exception.FindException;
-import com.trianglechoke.codesparring.quiz.Repository.TestcaseInputRepository;
-import com.trianglechoke.codesparring.quiz.Repository.TestcaseRepository;
-import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.entity.Testcase;
-import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
+import com.trianglechoke.codesparring.quiz.repository.TestcaseInputRepository;
+import com.trianglechoke.codesparring.quiz.repository.TestcaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CodeService {
