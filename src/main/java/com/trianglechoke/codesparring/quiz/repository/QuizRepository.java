@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
     /* tier 별 조회*/
-    @Query(value = "SELECT * FROM quiz WHERE quiz_tier=:quizTier", nativeQuery = true)
+    @Query(value = "SELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt FROM quiz " +
+            "WHERE quiz_tier=:quizTier", nativeQuery = true)
     public List<Object[]> findListByQuizTier(String quizTier);
 
     /* 정답률순 조회 */
