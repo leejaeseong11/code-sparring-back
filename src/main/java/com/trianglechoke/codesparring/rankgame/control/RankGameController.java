@@ -1,4 +1,4 @@
-package com.trianglechoke.codesparring.rankgame;
+package com.trianglechoke.codesparring.rankgame.control;
 
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
