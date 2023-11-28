@@ -2,6 +2,7 @@ package com.trianglechoke.codesparring.rankgame.service;
 
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.entity.RankGame;
 import com.trianglechoke.codesparring.rankgame.repository.RankGameRepository;
@@ -38,20 +39,29 @@ public class RankGameService {
     }
 
     /* read: 랭크게임 전적 조회 */
-    public List<RankGameDTO> findAllByMemberNo(Long memberNo) throws MyException {
+    public List<MyRankDTO> findAllByMemberNo(Long memberNo) throws MyException {
         List<Object[]> list = repository.findListByMemberNo(memberNo);
-        List<RankGameDTO> rankGameDTOList = new ArrayList<>();
+        List<MyRankDTO> rankGameDTOList = new ArrayList<>();
         for (Object[] objArr : list) {
             if (objArr[5] == null) continue;
-            RankGameDTO dto =
-                    RankGameDTO.builder()
-                            .rankNo(Long.valueOf(String.valueOf(objArr[0])))
-                            .member1No(Long.valueOf(String.valueOf(objArr[1])))
-                            .member1Name(String.valueOf(objArr[2]))
-                            .member2No(Long.valueOf(String.valueOf(objArr[3])))
-                            .member2Name(String.valueOf(objArr[4]))
-                            .gameResult(Integer.valueOf(String.valueOf(objArr[5])))
-                            .build();
+            Long result = Long.valueOf(String.valueOf(objArr[5]));
+            Long member1No = Long.valueOf(String.valueOf(objArr[1]));
+            Long member2No = Long.valueOf(String.valueOf(objArr[3]));
+            MyRankDTO dto =
+                    MyRankDTO.builder().rankNo(Long.valueOf(String.valueOf(objArr[0]))).build();
+            if (memberNo == member1No) {
+                dto.setOpposingNo(member2No);
+                dto.setOpposingName(String.valueOf(objArr[4]));
+                if (result == 0) dto.setGameResult("DRAW");
+                else if (result == 1) dto.setGameResult("WIN");
+                else if (result == 2) dto.setGameResult("LOSE");
+            } else {
+                dto.setOpposingNo(member1No);
+                dto.setOpposingName(String.valueOf(objArr[2]));
+                if (result == 0) dto.setGameResult("DRAW");
+                else if (result == 1) dto.setGameResult("LOSE");
+                else if (result == 2) dto.setGameResult("WIN");
+            }
             rankGameDTOList.add(dto);
         }
         return rankGameDTOList;
