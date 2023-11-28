@@ -1,8 +1,8 @@
 package com.trianglechoke.codesparring.quiz.service;
 
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.quiz.Repository.TestcaseInputRepository;
-import com.trianglechoke.codesparring.quiz.Repository.TestcaseRepository;
+import com.trianglechoke.codesparring.quiz.repository.TestcaseInputRepository;
+import com.trianglechoke.codesparring.quiz.repository.TestcaseRepository;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;

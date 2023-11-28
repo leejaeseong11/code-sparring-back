@@ -1,4 +1,4 @@
-package com.trianglechoke.codesparring.quiz.Repository;
+package com.trianglechoke.codesparring.quiz.repository;
 
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
