@@ -111,4 +111,8 @@ public class Member {
     public void modifyPoint(Integer point) {
         this.tierPoint+=point;
     }
+    
+    public void modifyTier(String tier) {
+        this.memberTier=tier;
+    }
 }

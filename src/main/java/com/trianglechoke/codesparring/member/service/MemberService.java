@@ -12,10 +12,21 @@ public class MemberService {
     @Autowired
     private MemberRepository repository;
 
+    /* RankGame - member point modify */
     public void modifyPoint(Long memberNo, Integer point) {
         Optional<Member> optM=repository.findById(memberNo);
         Member memberEntity=optM.get();
         memberEntity.modifyPoint(point);
+        String tier=calculateTier(memberEntity.getTierPoint());
+        memberEntity.modifyTier(tier);
         repository.save(memberEntity);
+    }
+
+    /* RankGame - member tier calculate */
+    private String calculateTier(Long point) {
+        if(point>15000L) return "PLATINUM";
+        else if(point>5000L) return "GOLD";
+        else if(point>1000L) return "SILVER";
+        else return "BRONZE";
     }
 }
