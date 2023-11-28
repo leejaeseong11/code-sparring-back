@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.quiz.service;
 
 import com.trianglechoke.codesparring.exception.*;
+import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.repository.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
@@ -131,14 +132,22 @@ public class QuizService {
     }
 
     /* quiz 추가 */
-    public void addQuiz(QuizDTO quizDTO) throws MyException {
-        repository.saveQuiz(
-                quizDTO.getMemberNo(),
-                quizDTO.getQuizTitle(),
-                quizDTO.getQuizContent(),
-                quizDTO.getQuizInput(),
-                quizDTO.getQuizOutput(),
-                quizDTO.getOutputType());
+    public Long addQuiz(QuizDTO quizDTO) throws MyException {
+        Member m= Member.builder().memberNo(quizDTO.getMemberNo()).build();
+        Quiz quizEntity =
+                Quiz.builder()
+                        .member(m)
+                        .quizTitle(quizDTO.getQuizTitle())
+                        .quizContent(quizDTO.getQuizContent())
+                        .quizTier("UNRANKED")
+                        .quizSubmitCnt(0)
+                        .quizSuccessCnt(0)
+                        .quizInput(quizDTO.getQuizInput())
+                        .quizOutput(quizDTO.getQuizOutput())
+                        .outputType(quizDTO.getOutputType())
+                        .build();
+        repository.save(quizEntity);
+        return quizEntity.getQuizNo();
     }
 
     /* quiz 수정 : title, content, input, output */

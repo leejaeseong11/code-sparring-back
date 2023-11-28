@@ -27,22 +27,4 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
                             + "    END",
             nativeQuery = true)
     public List<Object[]> findOrderByCorrect();
-
-    /* 저장 */
-    @Modifying
-    @Query(
-            value =
-                    "INSERT INTO quiz (quiz_no, member_no, quiz_title, quiz_content, quiz_input,"
-                            + " quiz_output, output_type)\n"
-                            + "VALUES (quiz_no_seq.NEXTVAL, :memberNo, :quizTitle, :quizContent,"
-                            + " :quizInput, :quizOutput, :outputType)",
-            nativeQuery = true)
-    @Transactional
-    public void saveQuiz(
-            Long memberNo,
-            String quizTitle,
-            String quizContent,
-            String quizInput,
-            String quizOutput,
-            String outputType);
 }
