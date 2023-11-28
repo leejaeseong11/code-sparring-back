@@ -24,18 +24,18 @@ public class QuizService {
     @Autowired private QuizRepository repository;
 
     /* quiz 전체 목록 조회 */
-    public List<QuizDTO> findAll() throws MyException {
+    public List<QuizDTO> findOrderByQuizNo(Integer start, Integer end) throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
-        List<Quiz> quizList = repository.findAll();
+        List<Object[]> list=repository.findOrderByQuizNo(start, end);
 
-        for (Quiz quiz : quizList) {
+        for (Object[] objArr : list) {
             QuizDTO dto =
                     QuizDTO.builder()
-                            .quizNo(quiz.getQuizNo())
-                            .quizTitle(quiz.getQuizTitle())
-                            .quizSubmitCnt(quiz.getQuizSubmitCnt())
-                            .quizSuccessCnt(quiz.getQuizSuccessCnt())
-                            .quizTier(quiz.getQuizTier())
+                            .quizNo(Long.valueOf(String.valueOf(objArr[1])))
+                            .quizTitle(String.valueOf(objArr[2]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[3])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
+                            .quizTier(String.valueOf(objArr[5]))
                             .build();
             quizDTOList.add(dto);
         }
