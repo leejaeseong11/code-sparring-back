@@ -100,9 +100,9 @@ public class Quiz {
     }
 
     // [임시] 제출횟수 및 정답횟수 증가 메소드
-    public void modifyQuizSubmit(boolean correct) {
+    public void modifyQuizSubmit(Integer correct) {
         this.quizSubmitCnt++;
-        if (correct) this.quizSuccessCnt++;
+        if (correct==1) this.quizSuccessCnt++;
     }
 
     // 티어 변경 메소드
