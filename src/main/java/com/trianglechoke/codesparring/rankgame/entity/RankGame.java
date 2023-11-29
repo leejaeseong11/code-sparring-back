@@ -48,6 +48,7 @@ public class RankGame {
     @Column(name = "game_result", columnDefinition = "NUMBER(1)")
     private Integer gameResult;
 
+    // 게임 결과 업데이트 메소드
     public void modifyGameResult(Integer result) {
         this.gameResult = result;
     }
