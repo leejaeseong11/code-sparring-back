@@ -64,9 +64,17 @@ interface QuizService {
     public Long addQuiz(QuizDTO quizDTO) throws MyException;
 
     /**
-     * 문제를 수정한다.
+     * 문제의 상세 정보를 수정한다.
      * @param quizDTO 문제 상세정보를 담은 객체
      * @throws MyException
      */
     public void modifyQuiz(QuizDTO quizDTO) throws MyException;
+
+    /**
+     * 문제의 티어를 변경한다.
+     * @param quizNo 문제 번호
+     * @param tier 변경될 티어
+     * @throws MyException
+     */
+    public void modifyQuizTier(Long quizNo, String tier) throws MyException;
 }
