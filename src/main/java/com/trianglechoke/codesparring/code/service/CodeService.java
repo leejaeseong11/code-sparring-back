@@ -3,6 +3,9 @@ package com.trianglechoke.codesparring.code.service;
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.repository.CodeRepository;
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.membercode.entity.MemberCode;
+import com.trianglechoke.codesparring.membercode.entity.MemberCodeEmbedded;
 import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dao.TestcaseInputRepository;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
@@ -41,11 +44,18 @@ public class CodeService {
     }
 
     // MemberCode 회원번호, 문제번호, 정답여부 insert
-    private void writeMemberCode(String memberNo, String quizNo, boolean quizCorrect) {}
+    public void writeMemberCode(Long memberNo, Long quizNo, Integer correct) {
+        Member member = Member.builder().memberNo(memberNo).build();
+        Quiz quiz = Quiz.builder().quizNo(quizNo).build();
+        MemberCodeEmbedded embedded =
+                MemberCodeEmbedded.builder().member(member).quiz(quiz).build();
+        MemberCode memberCode = MemberCode.builder().id(embedded).quizCorrect(correct).build();
+        repository.save(memberCode);
+        modifyQuizSubmit(quizNo, correct);
+    }
 
     // 문제제출횟수, 문제정답횟수 수정
-
-    private void modifyQuizSubmit(Long quizNo, boolean correct) throws MyException {
+    private void modifyQuizSubmit(Long quizNo, Integer correct) throws MyException {
         Optional<Quiz> optQ = quizRepository.findById(quizNo);
         Quiz quizEntity = optQ.get();
         quizEntity.modifyQuizSubmit(correct);
