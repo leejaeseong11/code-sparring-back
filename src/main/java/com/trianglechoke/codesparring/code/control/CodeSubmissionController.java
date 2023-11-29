@@ -4,7 +4,11 @@ import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.dto.NormalDTO;
 import com.trianglechoke.codesparring.code.dto.RankDTO;
 import com.trianglechoke.codesparring.code.service.CodeService;
+import com.trianglechoke.codesparring.exception.ErrorCode;
+import com.trianglechoke.codesparring.exception.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -34,8 +38,10 @@ public class CodeSubmissionController {
     int answerCount;
 
     @PostMapping("/normalMode")
-    public String normalMode(@RequestPart(value = "Main") MultipartFile file,
-                             @RequestPart(value = "dto") NormalDTO dto) throws IOException {
+    public ResponseEntity<?> normalMode(
+            @RequestPart(value = "Main") MultipartFile file,
+            @RequestPart(value = "dto") NormalDTO dto)
+            throws IOException {
 
         responseResult = new StringBuilder();
         answerCount = 0;
@@ -43,7 +49,8 @@ public class CodeSubmissionController {
         String input = "";
 
         if (file.isEmpty()) {
-            return "업로드된 파일이 비어 있습니다.";
+            // return "업로드된 파일이 비어 있습니다.";
+            throw new MyException(ErrorCode.FILE_NOT_FOUND);
         }
 
         // 파일 저장
@@ -55,28 +62,24 @@ public class CodeSubmissionController {
             file.transferTo(f);
         } catch (IOException e) {
             e.printStackTrace();
-            return "파일 저장 중 오류가 발생했습니다.";
+            // return "파일 저장 중 오류가 발생했습니다.";
+            throw new MyException(ErrorCode.FILE_NOT_SAVED);
         }
 
         if (!f.exists()) {
-            return "파일이 존재하지 않음!";
+            throw new MyException(ErrorCode.FILE_NOT_FOUND);
         }
 
         // 문제번호에 해당하는 테스트케이스 가져오기(input, expectedOutput에 넣어주기)
         List<CodeTestcaseDTO> list = service.findByQuizNo(String.valueOf(dto.getQuizNo()));
 
-        int count = 0;
         for (CodeTestcaseDTO ctdto : list) {
-            if (count < 10) {
-                output = ctdto.getTestcaseOutput();
-                input = ctdto.getTestcaseInput();
-
-                executeCode2(fileName, f, output, input);
-                count++;
-            }
+            output = ctdto.getTestcaseOutput();
+            input = ctdto.getTestcaseInput();
+            executeCode2(fileName, f, output, input);
         }
 
-        //파일삭제
+        // 파일삭제
         Files.delete(
                 Path.of(
                         "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
@@ -88,12 +91,10 @@ public class CodeSubmissionController {
                                 + fileName
                                 + ".class"));
 
-        //Quiz테이블의 문제 제출 횟수, 문제 정답 횟수 수정
-        return responseResult + ", " + answerCount;
-
-
-
-
+        // Quiz테이블의 문제 제출 횟수, 문제 정답 횟수 수정
+        // return responseResult + ", " + answerCount;
+        String msg = responseResult + ", " + answerCount;
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @PostMapping("/rankMode")

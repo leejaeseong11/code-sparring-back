@@ -22,7 +22,8 @@ public class CodeService {
 
     @Autowired private CodeRepository repository;
     @Autowired private QuizRepository quizRepository;
-    @Autowired private TestcaseRepository tc;
+//    @Autowired private
+//    @Autowired private TestcaseRepository tc;
     @Autowired private TestcaseInputRepository ti;
 
     // quizNo에 해당하는 testcase_no, testcase_output, testcase_input 가져오기
@@ -41,6 +42,13 @@ public class CodeService {
         }
         return ctDTOList;
     }
+
+    //MemberCode 회원번호, 문제번호, 정답여부 insert
+    private void writeMemberCode(String memberNo, String quizNo, boolean quizCorrect){
+
+
+    }
+
 
     //문제제출횟수, 문제정답횟수 수정
     private void modifyQuizSubmit(Long quizNo, boolean correct) throws MyException {

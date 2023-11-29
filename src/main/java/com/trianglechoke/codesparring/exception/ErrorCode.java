@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     /* 400 BAD_REQUEST : 잘못된 요청 */
+    FILE_NOT_SAVED(BAD_REQUEST, "파일을 저장할 수 없습니다."),
     QUIZ_NOT_SAVED(BAD_REQUEST, "문제를 추가할 수 없습니다."),
     TESTCASE_NOT_SAVED(BAD_REQUEST, "테스트케이스를 추가할 수 없습니다."),
     RANK_NOT_SAVED(BAD_REQUEST, "랭크 정보를 추가할 수 없습니다."),
@@ -20,6 +21,7 @@ public enum ErrorCode {
     /* 403 FORBIDDEN : 접근 권한 제한 */
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
+    FILE_NOT_FOUND(NOT_FOUND, "파일을 찾을 수 없습니다."),
     QUIZ_LIST_NOT_FOUND(NOT_FOUND, "문제 목록을 찾을 수 없습니다."),
     QUIZ_NOT_FOUND(NOT_FOUND, "해당 문제를 찾을 수 없습니다."),
     TESTCASE_NOT_FOUND(NOT_FOUND, "테스트케이스를 찾을 수 없습니다."),
