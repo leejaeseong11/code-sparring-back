@@ -105,7 +105,7 @@ public class QuizController {
         }
     }
 
-    /* 문제 수정하기 : 관리자 */
+    /* 문제 수정하기 */
     @PutMapping("/{quizNo}")
     @Transactional
     public ResponseEntity<?> modifyQuiz(@PathVariable Long quizNo, @RequestBody QuizDTO quizDTO) {

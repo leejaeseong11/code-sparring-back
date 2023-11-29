@@ -176,7 +176,7 @@ public class QuizServiceImpl implements QuizService {
         return quizEntity.getQuizNo();
     }
 
-    /* quiz 수정 : title, content, input, output */
+    /* Update : 문제의 title, content, input, output 수정 */
     public void modifyQuiz(QuizDTO quizDTO) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
         Quiz quizEntity = optQ.get();

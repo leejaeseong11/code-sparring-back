@@ -90,7 +90,7 @@ public class Quiz {
     @JoinColumn(name = "quiz_no")
     private List<Testcase> testcaseList;
 
-    // 문제 수정 메소드
+    // 문제 상세 정보 수정 메소드
     public void modifyQuiz(QuizDTO quizDTO) {
         this.quizTitle = quizDTO.getQuizTitle();
         this.quizContent = quizDTO.getQuizContent();
