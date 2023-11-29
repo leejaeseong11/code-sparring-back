@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface RankGameRepository extends JpaRepository<RankGame, Long> {
+    /* 랭크 게임 정보 추가 */
     @Modifying
     @Query(
             value =
@@ -20,6 +21,7 @@ public interface RankGameRepository extends JpaRepository<RankGame, Long> {
     @Transactional
     public void saveRankGame(Long member1No, Long member2No);
 
+    /* 회원의 랭크 게임 목록 조회 */
     @Query(
             value =
                     "SELECT r.rank_no, r.member1_no, m1.member_name, r.member2_no, m2.member_name,"
