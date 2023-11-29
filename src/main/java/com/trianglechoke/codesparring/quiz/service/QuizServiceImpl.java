@@ -82,6 +82,28 @@ public class QuizServiceImpl implements QuizService {
         return quizDTOList;
     }
 
+    /* Read : 티어 별 목록 조회 - 정답률순 */
+    public List<QuizDTO> findByTierOrderByCorrect(String quizTier, Integer start, Integer end, String order)
+            throws MyException {
+        List<QuizDTO> quizDTOList = new ArrayList<>();
+        List<Object[]> quizList = new ArrayList<>();
+        if (order.equals("asc")) quizList = repository.findByTierOrderByCorrect(quizTier, start, end);
+        else if (order.equals("desc")) quizList = repository.findByTierOrderByCorrectDesc(quizTier, start, end);
+
+        for (Object[] objArr : quizList) {
+            QuizDTO dto =
+                    QuizDTO.builder()
+                            .quizNo(Long.valueOf(String.valueOf(objArr[1])))
+                            .quizTitle(String.valueOf(objArr[2]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[3])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
+                            .quizTier(quizTier)
+                            .build();
+            quizDTOList.add(dto);
+        }
+        return quizDTOList;
+    }
+
     /* quiz 상세정보 조회 : quiz + reportList + testcaseList */
     public QuizDTO findByQuizNo(Long quizNo) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizNo);

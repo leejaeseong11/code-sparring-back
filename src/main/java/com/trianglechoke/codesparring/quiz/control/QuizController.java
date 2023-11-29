@@ -35,7 +35,8 @@ public class QuizController {
 
     /* 문제 전체 목록 조회하기 : 정답률 */
     @GetMapping("/list/{currentPage}/{order}")
-    public List<QuizDTO> quizListOrderByCorrect(@PathVariable Integer currentPage, @PathVariable String order) {
+    public List<QuizDTO> quizListOrderByCorrect(
+            @PathVariable Integer currentPage, @PathVariable String order) {
         try {
             List<QuizDTO> list =
                     service.findOrderByCorrect((currentPage - 1) * 10 + 1, currentPage * 10, order);
@@ -52,7 +53,24 @@ public class QuizController {
             @PathVariable String quizTier, @PathVariable Integer currentPage) {
         try {
             List<QuizDTO> list =
-                    service.findByQuizTier(quizTier, (currentPage - 1) * 3 + 1, currentPage * 3);
+                    service.findByQuizTier(quizTier, (currentPage - 1) * 10 + 1, currentPage * 10);
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            else return list;
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+        }
+    }
+
+    /* 티어 별 문제 목록 조회하기 : 정답률 */
+    @GetMapping("/tier/{quizTier}/{currentPage}/{order}")
+    public List<QuizDTO> quizListByQuizTier(
+            @PathVariable String quizTier,
+            @PathVariable Integer currentPage,
+            @PathVariable String order) {
+        try {
+            List<QuizDTO> list =
+                    service.findByTierOrderByCorrect(
+                            quizTier, (currentPage - 1) * 10 + 1, currentPage * 10, order);
             if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
         } catch (Exception e) {
