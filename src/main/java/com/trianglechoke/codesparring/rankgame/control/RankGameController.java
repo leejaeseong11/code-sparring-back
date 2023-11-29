@@ -24,7 +24,9 @@ public class RankGameController {
     @GetMapping("/{memberNo}/{currentPage}")
     public List<MyRankDTO> list(@PathVariable Long memberNo, @PathVariable Integer currentPage) {
         try {
-            List<MyRankDTO> list = service.findAllByMemberNo(memberNo, (currentPage - 1) * 10 + 1, currentPage * 10);
+            List<MyRankDTO> list =
+                    service.findAllByMemberNo(
+                            memberNo, (currentPage - 1) * 10 + 1, currentPage * 10);
             if (list.size() == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
             else return list;
         } catch (Exception e) {
