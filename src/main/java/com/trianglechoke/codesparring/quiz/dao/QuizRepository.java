@@ -12,13 +12,13 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
     @Query(
             value =
                     "SELECT * FROM (\n"
-                        + "\tSELECT rownum rn, q.*\n"
-                        + "\tFROM (\n"
-                        + "\t\tSELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt,"
-                        + " quiz_tier\n"
-                        + "\t\tFROM quiz ORDER BY quiz_submit_cnt desc\n"
-                        + "\t) q\n"
-                        + ") pg WHERE rn BETWEEN :start AND :end",
+                            + "\tSELECT rownum rn, q.*\n"
+                            + "\tFROM (\n"
+                            + "\t\tSELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt,"
+                            + " quiz_tier\n"
+                            + "\t\tFROM quiz ORDER BY quiz_submit_cnt desc\n"
+                            + "\t) q\n"
+                            + ") pg WHERE rn BETWEEN :start AND :end",
             nativeQuery = true)
     public List<Object[]> findQuizList(Integer start, Integer end);
 
@@ -26,16 +26,16 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
     @Query(
             value =
                     "SELECT * FROM (\n"
-                        + "\tSELECT rownum rn, q.*\n"
-                        + "\tFROM (\n"
-                        + "\t\tSELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt,"
-                        + " quiz_tier\n"
-                        + "\t\tFROM quiz ORDER BY CASE \n"
-                        + "        WHEN quiz_success_cnt = 0 THEN NULL\n"
-                        + "        ELSE quiz_submit_cnt / quiz_success_cnt\n"
-                        + "    END\n"
-                        + ") q\n"
-                        + ") pg WHERE rn BETWEEN :start AND :end",
+                            + "\tSELECT rownum rn, q.*\n"
+                            + "\tFROM (\n"
+                            + "\t\tSELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt,"
+                            + " quiz_tier\n"
+                            + "\t\tFROM quiz ORDER BY CASE \n"
+                            + "        WHEN quiz_success_cnt = 0 THEN NULL\n"
+                            + "        ELSE quiz_submit_cnt / quiz_success_cnt\n"
+                            + "    END\n"
+                            + ") q\n"
+                            + ") pg WHERE rn BETWEEN :start AND :end",
             nativeQuery = true)
     public List<Object[]> findOrderByCorrect(Integer start, Integer end);
 
@@ -43,16 +43,16 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
     @Query(
             value =
                     "SELECT * FROM (\n"
-                        + "\tSELECT rownum rn, q.*\n"
-                        + "\tFROM (\n"
-                        + "\t\tSELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt,"
-                        + " quiz_tier\n"
-                        + "\t\tFROM quiz ORDER BY CASE \n"
-                        + "        WHEN quiz_success_cnt = 0 THEN NULL\n"
-                        + "        ELSE quiz_submit_cnt / quiz_success_cnt\n"
-                        + "    END desc\n"
-                        + ") q\n"
-                        + ") pg WHERE rn BETWEEN :start AND :end",
+                            + "\tSELECT rownum rn, q.*\n"
+                            + "\tFROM (\n"
+                            + "\t\tSELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt,"
+                            + " quiz_tier\n"
+                            + "\t\tFROM quiz ORDER BY CASE \n"
+                            + "        WHEN quiz_success_cnt = 0 THEN NULL\n"
+                            + "        ELSE quiz_submit_cnt / quiz_success_cnt\n"
+                            + "    END desc\n"
+                            + ") q\n"
+                            + ") pg WHERE rn BETWEEN :start AND :end",
             nativeQuery = true)
     public List<Object[]> findOrderByCorrectDesc(Integer start, Integer end);
 
