@@ -2,8 +2,9 @@ package com.trianglechoke.codesparring.code.service;
 
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.repository.CodeRepository;
-import com.trianglechoke.codesparring.quiz.repository.TestcaseInputRepository;
-import com.trianglechoke.codesparring.quiz.repository.TestcaseRepository;
+import com.trianglechoke.codesparring.quiz.dao.TestcaseRepository;
+import com.trianglechoke.codesparring.quiz.dao.TestcaseInputRepository;
+import com.trianglechoke.codesparring.quiz.dao.TestcaseRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

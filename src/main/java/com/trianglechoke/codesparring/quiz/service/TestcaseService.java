@@ -1,61 +1,27 @@
 package com.trianglechoke.codesparring.quiz.service;
 
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.quiz.dao.TestcaseInputRepository;
-import com.trianglechoke.codesparring.quiz.dao.TestcaseRepository;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
-import com.trianglechoke.codesparring.quiz.entity.Testcase;
-import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
 
-import lombok.extern.slf4j.Slf4j;
+public interface TestcaseService {
+    /**
+     * 테스트케이스를 추가한다.
+     * @param tcDTO 테스트케이스, 테스트케이스 입력값 목록을 담은 객체
+     * @throws MyException
+     */
+    public void addTestcase(TestcaseDTO tcDTO) throws MyException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+    /**
+     * 테스트케이스를 수정한다.
+     * @param tcDTO 테스트케이스, 테스트케이스 입력값 목록을 담은 객체
+     * @throws MyException
+     */
+    public void modifyTestcase(TestcaseDTO tcDTO) throws MyException;
 
-import java.util.Optional;
-
-@Service
-@Slf4j
-public class TestcaseService {
-    @Autowired private TestcaseRepository testcaseRepository;
-    @Autowired private TestcaseInputRepository inputRepository;
-
-    /* testcase 추가 */
-    public void addTestcase(TestcaseDTO tcDTO) throws MyException {
-        Testcase tcEntity =
-                Testcase.builder()
-                        .quizNo(tcDTO.getQuizNo())
-                        .testcaseOutput(tcDTO.getTestcaseOutput())
-                        .build();
-        testcaseRepository.save(tcEntity);
-        log.error("{}", tcDTO.getTestcaseInputDTOList().size());
-        for (TestcaseInputDTO input : tcDTO.getTestcaseInputDTOList()) {
-            TestcaseInput inputEntity =
-                    TestcaseInput.builder()
-                            .testcaseNo(tcEntity.getTestcaseNo())
-                            .inputVar(input.getInputVar())
-                            .testcaseInput(input.getTestcaseInput())
-                            .build();
-            inputRepository.save(inputEntity);
-        }
-    }
-
-    /* testcase 수정 */
-    public void modifyTestcase(TestcaseDTO tcDTO) throws MyException {
-        Optional<Testcase> optTc = testcaseRepository.findById(tcDTO.getTestcaseNo());
-        Testcase tcEntity = optTc.get();
-        tcEntity.modifyOutput(tcDTO.getTestcaseOutput());
-        for (int i = 0; i < tcDTO.getTestcaseInputDTOList().size(); i++) {
-            tcEntity.getTestcaseInputList()
-                    .get(i)
-                    .modifyInput(tcDTO.getTestcaseInputDTOList().get(i));
-        }
-        testcaseRepository.save(tcEntity);
-    }
-
-    /* testcase 삭제 */
-    public void removeTestcase(Long testcaseNo) throws MyException {
-        testcaseRepository.deleteById(testcaseNo);
-    }
+    /**
+     * 테스트케이스를 삭제한다.
+     * @param testcaseNo 테스트케이스 번호
+     * @throws MyException
+     */
+    public void removeTestcase(Long testcaseNo) throws MyException;
 }

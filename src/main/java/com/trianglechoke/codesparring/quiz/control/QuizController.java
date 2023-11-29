@@ -4,7 +4,7 @@ import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.service.QuizServiceImpl;
-import com.trianglechoke.codesparring.quiz.service.TestcaseService;
+import com.trianglechoke.codesparring.quiz.service.TestcaseServiceImpl;
 
 import jakarta.transaction.Transactional;
 
@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("/quiz")
 public class QuizController {
     @Autowired private QuizServiceImpl service;
-    @Autowired private TestcaseService serviceTc;
+    @Autowired private TestcaseServiceImpl serviceTc;
 
     /* 문제 전체 목록 조회하기 : default */
     @GetMapping("/list/{currentPage}")

@@ -43,10 +43,12 @@ public class Testcase {
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
     private String testcaseOutput;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    // 입력값 목록
+    @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "testcase_no")
     private List<TestcaseInput> testcaseInputList;
 
+    // 출력값 수정 메소드
     public void modifyOutput(String output) {
         this.testcaseOutput = output;
     }
