@@ -3,8 +3,8 @@ package com.trianglechoke.codesparring.quiz.control;
 import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.service.QuizService;
-import com.trianglechoke.codesparring.quiz.service.TestcaseService;
+import com.trianglechoke.codesparring.quiz.service.QuizServiceImpl;
+import com.trianglechoke.codesparring.quiz.service.TestcaseServiceImpl;
 
 import jakarta.transaction.Transactional;
 
@@ -18,40 +18,67 @@ import java.util.List;
 @RestController
 @RequestMapping("/quiz")
 public class QuizController {
-    @Autowired private QuizService service;
-    @Autowired private TestcaseService serviceTc;
+    @Autowired private QuizServiceImpl service;
+    @Autowired private TestcaseServiceImpl serviceTc;
 
-    /* 문제 전체 목록 조회하기 */
-    @GetMapping("/list")
-    public List<QuizDTO> quizList() {
+    /* 문제 전체 목록 조회하기 : default */
+    @GetMapping("/list/{currentPage}")
+    public List<QuizDTO> quizList(@PathVariable Integer currentPage) {
         try {
-            return service.findAll();
+            List<QuizDTO> list = service.findQuizList((currentPage - 1) * 10 + 1, currentPage * 10);
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            else return list;
         } catch (Exception e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
         }
     }
 
-    /* 문제 목록 티어별로 조회하기 */
-    @GetMapping("/list/{quizTier}")
-    public List<QuizDTO> quizListByQuizTier(@PathVariable String quizTier) {
+    /* 문제 전체 목록 조회하기 : 정답률 */
+    @GetMapping("/list/{currentPage}/{order}")
+    public List<QuizDTO> quizListOrderByCorrect(
+            @PathVariable Integer currentPage, @PathVariable String order) {
         try {
-            return service.findByQuizTier(quizTier);
+            List<QuizDTO> list =
+                    service.findOrderByCorrect((currentPage - 1) * 10 + 1, currentPage * 10, order);
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            else return list;
         } catch (Exception e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
         }
     }
 
-    //    @GetMapping("/list/correct")
-    //    public List<QuizDTO> quizListOrderByCorrect() {
-    //        try {
-    //            return service.findOrderByCorrect();
-    //        } catch (Exception e) {
-    //            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
-    //        }
-    //    }
+    /* 티어 별 문제 목록 조회하기 : default */
+    @GetMapping("/tier/{quizTier}/{currentPage}")
+    public List<QuizDTO> quizListByQuizTier(
+            @PathVariable String quizTier, @PathVariable Integer currentPage) {
+        try {
+            List<QuizDTO> list =
+                    service.findByQuizTier(quizTier, (currentPage - 1) * 10 + 1, currentPage * 10);
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            else return list;
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+        }
+    }
 
-    /* 문제 상세정보 조회하기 : 관리자 or 회원 */
-    /* 회원이 코드 실행 시에도 사용할 Controller */
+    /* 티어 별 문제 목록 조회하기 : 정답률 */
+    @GetMapping("/tier/{quizTier}/{currentPage}/{order}")
+    public List<QuizDTO> quizListByQuizTier(
+            @PathVariable String quizTier,
+            @PathVariable Integer currentPage,
+            @PathVariable String order) {
+        try {
+            List<QuizDTO> list =
+                    service.findByTierOrderByCorrect(
+                            quizTier, (currentPage - 1) * 10 + 1, currentPage * 10, order);
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            else return list;
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+        }
+    }
+
+    /* 문제 상세 정보 조회하기 */
     @GetMapping("/{quizNo}")
     public QuizDTO quiz(@PathVariable Long quizNo) {
         try {
@@ -61,7 +88,7 @@ public class QuizController {
         }
     }
 
-    /* 문제 추가하기 : 관리자 or 출제 회원 */
+    /* 문제 추가하기 */
     @PostMapping()
     @Transactional
     public ResponseEntity<?> writeQuiz(@RequestBody QuizDTO quizDTO) {
@@ -78,7 +105,7 @@ public class QuizController {
         }
     }
 
-    /* 문제 수정하기 : 관리자 */
+    /* 문제 상세 정보 수정하기 */
     @PutMapping("/{quizNo}")
     @Transactional
     public ResponseEntity<?> modifyQuiz(@PathVariable Long quizNo, @RequestBody QuizDTO quizDTO) {
@@ -92,7 +119,21 @@ public class QuizController {
         }
     }
 
-    /* 문제 삭제하기 : 관리자 */
+    /* 문제 티어 변경하기 */
+    @PutMapping("/{quizNo}/{quizTier}")
+    @Transactional
+    public ResponseEntity<?> modifyQuizTier(
+            @PathVariable Long quizNo, @PathVariable String quizTier) {
+        try {
+            service.modifyQuizTier(quizNo, quizTier);
+            String msg = "티어 변경 성공";
+            return new ResponseEntity<>(msg, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_NOT_MODIFIED);
+        }
+    }
+
+    /* 문제 삭제하기 */
     @DeleteMapping("/{quizNo}")
     @Transactional
     public ResponseEntity<?> removeQuiz(@PathVariable Long quizNo) {

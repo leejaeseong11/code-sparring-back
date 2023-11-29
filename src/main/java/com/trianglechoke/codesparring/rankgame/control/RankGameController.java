@@ -4,7 +4,7 @@ import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
-import com.trianglechoke.codesparring.rankgame.service.RankGameService;
+import com.trianglechoke.codesparring.rankgame.service.RankGameServiceImpl;
 
 import jakarta.transaction.Transactional;
 
@@ -18,9 +18,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/rankgame")
 public class RankGameController {
-    @Autowired private RankGameService service;
+    @Autowired private RankGameServiceImpl service;
 
-    /* 랭크게임 매칭 완료되어 랭크게임에 랭크정보 추가됨 */
+    /* 회원의 랭크 게임 전적 목록 조회하기 */
+    @GetMapping("/{memberNo}/{currentPage}")
+    public List<MyRankDTO> list(@PathVariable Long memberNo, @PathVariable Integer currentPage) {
+        try {
+            List<MyRankDTO> list =
+                    service.findAllByMemberNo(memberNo, (currentPage - 1) * 5 + 1, currentPage * 5);
+            if (list.size() == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
+            else return list;
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
+        }
+    }
+
+    /* 랭크 게임 정보 추가하기 */
     @PostMapping()
     @Transactional
     public ResponseEntity<?> add(@RequestBody RankGameDTO rankGameDTO) {
@@ -33,7 +46,7 @@ public class RankGameController {
         }
     }
 
-    /* 랭크게임 종료되어 랭크게임에 게임결과 업데이트됨 */
+    /* 랭크 게임 결과 업데이트하기 */
     @PutMapping("/{rankNo}")
     @Transactional
     public ResponseEntity<?> modify(
@@ -45,15 +58,6 @@ public class RankGameController {
             return new ResponseEntity<>(msg, HttpStatus.OK);
         } catch (Exception e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_MODIFIED);
-        }
-    }
-
-    @GetMapping("/{memberNo}")
-    public List<MyRankDTO> list(@PathVariable Long memberNo) {
-        try {
-            return service.findAllByMemberNo(memberNo);
-        } catch (Exception e) {
-            throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
         }
     }
 }
