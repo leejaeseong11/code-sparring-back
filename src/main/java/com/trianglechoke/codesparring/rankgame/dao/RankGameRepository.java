@@ -29,7 +29,7 @@ public interface RankGameRepository extends JpaRepository<RankGame, Long> {
                             + "        JOIN \"MEMBER\" m1 ON r.member1_no = m1.member_no\n"
                             + "        JOIN \"MEMBER\" m2 ON r.member2_no = m2.member_no\n"
                             + "        WHERE :memberNo IN (r.member1_no, r.member2_no)\n"
-                            + "        ORDER BY rank_no\n"
+                            + "        ORDER BY rank_no desc\n"
                             + "    ) q\n"
                             + ")\n"
                             + "WHERE rn BETWEEN :start AND :end",
