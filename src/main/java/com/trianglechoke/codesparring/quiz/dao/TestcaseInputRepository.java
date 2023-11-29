@@ -1,4 +1,4 @@
-package com.trianglechoke.codesparring.quiz.repository;
+package com.trianglechoke.codesparring.quiz.dao;
 
 import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
 
