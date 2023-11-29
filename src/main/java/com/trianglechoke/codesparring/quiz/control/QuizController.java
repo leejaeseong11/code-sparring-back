@@ -3,7 +3,7 @@ package com.trianglechoke.codesparring.quiz.control;
 import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.service.QuizService;
+import com.trianglechoke.codesparring.quiz.service.QuizServiceImpl;
 import com.trianglechoke.codesparring.quiz.service.TestcaseService;
 
 import jakarta.transaction.Transactional;
@@ -18,14 +18,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/quiz")
 public class QuizController {
-    @Autowired private QuizService service;
+    @Autowired private QuizServiceImpl service;
     @Autowired private TestcaseService serviceTc;
 
-    /* 문제 전체 목록 조회하기 */
+    /* 문제 전체 목록 조회하기 : 1 페이지 당 10개의 문제 출력 (아래 모두 동일) */
     @GetMapping("/list/{currentPage}")
     public List<QuizDTO> quizList(@PathVariable Integer currentPage) {
         try {
-            List<QuizDTO> list= service.findOrderByQuizNo((currentPage-1)*3+1,currentPage*3);
+            List<QuizDTO> list= service.findQuizList((currentPage-1)*10+1, currentPage*10);
             if(list.size()==0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
         } catch (Exception e) {
@@ -33,11 +33,13 @@ public class QuizController {
         }
     }
 
-    /* 문제 목록 티어별로 조회하기 */
-    @GetMapping("/tier/{quizTier}")
-    public List<QuizDTO> quizListByQuizTier(@PathVariable String quizTier) {
+    /* 티어에 해당하는 문제 목록 조회하기 */
+    @GetMapping("/tier/{quizTier}/{currentPage}")
+    public List<QuizDTO> quizListByQuizTier(@PathVariable String quizTier, @PathVariable Integer currentPage) {
         try {
-            return service.findByQuizTier(quizTier);
+            List<QuizDTO> list=service.findByQuizTier(quizTier, (currentPage-1)*3+1,currentPage*3);
+            if(list.size()==0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            else return list;
         } catch (Exception e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
         }

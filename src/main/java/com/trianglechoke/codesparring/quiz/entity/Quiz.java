@@ -80,12 +80,12 @@ public class Quiz {
     @NotNull
     private String outputType;
 
-    // 신고받은 목록
+    // 문제 신고 목록
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "quiz_no")
     private List<Report> reportList;
 
-    // 테스트케이스 목록
+    // 문제 테스트케이스 목록
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "quiz_no")
     private List<Testcase> testcaseList;
@@ -99,11 +99,13 @@ public class Quiz {
         this.outputType = quizDTO.getOutputType();
     }
 
+    // [임시] 제출횟수 및 정답횟수 증가 메소드
     public void modifyQuizSubmit(QuizDTO quizDTO, boolean correct) {
         this.quizSubmitCnt++;
         if (correct) this.quizSuccessCnt++;
     }
 
+    // 티어 변경 메소드
     public void modifyQuizTier(String tier) {
         this.quizTier = tier;
     }

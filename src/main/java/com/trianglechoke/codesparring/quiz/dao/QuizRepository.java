@@ -1,4 +1,4 @@
-package com.trianglechoke.codesparring.quiz.repository;
+package com.trianglechoke.codesparring.quiz.dao;
 
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
@@ -8,32 +8,36 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface QuizRepository extends JpaRepository<Quiz, Long> {
-    @Query(value = "SELECT *\n" +
-            "\t\tFROM (\n" +
-            "\t\t\tSELECT rownum rn, q.*\n" +
-            "\t\t\tFROM (\n" +
-            "\t\t\t\tSELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt, quiz_tier\n" +
-            "\t\t\t\tFROM quiz ORDER BY quiz_no\n" +
-            "\t\t\t) q\n" +
-            "\t\t) pg\n" +
-            "WHERE rn BETWEEN :start AND :end", nativeQuery = true)
-    public List<Object[]> findOrderByQuizNo(Integer start, Integer end);
+    /* 전체 목록 조회 : default = 제출 횟수 많은 순 */
+    @Query(
+            value =
+                    "SELECT * FROM (\n"
+                            + "\tSELECT rownum rn, q.*\n"
+                            + "\tFROM (\n"
+                            + "\t\tSELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt, quiz_tier\n"
+                            + "\t\tFROM quiz ORDER BY quiz_submit_cnt desc\n"
+                            + "\t) q\n"
+                            + ") pg WHERE rn BETWEEN :start AND :end", nativeQuery = true)
+    public List<Object[]> findQuizList(Integer start, Integer end);
 
-    /* tier 별 조회*/
+    /* 전체 목록 조회 : 정답률 높은 순 & 정답률 낮은 순 */
+    @Query(
+            value =
+                    "SELECT * FROM (\n"
+                            + "\tSELECT rownum rn, q.*\n"
+                            + "\tFROM (\n"
+                            + "\t\tSELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt, quiz_tier\n"
+                            + "\t\tFROM quiz ORDER BY CASE \n"
+                            + "        WHEN quiz_success_cnt = 0 THEN NULL\n"
+                            + "        ELSE quiz_submit_cnt / quiz_success_cnt\n"
+                            + "    END\n"
+                            + "\t) q\n"
+                            + ") pg WHERE rn BETWEEN :start AND :end",
+            nativeQuery = true)
+    public List<Object[]> findOrderByCorrect();
+
+    /* tier 별 조회 */
     @Query(value = "SELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt FROM quiz " +
             "WHERE quiz_tier=:quizTier", nativeQuery = true)
     public List<Object[]> findListByQuizTier(String quizTier);
-
-    /* 정답률순 조회 */
-    @Query(
-            value =
-                    "SELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt, quiz_tier\n"
-                            + "FROM quiz\n"
-                            + "ORDER BY \n"
-                            + "    CASE \n"
-                            + "        WHEN quiz_success_cnt = 0 THEN NULL\n"
-                            + "        ELSE quiz_submit_cnt / quiz_success_cnt\n"
-                            + "    END",
-            nativeQuery = true)
-    public List<Object[]> findOrderByCorrect();
 }
