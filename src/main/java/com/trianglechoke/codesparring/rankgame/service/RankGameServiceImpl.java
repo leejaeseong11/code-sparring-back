@@ -24,25 +24,25 @@ public class RankGameServiceImpl implements RankGameService {
     @Autowired private RankGameRepository repository;
 
     /* Read : 랭크게임 전적 조회 */
-    public List<MyRankDTO> findAllByMemberNo(Long memberNo) throws MyException {
-        List<Object[]> list = repository.findListByMemberNo(memberNo);
+    public List<MyRankDTO> findAllByMemberNo(Long memberNo, Integer start, Integer end) throws MyException {
+        List<Object[]> list = repository.findListByMemberNo(memberNo, start, end);
         List<MyRankDTO> rankGameDTOList = new ArrayList<>();
         for (Object[] objArr : list) {
-            if (objArr[5] == null) continue;
-            Long result = Long.valueOf(String.valueOf(objArr[5]));
-            Long member1No = Long.valueOf(String.valueOf(objArr[1]));
-            Long member2No = Long.valueOf(String.valueOf(objArr[3]));
+            if (objArr[6] == null) continue;
+            Long result = Long.valueOf(String.valueOf(objArr[6]));
+            Long member1No = Long.valueOf(String.valueOf(objArr[2]));
+            Long member2No = Long.valueOf(String.valueOf(objArr[4]));
             MyRankDTO dto =
-                    MyRankDTO.builder().rankNo(Long.valueOf(String.valueOf(objArr[0]))).build();
+                    MyRankDTO.builder().rankNo(Long.valueOf(String.valueOf(objArr[1]))).build();
             if (memberNo == member1No) {
                 dto.setOpposingNo(member2No);
-                dto.setOpposingName(String.valueOf(objArr[4]));
+                dto.setOpposingName(String.valueOf(objArr[5]));
                 if (result == 0) dto.setGameResult("DRAW");
                 else if (result == 1) dto.setGameResult("WIN");
                 else if (result == 2) dto.setGameResult("LOSE");
             } else {
                 dto.setOpposingNo(member1No);
-                dto.setOpposingName(String.valueOf(objArr[2]));
+                dto.setOpposingName(String.valueOf(objArr[3]));
                 if (result == 0) dto.setGameResult("DRAW");
                 else if (result == 1) dto.setGameResult("LOSE");
                 else if (result == 2) dto.setGameResult("WIN");

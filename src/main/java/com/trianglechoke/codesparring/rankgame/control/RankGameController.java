@@ -21,10 +21,12 @@ public class RankGameController {
     @Autowired private RankGameServiceImpl service;
 
     /* 회원의 랭크 게임 전적 목록 조회하기 */
-    @GetMapping("/{memberNo}")
-    public List<MyRankDTO> list(@PathVariable Long memberNo) {
+    @GetMapping("/{memberNo}/{currentPage}")
+    public List<MyRankDTO> list(@PathVariable Long memberNo, @PathVariable Integer currentPage) {
         try {
-            return service.findAllByMemberNo(memberNo);
+            List<MyRankDTO> list = service.findAllByMemberNo(memberNo, (currentPage - 1) * 10 + 1, currentPage * 10);
+            if (list.size() == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
+            else return list;
         } catch (Exception e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
         }
