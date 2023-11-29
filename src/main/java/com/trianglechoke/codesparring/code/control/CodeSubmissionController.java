@@ -37,7 +37,6 @@ public class CodeSubmissionController {
 
     @PostMapping("/normalMode")
     public ResponseEntity<?> normalMode(
-
             @RequestPart(value = "Main") MultipartFile file,
             @RequestPart(value = "dto") NormalDTO dto)
             throws IOException {
@@ -94,7 +93,6 @@ public class CodeSubmissionController {
         // return responseResult + ", " + answerCount;
         String msg = responseResult + ", " + answerCount;
         return new ResponseEntity<>(msg, HttpStatus.OK);
-
     }
 
     @PostMapping("/rankMode")
