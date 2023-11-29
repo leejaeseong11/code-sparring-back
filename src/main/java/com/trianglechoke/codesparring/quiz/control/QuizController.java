@@ -78,8 +78,7 @@ public class QuizController {
         }
     }
 
-    /* 문제 상세정보 조회하기 : 관리자 or 회원 */
-    /* 회원이 코드 실행 시에도 사용할 Controller */
+    /* 문제 상세 정보 조회하기 */
     @GetMapping("/{quizNo}")
     public QuizDTO quiz(@PathVariable Long quizNo) {
         try {

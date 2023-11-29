@@ -104,7 +104,7 @@ public class QuizServiceImpl implements QuizService {
         return quizDTOList;
     }
 
-    /* quiz 상세정보 조회 : quiz + reportList + testcaseList */
+    /* Read : 문제 상세 조회 */
     public QuizDTO findByQuizNo(Long quizNo) throws MyException {
         Optional<Quiz> optQ = repository.findById(quizNo);
         Quiz quizEntity = optQ.get();

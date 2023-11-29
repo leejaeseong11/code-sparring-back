@@ -46,4 +46,12 @@ interface QuizService {
      */
     public List<QuizDTO> findByTierOrderByCorrect(String quizTier, Integer start, Integer end, String order)
             throws MyException;
+
+    /**
+     * quizNo 에 해당하는 문제의 상세 정보를 조회한다.
+     * @param quizNo 문제 번호
+     * @return 테스트케이스 목록과 신고 커멘트 목록을 포함한 문제 상세 정보
+     * @throws MyException
+     */
+    public QuizDTO findByQuizNo(Long quizNo) throws MyException;
 }
