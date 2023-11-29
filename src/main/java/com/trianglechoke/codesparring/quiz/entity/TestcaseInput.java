@@ -45,6 +45,7 @@ public class TestcaseInput {
     @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")
     private String testcaseInput;
 
+    // 입력값 수정 메소드
     public void modifyInput(TestcaseInputDTO testcaseInput) {
         this.inputVar = testcaseInput.getInputVar();
         this.testcaseInput = testcaseInput.getTestcaseInput();
