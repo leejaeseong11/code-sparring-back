@@ -74,7 +74,7 @@ public class QuizServiceImpl implements QuizService {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findListByQuizTier(quizTier, start, end);
         Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
-        ExampleMatcher exampleMatcher=ExampleMatcher.matchingAll();
+        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
         Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
         Long quizCnt = repository.count(example);
         quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
@@ -102,7 +102,7 @@ public class QuizServiceImpl implements QuizService {
         else if (order.equals("desc"))
             quizList = repository.findByTierOrderByCorrectDesc(quizTier, start, end);
         Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
-        ExampleMatcher exampleMatcher=ExampleMatcher.matchingAll();
+        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
         Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
         Long quizCnt = repository.count(example);
         quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
