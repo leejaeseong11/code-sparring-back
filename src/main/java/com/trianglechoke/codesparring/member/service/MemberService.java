@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.trianglechoke.codesparring.member.entity.Role.USER;
 
@@ -80,7 +81,7 @@ public class MemberService {
     public MemberDTO updateMember(Long memberNo, MemberDTO memberDTO) {
         Optional<Member> optionalMember = memberRepository.findById(memberNo);
         Member member = optionalMember.get();
-        if(memberDTO.getMemberPwd() != null) {
+        if (memberDTO.getMemberPwd() != null) {
             String encryptedPassword = passwordEncoder.encode(memberDTO.getMemberPwd());
             member.setMemberPwd(encryptedPassword);
         } else if (memberDTO.getMemberName() != null) {
@@ -90,5 +91,31 @@ public class MemberService {
         }
         memberRepository.save(member);
         return MemberDTO.memberEntityToDTO(member);
+    }
+
+    /* RankGame - member point modify */
+    public void modifyPoint(Long memberNo, Integer point) {
+        Optional<Member> optM = memberRepository.findById(memberNo);
+        Member memberEntity = optM.get();
+        memberEntity.modifyPoint(point);
+        String tier = calculateTier(memberEntity.getTierPoint());
+        memberEntity.modifyTier(tier);
+        memberRepository.save(memberEntity);
+    }
+
+    /* RankGame - member cnt modify : winCnt, loseCnt, drawCnt */
+    public void modifyCnt(Long memberNo, Integer gameResult) {
+        Optional<Member> optM = memberRepository.findById(memberNo);
+        Member memberEntity = optM.get();
+        memberEntity.modifyCnt(gameResult);
+        memberRepository.save(memberEntity);
+    }
+
+    /* RankGame - member tier calculate */
+    private String calculateTier(Long point) {
+        if (point > 15000L) return "PLATINUM";
+        else if (point > 5000L) return "GOLD";
+        else if (point > 1000L) return "SILVER";
+        else return "BRONZE";
     }
 }

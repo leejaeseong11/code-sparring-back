@@ -1,11 +1,8 @@
-package com.trianglechoke.codesparring.quiz.Repository;
+package com.trianglechoke.codesparring.quiz.repository;
 
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
-import jakarta.transaction.Transactional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -27,22 +24,4 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
                             + "    END",
             nativeQuery = true)
     public List<Object[]> findOrderByCorrect();
-
-    /* 저장 */
-    @Modifying
-    @Query(
-            value =
-                    "INSERT INTO quiz (quiz_no, member_no, quiz_title, quiz_content, quiz_input,"
-                            + " quiz_output, output_type)\n"
-                            + "VALUES (quiz_no_seq.NEXTVAL, :memberNo, :quizTitle, :quizContent,"
-                            + " :quizInput, :quizOutput, :outputType)",
-            nativeQuery = true)
-    @Transactional
-    public void saveQuiz(
-            Long memberNo,
-            String quizTitle,
-            String quizContent,
-            String quizInput,
-            String quizOutput,
-            String outputType);
 }

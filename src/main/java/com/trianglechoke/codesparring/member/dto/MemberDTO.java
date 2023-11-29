@@ -8,6 +8,8 @@ import org.hibernate.annotations.DynamicInsert;
 
 import static com.trianglechoke.codesparring.member.entity.Role.USER;
 
+import org.hibernate.annotations.DynamicInsert;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -37,6 +39,7 @@ public class MemberDTO {
     private Long loseCnt;
     private Long drawCnt;
     private Integer memberStatus;
+
     private Role role;
 
     public static MemberDTO memberEntityToDTO(Member member) {
@@ -61,6 +64,4 @@ public class MemberDTO {
     }
 
 }
-
-
 

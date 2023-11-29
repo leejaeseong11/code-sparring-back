@@ -1,7 +1,5 @@
 package com.trianglechoke.codesparring.room.entity;
 
-import com.trianglechoke.codesparring.member.entity.Member;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -21,18 +19,7 @@ import org.hibernate.annotations.DynamicInsert;
 @DynamicInsert
 /* 방 회원 Entity */
 public class RoomMember {
-    // [FK] 방 번호
-    @Id
-    @Column(name = "room_no")
-    @NotNull
-    private Long roomNo;
-
-    // [FK] 회원 번호
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "member_no")
-    @NotNull
-    private Member member;
+    @EmbeddedId private RoomMemberKey id = new RoomMemberKey();
 
     // 방장 여부 (0은 방장)
     @Column(name = "host_status", columnDefinition = "NUMBER(1) default 1")
