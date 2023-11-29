@@ -77,4 +77,11 @@ interface QuizService {
      * @throws MyException
      */
     public void modifyQuizTier(Long quizNo, String tier) throws MyException;
+
+    /**
+     * 문제를 삭제한다.
+     * @param quizNo 문제 번호
+     * @throws MyException
+     */
+    public void removeQuiz(Long quizNo) throws MyException;
 }

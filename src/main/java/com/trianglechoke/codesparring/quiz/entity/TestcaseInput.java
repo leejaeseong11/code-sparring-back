@@ -34,7 +34,6 @@ public class TestcaseInput {
 
     // [FK] 테스트케이스 번호
     @Column(name = "testcase_no")
-    @NotNull
     private Long testcaseNo;
 
     // 매개변수

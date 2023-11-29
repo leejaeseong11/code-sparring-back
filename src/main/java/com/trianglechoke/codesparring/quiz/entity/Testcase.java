@@ -38,14 +38,15 @@ public class Testcase {
 
     // [FK] 문제 번호
     @Column(name = "quiz_no")
-    @NotNull
     private Long quizNo;
 
     // 출력값
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
     private String testcaseOutput;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.REMOVE)
     @JoinColumn(name = "testcase_no")
     private List<TestcaseInput> testcaseInputList;
 
