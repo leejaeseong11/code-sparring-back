@@ -11,7 +11,7 @@ import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.room.dao.RoomRepository;
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
 import com.trianglechoke.codesparring.room.entity.Room;
-import com.trianglechoke.codesparring.room.service.RoomService;
+import com.trianglechoke.codesparring.room.service.RoomServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +34,7 @@ public class RoomServiceTest {
     List<Room> roomList = new ArrayList<>();
     @Mock RoomRepository repository;
 
-    @InjectMocks RoomService service;
+    @InjectMocks RoomServiceImpl service;
 
     @BeforeEach
     void init() {
