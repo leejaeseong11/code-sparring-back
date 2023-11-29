@@ -34,4 +34,9 @@ public class CodeService {
         }
         return ctDTOList;
     }
+
+    //문제제출횟수, 문제정답횟수 수정
+    public void modifyQuiz(String quizNo){
+
+    }
 }
