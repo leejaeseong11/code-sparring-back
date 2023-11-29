@@ -12,10 +12,4 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
     @EntityGraph(attributePaths = "role") // Eager로 authorities(role) 정보를 조회합니다.
     Optional<Member> findByMemberId(String memberId);
-    @Modifying
-    @Query("UPDATE Member m SET m.memberPwd = :memberPwd, m.memberName = :memberName, m.memberInfo = :memberInfo WHERE m.memberId = :memberId")
-    void modifyMember(@Param("memberId") Long memberId,
-                      @Param("memberPwd") String memberPwd,
-                      @Param("memberName") String memberName,
-                      @Param("memberInfo") String memberInfo);
 }

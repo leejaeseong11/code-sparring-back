@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity
-@EnableMethodSecurity // 기본적인 Web 보안을 활성화하겠다
+@EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
     private final TokenProvider tokenProvider;
@@ -73,4 +73,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }
