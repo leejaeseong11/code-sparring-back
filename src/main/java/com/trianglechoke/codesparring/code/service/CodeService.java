@@ -45,16 +45,11 @@ public class CodeService {
 
     // MemberCode 회원번호, 문제번호, 정답여부 insert
     public void writeMemberCode(Long memberNo, Long quizNo, Integer correct) {
-        Member member= Member.builder().memberNo(memberNo).build();
-        Quiz quiz=Quiz.builder().quizNo(quizNo).build();
-        MemberCodeEmbedded embedded=MemberCodeEmbedded.builder()
-                .member(member)
-                .quiz(quiz)
-                .build();
-        MemberCode memberCode= MemberCode.builder()
-                .id(embedded)
-                .quizCorrect(correct)
-                .build();
+        Member member = Member.builder().memberNo(memberNo).build();
+        Quiz quiz = Quiz.builder().quizNo(quizNo).build();
+        MemberCodeEmbedded embedded =
+                MemberCodeEmbedded.builder().member(member).quiz(quiz).build();
+        MemberCode memberCode = MemberCode.builder().id(embedded).quizCorrect(correct).build();
         repository.save(memberCode);
         modifyQuizSubmit(quizNo, correct);
     }

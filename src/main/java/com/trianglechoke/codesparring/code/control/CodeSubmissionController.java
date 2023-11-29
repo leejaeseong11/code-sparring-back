@@ -89,8 +89,8 @@ public class CodeSubmissionController {
                                 + fileName
                                 + ".class"));
 
-        Integer correct=0;
-        if(answerCount==list.size()) correct=1;
+        Integer correct = 0;
+        if (answerCount == list.size()) correct = 1;
         service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct);
 
         // Quiz테이블의 문제 제출 횟수, 문제 정답 횟수 수정
