@@ -2,17 +2,16 @@ package com.trianglechoke.codesparring.quiz.service;
 
 import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
 import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
-import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,12 +83,14 @@ public class QuizServiceImpl implements QuizService {
     }
 
     /* Read : 티어 별 목록 조회 - 정답률순 */
-    public List<QuizDTO> findByTierOrderByCorrect(String quizTier, Integer start, Integer end, String order)
-            throws MyException {
+    public List<QuizDTO> findByTierOrderByCorrect(
+            String quizTier, Integer start, Integer end, String order) throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = new ArrayList<>();
-        if (order.equals("asc")) quizList = repository.findByTierOrderByCorrect(quizTier, start, end);
-        else if (order.equals("desc")) quizList = repository.findByTierOrderByCorrectDesc(quizTier, start, end);
+        if (order.equals("asc"))
+            quizList = repository.findByTierOrderByCorrect(quizTier, start, end);
+        else if (order.equals("desc"))
+            quizList = repository.findByTierOrderByCorrectDesc(quizTier, start, end);
 
         for (Object[] objArr : quizList) {
             QuizDTO dto =

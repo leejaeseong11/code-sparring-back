@@ -5,7 +5,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,9 +43,7 @@ public class Testcase {
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
     private String testcaseOutput;
 
-    @OneToMany(
-            fetch = FetchType.EAGER,
-            cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "testcase_no")
     private List<TestcaseInput> testcaseInputList;
 
