@@ -1,41 +1,58 @@
 package com.trianglechoke.codesparring.code.control;
 
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
+import com.trianglechoke.codesparring.code.dto.NormalDTO;
+import com.trianglechoke.codesparring.code.dto.RankDTO;
 import com.trianglechoke.codesparring.code.service.CodeService;
+import com.trianglechoke.codesparring.exception.ErrorCode;
+import com.trianglechoke.codesparring.exception.MyException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
+import java.util.Scanner;
 
-// 코드실행(테스트케이스 3개)
+// 코드제출(테스트케이스 10개)
 @RestController
-@RequestMapping("/code")
-public class CodeExecutionController {
+@RequestMapping("/submit")
+public class CodeSubmissionController {
 
     @Autowired private CodeService service;
+    StringBuilder responseResult;
 
-    StringBuilder responseResult = new StringBuilder();
+    // 테스트케이스 실행결과 정답 수
+    int answerCount;
 
-    @PostMapping("/executeCode")
-    public String executeCode(
-            @RequestPart("quiz_no") String quizNo, @RequestPart("Main") MultipartFile file)
+    @PostMapping("/normalMode")
+    public ResponseEntity<?> normalMode(
+            @RequestPart(value = "Main") MultipartFile file,
+            @RequestPart(value = "dto") NormalDTO dto)
             throws IOException {
 
+        responseResult = new StringBuilder();
+        answerCount = 0;
         String output = "";
         String input = "";
 
-        // 전달받은 파일이 비었는지 확인
         if (file.isEmpty()) {
-            return "업로드된 파일이 비어 있습니다.";
+            // return "업로드된 파일이 비어 있습니다.";
+            throw new MyException(ErrorCode.FILE_NOT_FOUND);
         }
 
         // 파일 저장
-        String fileName = file.getName(); // 원하는 파일명으로 변경
+        String fileName = file.getName(); // value값으로 지정
         String filePath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
         File f = new File(filePath, fileName + ".java");
 
@@ -43,40 +60,47 @@ public class CodeExecutionController {
             file.transferTo(f);
         } catch (IOException e) {
             e.printStackTrace();
-            return "파일 저장 중 오류가 발생했습니다.";
+            // return "파일 저장 중 오류가 발생했습니다.";
+            throw new MyException(ErrorCode.FILE_NOT_SAVED);
         }
 
         if (!f.exists()) {
-            return "파일이 존재하지 않음!";
+            throw new MyException(ErrorCode.FILE_NOT_FOUND);
         }
 
         // 문제번호에 해당하는 테스트케이스 가져오기(input, expectedOutput에 넣어주기)
-        List<CodeTestcaseDTO> list = service.findByQuizNo(quizNo);
-        System.out.println(list.size());
+        List<CodeTestcaseDTO> list = service.findByQuizNo(String.valueOf(dto.getQuizNo()));
 
-        int count = 0;
-        for (CodeTestcaseDTO dto : list) {
-            if (count < 3) {
-                output = dto.getTestcaseOutput();
-                input = dto.getTestcaseInput();
-
-                executeCode2(fileName, f, output, input);
-                count++;
-            } else {
-                // 파일삭제
-                Files.delete(
-                        Path.of(
-                                "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                        + fileName
-                                        + ".java"));
-                Files.delete(
-                        Path.of(
-                                "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                        + fileName
-                                        + ".class"));
-                return String.valueOf(responseResult);
-            }
+        for (CodeTestcaseDTO ctdto : list) {
+            output = ctdto.getTestcaseOutput();
+            input = ctdto.getTestcaseInput();
+            executeCode2(fileName, f, output, input);
         }
+
+        // 파일삭제
+        Files.delete(
+                Path.of(
+                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
+                                + fileName
+                                + ".java"));
+        Files.delete(
+                Path.of(
+                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
+                                + fileName
+                                + ".class"));
+
+        Integer correct = 0;
+        if (answerCount == list.size()) correct = 1;
+        service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct);
+
+        // Quiz테이블의 문제 제출 횟수, 문제 정답 횟수 수정
+        // return responseResult + ", " + answerCount;
+        String msg = responseResult + ", " + answerCount;
+        return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+    @PostMapping("/rankMode")
+    public String rankMode(@RequestPart MultipartFile file, @RequestPart RankDTO dto) {
 
         return "";
     }
@@ -87,7 +111,6 @@ public class CodeExecutionController {
         String expectedOutput = "0.8"; // 예상 출력값
         String compileResult = "";
         String result = "";
-
         // -------------------------------컴파일 시작-------------------------------
         String cmd = "cmd.exe";
         String arg = "/c";
@@ -97,7 +120,7 @@ public class CodeExecutionController {
         try {
             Process p = pb.start();
             int exitCode = p.waitFor();
-            System.out.println("Process start exitCode=" + exitCode);
+            System.out.println("컴파일 Process start exitCode=" + exitCode); // process가 정상 동작:0, 실패:1
 
             InputStream is = p.getInputStream();
             Scanner sc = new Scanner(is);
@@ -152,7 +175,7 @@ public class CodeExecutionController {
             // 실행 결과를 한번에 리턴하기 위해 StringBuilder사용
             if (result.trim().equals(expectedOutput.trim())) {
                 responseResult.append("테스트 통과! 출력값:").append(result);
-                ;
+                answerCount += 1;
             } else {
                 responseResult
                         .append("테스트 실패! 예상 출력값:")

@@ -3,7 +3,7 @@ package com.trianglechoke.codesparring.quiz.control;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.service.TestcaseService;
+import com.trianglechoke.codesparring.quiz.service.TestcaseServiceImpl;
 
 import jakarta.transaction.Transactional;
 
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/testcase")
 public class TestcaseController {
-    @Autowired private TestcaseService service;
+    @Autowired private TestcaseServiceImpl service;
 
-    /* 문제에 테스트케이스 추가하기 : 관리자 */
+    /* 테스트케이스 추가하기 */
     @PostMapping("/{quizNo}")
     @Transactional
     public ResponseEntity<?> writeTestcase(
@@ -32,7 +32,7 @@ public class TestcaseController {
         }
     }
 
-    /* 테스트케이스 수정하기 : 관리자 */
+    /* 테스트케이스 수정하기 */
     @PutMapping("/{testcaseNo}")
     @Transactional
     public ResponseEntity<?> modifyTestcase(
@@ -47,7 +47,7 @@ public class TestcaseController {
         }
     }
 
-    /* 테스트케이스 삭제하기 : 관리자 */
+    /* 테스트케이스 삭제하기 */
     @DeleteMapping("/{testcaseNo}")
     @Transactional
     public ResponseEntity<?> removeTestcase(@PathVariable Long testcaseNo) {
