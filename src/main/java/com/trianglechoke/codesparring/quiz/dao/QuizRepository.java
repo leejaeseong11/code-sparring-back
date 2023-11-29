@@ -53,8 +53,17 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
             nativeQuery = true)
     public List<Object[]> findOrderByCorrectDesc(Integer start, Integer end);
 
-    /* tier 별 조회 */
-    @Query(value = "SELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt FROM quiz " +
-            "WHERE quiz_tier=:quizTier", nativeQuery = true)
-    public List<Object[]> findListByQuizTier(String quizTier);
+    /* tier 목록 조회 : default = 제출 횟수 많은 순 */
+    @Query(
+            value =
+                    "SELECT * FROM (\n"
+                            + "\tSELECT rownum rn, q.*\n"
+                            + "\tFROM (\n"
+                            + "\t\tSELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt\n"
+                            + "\t\tFROM quiz WHERE quiz_tier=:quizTier\n"
+                            + "\t\tORDER BY quiz_submit_cnt desc\n"
+                            + "\t) q\n"
+                            + ") pg WHERE rn BETWEEN :start AND :end",
+            nativeQuery = true)
+    public List<Object[]> findListByQuizTier(String quizTier, Integer start, Integer end);
 }

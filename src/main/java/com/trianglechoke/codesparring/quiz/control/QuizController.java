@@ -46,7 +46,7 @@ public class QuizController {
         }
     }
 
-    /* 티어에 해당하는 문제 목록 조회하기 */
+    /* 티어 별 문제 목록 조회하기 : default */
     @GetMapping("/tier/{quizTier}/{currentPage}")
     public List<QuizDTO> quizListByQuizTier(
             @PathVariable String quizTier, @PathVariable Integer currentPage) {

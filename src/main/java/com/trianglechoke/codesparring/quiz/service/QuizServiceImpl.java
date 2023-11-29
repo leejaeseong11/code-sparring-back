@@ -63,18 +63,18 @@ public class QuizServiceImpl implements QuizService {
         return quizDTOList;
     }
 
-    /* Read : 티어 별 목록 조회 */
+    /* Read : 티어 별 목록 조회 - default */
     public List<QuizDTO> findByQuizTier(String quizTier, Integer start, Integer end)
             throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
-        List<Object[]> quizList = repository.findListByQuizTier(quizTier);
+        List<Object[]> quizList = repository.findListByQuizTier(quizTier, start, end);
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
-                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
-                            .quizTitle(String.valueOf(objArr[1]))
-                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[2])))
-                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[3])))
+                            .quizNo(Long.valueOf(String.valueOf(objArr[1])))
+                            .quizTitle(String.valueOf(objArr[2]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[3])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(quizTier)
                             .build();
             quizDTOList.add(dto);
