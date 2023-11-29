@@ -1,7 +1,7 @@
 package com.trianglechoke.codesparring.room.control;
 
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
-import com.trianglechoke.codesparring.room.service.RoomServiceImpl;
+import com.trianglechoke.codesparring.room.service.RoomService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/room")
 public class RoomController {
-    @Autowired private RoomServiceImpl roomService;
+    @Autowired private RoomService roomService;
 
     @GetMapping("/{roomNo}")
     public RoomDTO find(@PathVariable Long roomNo) {
