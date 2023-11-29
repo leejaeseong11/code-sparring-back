@@ -7,5 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/room-member")
 public class RoomMemberController {
 
-    public boolean findMember(Long memberNo) {}
+    public boolean findMember(Long memberNo) {
+        return false;
+    }
 }
