@@ -2,19 +2,26 @@ package com.trianglechoke.codesparring.code.service;
 
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.repository.CodeRepository;
+import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.membercode.entity.MemberCode;
+import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dao.TestcaseInputRepository;
 import com.trianglechoke.codesparring.quiz.dao.TestcaseRepository;
 
+import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
+import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CodeService {
 
     @Autowired private CodeRepository repository;
+    @Autowired private QuizRepository quizRepository;
     @Autowired private TestcaseRepository tc;
     @Autowired private TestcaseInputRepository ti;
 
@@ -36,7 +43,10 @@ public class CodeService {
     }
 
     //문제제출횟수, 문제정답횟수 수정
-    public void modifyQuiz(String quizNo){
-
+    private void modifyQuizSubmit(Long quizNo, boolean correct) throws MyException {
+        Optional<Quiz> optQ = quizRepository.findById(quizNo);
+        Quiz quizEntity = optQ.get();
+        quizEntity.modifyQuizSubmit(correct);
+        quizRepository.save(quizEntity);
     }
 }
