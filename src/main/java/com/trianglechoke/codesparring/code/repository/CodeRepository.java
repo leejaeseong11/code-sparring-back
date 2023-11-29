@@ -15,9 +15,9 @@ public interface CodeRepository extends JpaRepository<MemberCode, Long> {
     @Query(
             value =
                     "select tc.testcase_no, tc.testcase_output, ti.testcase_input\n"
-                        + "from testcase tc join testcase_input ti on(tc.testcase_no ="
-                        + " ti.testcase_no)\n"
-                        + "where tc.quiz_no=:quizNo",
+                            + "from testcase tc join testcase_input ti on(tc.testcase_no ="
+                            + " ti.testcase_no)\n"
+                            + "where tc.quiz_no=:quizNo",
             nativeQuery = true)
     public List<Object[]> findByQuizNo(@Param("quizNo") Long quizNo);
 
