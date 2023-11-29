@@ -1,4 +1,4 @@
-package com.trianglechoke.codesparring.rankgame.repository;
+package com.trianglechoke.codesparring.rankgame.dao;
 
 import com.trianglechoke.codesparring.rankgame.entity.RankGame;
 

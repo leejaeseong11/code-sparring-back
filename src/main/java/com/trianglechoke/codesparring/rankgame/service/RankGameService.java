@@ -7,7 +7,7 @@ import com.trianglechoke.codesparring.member.repository.MemberRepository;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.entity.RankGame;
-import com.trianglechoke.codesparring.rankgame.repository.RankGameRepository;
+import com.trianglechoke.codesparring.rankgame.dao.RankGameRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
