@@ -54,4 +54,12 @@ interface QuizService {
      * @throws MyException
      */
     public QuizDTO findByQuizNo(Long quizNo) throws MyException;
+
+    /**
+     * 문제를 추가한다.
+     * @param quizDTO 문제 상세정보, 테스트케이스 목록을 담은 객체
+     * @return 생성된 문제의 번호
+     * @throws MyException
+     */
+    public Long addQuiz(QuizDTO quizDTO) throws MyException;
 }

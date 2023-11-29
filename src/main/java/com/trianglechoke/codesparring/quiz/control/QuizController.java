@@ -88,7 +88,7 @@ public class QuizController {
         }
     }
 
-    /* 문제 추가하기 : 관리자 or 출제 회원 */
+    /* 문제 추가하기 */
     @PostMapping()
     @Transactional
     public ResponseEntity<?> writeQuiz(@RequestBody QuizDTO quizDTO) {

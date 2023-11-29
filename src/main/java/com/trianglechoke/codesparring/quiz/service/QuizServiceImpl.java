@@ -157,7 +157,7 @@ public class QuizServiceImpl implements QuizService {
         return quizDTO;
     }
 
-    /* quiz 추가 */
+    /* Create : 문제 추가 */
     public Long addQuiz(QuizDTO quizDTO) throws MyException {
         Member m = Member.builder().memberNo(quizDTO.getMemberNo()).build();
         Quiz quizEntity =
