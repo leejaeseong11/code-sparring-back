@@ -4,6 +4,7 @@ import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.dto.NormalDTO;
 import com.trianglechoke.codesparring.code.dto.RankDTO;
 import com.trianglechoke.codesparring.code.service.CodeService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,25 +18,24 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
-
-//코드제출(테스트케이스 10개)
+// 코드제출(테스트케이스 10개)
 @RestController
 @RequestMapping("/submit")
 public class CodeSubmissionController {
 
-    @Autowired
-    private CodeService service;
+    @Autowired private CodeService service;
     StringBuilder responseResult;
 
-    //테스트케이스 실행결과 정답 수
+    // 테스트케이스 실행결과 정답 수
     int answerCount;
 
     @PostMapping("/normalMode")
-    public String normalMode(@RequestPart(value = "Main") MultipartFile file,
-                             @RequestPart(value = "dto") NormalDTO dto) throws IOException {
+    public String normalMode(
+            @RequestPart(value = "Main") MultipartFile file,
+            @RequestPart(value = "dto") NormalDTO dto)
+            throws IOException {
 
         responseResult = new StringBuilder();
         answerCount = 0;
@@ -76,7 +76,7 @@ public class CodeSubmissionController {
             }
         }
 
-        //파일삭제
+        // 파일삭제
         Files.delete(
                 Path.of(
                         "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
@@ -88,21 +88,15 @@ public class CodeSubmissionController {
                                 + fileName
                                 + ".class"));
 
-        //Quiz테이블의 문제 제출 횟수, 문제 정답 횟수 수정
+        // Quiz테이블의 문제 제출 횟수, 문제 정답 횟수 수정
         return responseResult + ", " + answerCount;
-
-
-
-
     }
 
     @PostMapping("/rankMode")
-    public String rankMode(@RequestPart MultipartFile file,
-                           @RequestPart RankDTO dto){
+    public String rankMode(@RequestPart MultipartFile file, @RequestPart RankDTO dto) {
 
         return "";
     }
-
 
     public void executeCode2(String fileName, File f, String output, String input) {
 
@@ -119,7 +113,7 @@ public class CodeSubmissionController {
         try {
             Process p = pb.start();
             int exitCode = p.waitFor();
-            System.out.println("컴파일 Process start exitCode=" + exitCode); //process가 정상 동작:0, 실패:1
+            System.out.println("컴파일 Process start exitCode=" + exitCode); // process가 정상 동작:0, 실패:1
 
             InputStream is = p.getInputStream();
             Scanner sc = new Scanner(is);
@@ -174,9 +168,10 @@ public class CodeSubmissionController {
             // 실행 결과를 한번에 리턴하기 위해 StringBuilder사용
             if (result.trim().equals(expectedOutput.trim())) {
                 responseResult.append("테스트 통과! 출력값:").append(result);
-                answerCount+=1;
+                answerCount += 1;
             } else {
-                responseResult.append("테스트 실패! 예상 출력값:")
+                responseResult
+                        .append("테스트 실패! 예상 출력값:")
                         .append(expectedOutput)
                         .append(", 실제 출력값:")
                         .append(result);
@@ -188,5 +183,4 @@ public class CodeSubmissionController {
         // -------------------------------실행 끝-------------------------------
 
     }
-
 }
