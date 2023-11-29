@@ -4,10 +4,10 @@ import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.member.repository.MemberRepository;
+import com.trianglechoke.codesparring.rankgame.dao.RankGameRepository;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.entity.RankGame;
-import com.trianglechoke.codesparring.rankgame.dao.RankGameRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +24,8 @@ public class RankGameServiceImpl implements RankGameService {
     @Autowired private RankGameRepository repository;
 
     /* Read : 랭크게임 전적 조회 */
-    public List<MyRankDTO> findAllByMemberNo(Long memberNo, Integer start, Integer end) throws MyException {
+    public List<MyRankDTO> findAllByMemberNo(Long memberNo, Integer start, Integer end)
+            throws MyException {
         List<Object[]> list = repository.findListByMemberNo(memberNo, start, end);
         List<MyRankDTO> rankGameDTOList = new ArrayList<>();
         for (Object[] objArr : list) {
