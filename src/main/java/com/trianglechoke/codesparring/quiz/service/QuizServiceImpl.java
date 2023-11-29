@@ -13,6 +13,8 @@ import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +29,8 @@ public class QuizServiceImpl implements QuizService {
     public List<QuizDTO> findQuizList(Integer start, Integer end) throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findQuizList(start, end);
+        Long quizCnt = repository.count();
+        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -48,7 +52,8 @@ public class QuizServiceImpl implements QuizService {
         List<Object[]> quizList = new ArrayList<>();
         if (order.equals("asc")) quizList = repository.findOrderByCorrect(start, end);
         else if (order.equals("desc")) quizList = repository.findOrderByCorrectDesc(start, end);
-
+        Long quizCnt = repository.count();
+        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -68,6 +73,11 @@ public class QuizServiceImpl implements QuizService {
             throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findListByQuizTier(quizTier, start, end);
+        Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
+        ExampleMatcher exampleMatcher=ExampleMatcher.matchingAll();
+        Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
+        Long quizCnt = repository.count(example);
+        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -91,7 +101,11 @@ public class QuizServiceImpl implements QuizService {
             quizList = repository.findByTierOrderByCorrect(quizTier, start, end);
         else if (order.equals("desc"))
             quizList = repository.findByTierOrderByCorrectDesc(quizTier, start, end);
-
+        Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
+        ExampleMatcher exampleMatcher=ExampleMatcher.matchingAll();
+        Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
+        Long quizCnt = repository.count(example);
+        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
