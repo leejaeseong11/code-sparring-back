@@ -100,7 +100,7 @@ public class Quiz {
     }
 
     // [임시] 제출횟수 및 정답횟수 증가 메소드
-    public void modifyQuizSubmit(QuizDTO quizDTO, boolean correct) {
+    public void modifyQuizSubmit(boolean correct) {
         this.quizSubmitCnt++;
         if (correct) this.quizSuccessCnt++;
     }

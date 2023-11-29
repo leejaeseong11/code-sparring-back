@@ -198,13 +198,4 @@ public class QuizServiceImpl implements QuizService {
     public void removeQuiz(Long quizNo) throws MyException {
         repository.deleteById(quizNo);
     }
-
-    /* 임시로 생성해놓은 메소드 -> 트리거 설정 시 삭제 */
-    /* 문제 제출 : 문제 제출 횟수 증가, 정답 유무에 따른 정답 횟수 증가 (정답인 경우, correct=true) */
-    public void modifyQuizSubmit(QuizDTO quizDTO, boolean correct) throws MyException {
-        Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
-        Quiz quizEntity = optQ.get();
-        quizEntity.modifyQuizSubmit(quizDTO, correct);
-        repository.save(quizEntity);
-    }
 }

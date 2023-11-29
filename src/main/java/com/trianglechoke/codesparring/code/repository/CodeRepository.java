@@ -20,4 +20,14 @@ public interface CodeRepository extends JpaRepository<MemberCode, Long> {
                             + "where tc.quiz_no=:quizNo",
             nativeQuery = true)
     public List<Object[]> findByQuizNo(@Param("quizNo") Long quizNo);
+
+    //    @Modifying
+    //    @Query(
+    //            value =
+    //                    "update quiz \n"
+    //                            + "set quiz_submit_cnt=quiz_submit_cnt+1, \n"
+    //                            + "    quiz_success_cnt=quiz_success_cnt+1\n"
+    //                            + "where quiz_no =:100",
+    //    nativeQuery = true)
+    //    public void modifyQuiz(@Param() String quizNo);
 }
