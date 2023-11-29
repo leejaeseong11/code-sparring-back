@@ -1,5 +1,6 @@
 package com.trianglechoke.codesparring.membercode.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
@@ -24,6 +25,7 @@ public class MemberCodeEmbedded implements Serializable {
     @ManyToOne
     @JoinColumn(name = "member_no")
     @NotNull
+    @JsonIgnore
     private Member member;
 
     // [FK] 문제 번호
