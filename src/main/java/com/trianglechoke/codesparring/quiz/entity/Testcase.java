@@ -5,7 +5,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,17 +37,18 @@ public class Testcase {
 
     // [FK] 문제 번호
     @Column(name = "quiz_no")
-    @NotNull
     private Long quizNo;
 
     // 출력값
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
     private String testcaseOutput;
 
+    // 입력값 목록
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "testcase_no")
     private List<TestcaseInput> testcaseInputList;
 
+    // 출력값 수정 메소드
     public void modifyOutput(String output) {
         this.testcaseOutput = output;
     }

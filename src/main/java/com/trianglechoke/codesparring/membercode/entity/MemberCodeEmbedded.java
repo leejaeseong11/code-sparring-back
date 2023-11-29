@@ -15,10 +15,11 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-// @NoArgsConstructor
-// @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode
 @Embeddable
+@Builder
 public class MemberCodeEmbedded implements Serializable {
     // [FK] 회원 번호
 

@@ -111,6 +111,7 @@ public class Member {
     // rankGame 이후 point 변경
     public void modifyPoint(Integer point) {
         this.tierPoint += point;
+        if (this.tierPoint < 0L) this.tierPoint = 0L;
     }
 
     // point 에 따른 tier 변경
