@@ -154,7 +154,8 @@ public class CodeExecutionController {
                 responseResult.append("테스트 통과! 출력값:").append(result);
                 ;
             } else {
-                responseResult.append("테스트 실패! 예상 출력값:")
+                responseResult
+                        .append("테스트 실패! 예상 출력값:")
                         .append(expectedOutput)
                         .append(", 실제 출력값:")
                         .append(result);
