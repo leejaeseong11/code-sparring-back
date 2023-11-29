@@ -100,9 +100,9 @@ public class RankGameService {
 
     /* RankGame - member tier calculate */
     private String calculateTier(Long point) {
-        if (point > 15000L) return "PLATINUM";
-        else if (point > 5000L) return "GOLD";
-        else if (point > 1000L) return "SILVER";
+        if (point >= 15000L) return "PLATINUM";
+        else if (point >= 5000L) return "GOLD";
+        else if (point >= 1000L) return "SILVER";
         else return "BRONZE";
     }
 
