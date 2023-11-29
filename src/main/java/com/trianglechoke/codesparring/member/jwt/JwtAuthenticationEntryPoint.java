@@ -10,6 +10,7 @@ import java.io.IOException;
 
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
+   //유효한 자격 증명 제공하지 않고 접근하려 할 때 401 UNAUTHORIZED 에러 반환하는 역할 수행
    @Override
    public void commence(HttpServletRequest request,
                         HttpServletResponse response,

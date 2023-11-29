@@ -22,7 +22,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class TokenProvider implements InitializingBean {
-
+   // application.properties에서 정의한 secret, token-validity-in-seconds 값을 주입받음
+   // 토큰 생성, 토큰 권한 정보를 이용해 Authentication 객체 반환, 토큰 검증 등을 수행
    private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
    private static final String AUTHORITIES_KEY = "auth";
    private final String secret;
@@ -30,8 +31,8 @@ public class TokenProvider implements InitializingBean {
    private Key key;
 
    public TokenProvider(
-      @Value("${jwt.secret}") String secret,
-      @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+           @Value("${jwt.secret}") String secret,
+           @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
       this.secret = secret;
       this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
    }
@@ -42,22 +43,24 @@ public class TokenProvider implements InitializingBean {
       this.key = Keys.hmacShaKeyFor(keyBytes);
    }
 
+   //Authentication 객체에 포함된 권한 정보들을 담은 토큰 생성, 토큰의 만료 시간 지정
    public String createToken(Authentication authentication) {
       String authorities = authentication.getAuthorities().stream()
-         .map(GrantedAuthority::getAuthority)
-         .collect(Collectors.joining(","));
+              .map(GrantedAuthority::getAuthority)
+              .collect(Collectors.joining(","));
 
       long now = (new Date()).getTime();
       Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
       return Jwts.builder()
-         .setSubject(authentication.getName())
-         .claim(AUTHORITIES_KEY, authorities)
-         .signWith(key, SignatureAlgorithm.HS512)
-         .setExpiration(validity)
-         .compact();
+              .setSubject(authentication.getName())
+              .claim(AUTHORITIES_KEY, authorities)
+              .signWith(key, SignatureAlgorithm.HS512)
+              .setExpiration(validity)
+              .compact();
    }
 
+   //토큰에 담겨있는 권한 정보들 이용해 Authentication 객체 반환
    public Authentication getAuthentication(String token) {
       Claims claims = Jwts
               .parserBuilder()
@@ -67,15 +70,16 @@ public class TokenProvider implements InitializingBean {
               .getBody();
 
       Collection<? extends GrantedAuthority> authorities =
-         Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-            .map(SimpleGrantedAuthority::new)
-            .collect(Collectors.toList());
+              Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                      .map(SimpleGrantedAuthority::new)
+                      .collect(Collectors.toList());
 
       User principal = new User(claims.getSubject(), "", authorities);
 
       return new UsernamePasswordAuthenticationToken(principal, token, authorities);
    }
 
+   //토큰 검증
    public boolean validateToken(String token) {
       try {
          Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);

@@ -4,6 +4,7 @@ import com.trianglechoke.codesparring.member.dto.LoginDTO;
 import com.trianglechoke.codesparring.member.dto.TokenDTO;
 import com.trianglechoke.codesparring.member.jwt.JwtFilter;
 import com.trianglechoke.codesparring.member.jwt.TokenProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
-
+@Slf4j
 @RestController
 public class AuthController {
     private final TokenProvider tokenProvider;
@@ -27,12 +28,11 @@ public class AuthController {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
-    @PostMapping("/")
+    //username, password를 파라미터로 입력받아 UserPasswordAuthenticationToken 객체 생성
+    @PostMapping("/login")
     public ResponseEntity<TokenDTO> authorize(@Valid @RequestBody LoginDTO loginDto) {
-
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getMemberId(), loginDto.getMemberPwd());
-
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

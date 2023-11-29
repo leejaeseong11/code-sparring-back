@@ -3,8 +3,10 @@ package com.trianglechoke.codesparring.member.service;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Member;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +27,7 @@ public class CustomMemberDetailsService implements UserDetailsService {
    @Transactional
    public UserDetails loadUserByUsername(final String memberId) {
       return memberRepository.findByMemberId(memberId)
+              .filter(member -> member.getMemberStatus() == 1)
               .map(user -> createUser(memberId, user))
               .orElseThrow(() -> new UsernameNotFoundException(memberId + " -> 데이터베이스에서 찾을 수 없습니다."));
    }
@@ -33,11 +36,9 @@ public class CustomMemberDetailsService implements UserDetailsService {
       if (!member.isActivated()) {
          throw new RuntimeException(username + " -> 활성화되어 있지 않습니다.");
       }
-
       List<GrantedAuthority> grantedAuthorities = Collections.singletonList(
               new SimpleGrantedAuthority("ROLE_" + member.getRole().name())
       );
-
       return new org.springframework.security.core.userdetails.User(
               member.getMemberId(),
               member.getMemberPwd(),

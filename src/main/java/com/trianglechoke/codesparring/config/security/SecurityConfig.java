@@ -55,9 +55,8 @@ public class SecurityConfig {
             )
 
             .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                .requestMatchers("/login").permitAll()  // 열어주는것
-//                .requestMatchers("/*").permitAll()  // 열어주는것
-                .anyRequest().authenticated()
+                .requestMatchers("/signup", "/login").permitAll()  // 토큰 없어도 열어주는것
+                .anyRequest().authenticated() // 나머지 요청들은 모두 인증 받아야 함
             )
 
             // 세션을 사용하지 않기 때문에 STATELESS로 설정

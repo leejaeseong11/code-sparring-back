@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 public class JwtFilter extends GenericFilterBean {
-
+   //JWT를 위한 Custom Filter 생성, jwt 토큰의 인증 정보를 현재 실행 중인 스레드에 저장
    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
    public static final String AUTHORIZATION_HEADER = "Authorization";
    private TokenProvider tokenProvider;
@@ -23,6 +23,7 @@ public class JwtFilter extends GenericFilterBean {
       this.tokenProvider = tokenProvider;
    }
 
+   //실제 필터링 로직 작성하는 부분, jwt 토큰의 인증 정보를 현재 실행 중인 스레드에 저장
    @Override
    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
       HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
@@ -40,6 +41,7 @@ public class JwtFilter extends GenericFilterBean {
       filterChain.doFilter(servletRequest, servletResponse);
    }
 
+   //HttpServletRequest 객체의 Header에서 token 추출
    private String resolveToken(HttpServletRequest request) {
       String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 

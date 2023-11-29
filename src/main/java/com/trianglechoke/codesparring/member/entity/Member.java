@@ -125,6 +125,7 @@ public class Member {
     public static Member memberDTOToEntity(MemberDTO memberDTO, PasswordEncoder passwordEncoder){
         Member member = Member.builder()
                 .role(USER)
+                .memberNo(memberDTO.getMemberNo())
                 .memberId(memberDTO.getMemberId())
                 .memberPwd(passwordEncoder.encode(memberDTO.getMemberPwd()))
                 .memberName(memberDTO.getMemberName())
