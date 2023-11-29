@@ -8,7 +8,7 @@ import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
 import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
-import com.trianglechoke.codesparring.quiz.repository.QuizRepository;
+import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
@@ -20,15 +20,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class QuizService {
+public class QuizServiceImpl implements QuizService {
     @Autowired private QuizRepository repository;
 
-    /* quiz 전체 목록 조회 */
-    public List<QuizDTO> findOrderByQuizNo(Integer start, Integer end) throws MyException {
+    /* Read : 전체 목록 조회 - default */
+    public List<QuizDTO> findQuizList(Integer start, Integer end) throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
-        List<Object[]> list=repository.findOrderByQuizNo(start, end);
-
-        for (Object[] objArr : list) {
+        List<Object[]> quizList = repository.findQuizList(start, end);
+        for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
                             .quizNo(Long.valueOf(String.valueOf(objArr[1])))
@@ -42,8 +41,8 @@ public class QuizService {
         return quizDTOList;
     }
 
-    /* quiz 티어 별 목록 조회 */
-    public List<QuizDTO> findByQuizTier(String quizTier) throws MyException {
+    /* Read : 티어 별 목록 조회 */
+    public List<QuizDTO> findByQuizTier(String quizTier, Integer start, Integer end) throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findListByQuizTier(quizTier);
         for (Object[] objArr : quizList) {
