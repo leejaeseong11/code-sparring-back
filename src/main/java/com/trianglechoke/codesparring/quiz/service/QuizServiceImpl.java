@@ -41,8 +41,31 @@ public class QuizServiceImpl implements QuizService {
         return quizDTOList;
     }
 
+    /* Read : 전체 목록 조회 - 정답률순 */
+    public List<QuizDTO> findOrderByCorrect(Integer start, Integer end, String order)
+            throws MyException {
+        List<QuizDTO> quizDTOList = new ArrayList<>();
+        List<Object[]> quizList = new ArrayList<>();
+        if (order.equals("asc")) quizList = repository.findOrderByCorrect(start, end);
+        else if (order.equals("desc")) quizList = repository.findOrderByCorrectDesc(start, end);
+
+        for (Object[] objArr : quizList) {
+            QuizDTO dto =
+                    QuizDTO.builder()
+                            .quizNo(Long.valueOf(String.valueOf(objArr[1])))
+                            .quizTitle(String.valueOf(objArr[2]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[3])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
+                            .quizTier(String.valueOf(objArr[5]))
+                            .build();
+            quizDTOList.add(dto);
+        }
+        return quizDTOList;
+    }
+
     /* Read : 티어 별 목록 조회 */
-    public List<QuizDTO> findByQuizTier(String quizTier, Integer start, Integer end) throws MyException {
+    public List<QuizDTO> findByQuizTier(String quizTier, Integer start, Integer end)
+            throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findListByQuizTier(quizTier);
         for (Object[] objArr : quizList) {
@@ -53,24 +76,6 @@ public class QuizServiceImpl implements QuizService {
                             .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[2])))
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[3])))
                             .quizTier(quizTier)
-                            .build();
-            quizDTOList.add(dto);
-        }
-        return quizDTOList;
-    }
-
-    /* quiz 전체 목록 조회_정답률순 정렬 */
-    public List<QuizDTO> findOrderByCorrect() throws MyException {
-        List<QuizDTO> quizDTOList = new ArrayList<>();
-        List<Object[]> quizList = repository.findOrderByCorrect();
-        for (Object[] objArr : quizList) {
-            QuizDTO dto =
-                    QuizDTO.builder()
-                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
-                            .quizTitle(String.valueOf(objArr[1]))
-                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[2])))
-                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[3])))
-                            .quizTier(String.valueOf(objArr[4]))
                             .build();
             quizDTOList.add(dto);
         }

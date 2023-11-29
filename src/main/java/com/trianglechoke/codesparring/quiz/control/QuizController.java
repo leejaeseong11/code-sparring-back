@@ -21,12 +21,25 @@ public class QuizController {
     @Autowired private QuizServiceImpl service;
     @Autowired private TestcaseService serviceTc;
 
-    /* 문제 전체 목록 조회하기 : 1 페이지 당 10개의 문제 출력 (아래 모두 동일) */
+    /* 문제 전체 목록 조회하기 : default */
     @GetMapping("/list/{currentPage}")
     public List<QuizDTO> quizList(@PathVariable Integer currentPage) {
         try {
-            List<QuizDTO> list= service.findQuizList((currentPage-1)*10+1, currentPage*10);
-            if(list.size()==0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            List<QuizDTO> list = service.findQuizList((currentPage - 1) * 10 + 1, currentPage * 10);
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            else return list;
+        } catch (Exception e) {
+            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+        }
+    }
+
+    /* 문제 전체 목록 조회하기 : 정답률 */
+    @GetMapping("/list/{currentPage}/{order}")
+    public List<QuizDTO> quizListOrderByCorrect(@PathVariable Integer currentPage, @PathVariable String order) {
+        try {
+            List<QuizDTO> list =
+                    service.findOrderByCorrect((currentPage - 1) * 10 + 1, currentPage * 10, order);
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
         } catch (Exception e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
@@ -35,20 +48,13 @@ public class QuizController {
 
     /* 티어에 해당하는 문제 목록 조회하기 */
     @GetMapping("/tier/{quizTier}/{currentPage}")
-    public List<QuizDTO> quizListByQuizTier(@PathVariable String quizTier, @PathVariable Integer currentPage) {
+    public List<QuizDTO> quizListByQuizTier(
+            @PathVariable String quizTier, @PathVariable Integer currentPage) {
         try {
-            List<QuizDTO> list=service.findByQuizTier(quizTier, (currentPage-1)*3+1,currentPage*3);
-            if(list.size()==0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            List<QuizDTO> list =
+                    service.findByQuizTier(quizTier, (currentPage - 1) * 3 + 1, currentPage * 3);
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
-        } catch (Exception e) {
-            throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
-        }
-    }
-
-    @GetMapping("/list/correct")
-    public List<QuizDTO> quizListOrderByCorrect() {
-        try {
-            return service.findOrderByCorrect();
         } catch (Exception e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
         }
