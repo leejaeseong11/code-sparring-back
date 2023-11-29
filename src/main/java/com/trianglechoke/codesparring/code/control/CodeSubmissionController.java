@@ -3,6 +3,7 @@ package com.trianglechoke.codesparring.code.control;
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.dto.NormalDTO;
 import com.trianglechoke.codesparring.code.dto.RankDTO;
+import com.trianglechoke.codesparring.code.dto.ResponseDTO;
 import com.trianglechoke.codesparring.code.service.CodeService;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
@@ -21,7 +22,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 // 코드제출(테스트케이스 10개)
@@ -100,15 +103,82 @@ public class CodeSubmissionController {
     }
 
     @PostMapping("/rankMode")
-    public String rankMode(@RequestPart MultipartFile file, @RequestPart RankDTO dto) {
+    public ResponseEntity<?> rankMode(
+            @RequestPart(value = "Main") MultipartFile file,
+            @RequestPart(value = "dto") RankDTO dto)
+            throws IOException {
 
-        return "";
+
+        responseResult = new StringBuilder();
+        answerCount = 0;
+        String output = "";
+        String input = "";
+
+        if (file.isEmpty()) {
+            // return "업로드된 파일이 비어 있습니다.";
+            throw new MyException(ErrorCode.FILE_NOT_FOUND);
+        }
+
+        // 파일 저장
+        String fileName = file.getName(); // value값으로 지정
+        String filePath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
+        File f = new File(filePath, fileName + ".java");
+
+        try {
+            file.transferTo(f);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // return "파일 저장 중 오류가 발생했습니다.";
+            throw new MyException(ErrorCode.FILE_NOT_SAVED);
+        }
+
+        if (!f.exists()) {
+            throw new MyException(ErrorCode.FILE_NOT_FOUND);
+        }
+
+        // 문제번호에 해당하는 테스트케이스 가져오기(input, expectedOutput에 넣어주기)
+        List<CodeTestcaseDTO> list = service.findByQuizNo(String.valueOf(dto.getQuizNo()));
+
+        for (CodeTestcaseDTO ctdto : list) {
+            output = ctdto.getTestcaseOutput();
+            input = ctdto.getTestcaseInput();
+            executeCode2(fileName, f, output, input);
+        }
+
+        // 파일삭제
+        Files.delete(
+                Path.of(
+                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
+                                + fileName
+                                + ".java"));
+        Files.delete(
+                Path.of(
+                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
+                                + fileName
+                                + ".class"));
+
+        Integer correct = 0;
+        if (answerCount == list.size()) correct = 1;
+        service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct);
+
+        String result =  responseResult + ", " + answerCount;
+//        ResponseDTO resdto = new ResponseDTO();
+//        resdto.setResult(result);
+//        resdto.setGameResult(correct);
+
+
+        Map<String, String> result2 = new HashMap<>();
+        result2.put("result", result);
+        result2.put("gameResult", String.valueOf(correct));
+        return new ResponseEntity<>(result2, HttpStatus.OK);
+
+
     }
 
     public void executeCode2(String fileName, File f, String output, String input) {
 
         String input2 = " " + input; // 입력값
-        String expectedOutput = "0.8"; // 예상 출력값
+        String expectedOutput = " " + output; // 예상 출력값
         String compileResult = "";
         String result = "";
         // -------------------------------컴파일 시작-------------------------------
@@ -171,6 +241,7 @@ public class CodeSubmissionController {
                 resultBuilder.append(resultLine).append(System.getProperty("line.separator"));
             }
             result = resultBuilder.toString();
+
 
             // 실행 결과를 한번에 리턴하기 위해 StringBuilder사용
             if (result.trim().equals(expectedOutput.trim())) {
