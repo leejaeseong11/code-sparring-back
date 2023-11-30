@@ -3,7 +3,6 @@ package com.trianglechoke.codesparring.code.control;
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.dto.NormalDTO;
 import com.trianglechoke.codesparring.code.dto.RankDTO;
-import com.trianglechoke.codesparring.code.dto.ResponseDTO;
 import com.trianglechoke.codesparring.code.service.CodeService;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
@@ -97,8 +96,7 @@ public class CodeSubmissionController {
         service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct);
 
         // Quiz테이블의 문제 제출 횟수, 문제 정답 횟수 수정
-        // return responseResult + ", " + answerCount;
-        String msg = responseResult + ", " + answerCount;
+        String msg = String.valueOf(responseResult);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
@@ -161,7 +159,7 @@ public class CodeSubmissionController {
         if (answerCount == list.size()) correct = 1;
         service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct);
 
-        String result =  responseResult + ", " + answerCount;
+        String result = String.valueOf(responseResult);
 //        ResponseDTO resdto = new ResponseDTO();
 //        resdto.setResult(result);
 //        resdto.setGameResult(correct);

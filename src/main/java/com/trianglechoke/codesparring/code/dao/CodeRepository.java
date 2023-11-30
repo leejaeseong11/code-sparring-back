@@ -1,4 +1,4 @@
-package com.trianglechoke.codesparring.code.repository;
+package com.trianglechoke.codesparring.code.dao;
 
 import com.trianglechoke.codesparring.membercode.entity.MemberCode;
 

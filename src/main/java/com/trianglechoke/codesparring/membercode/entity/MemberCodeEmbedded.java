@@ -3,6 +3,7 @@ package com.trianglechoke.codesparring.membercode.entity;
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -20,17 +21,12 @@ import java.io.Serializable;
 @Embeddable
 @Builder
 public class MemberCodeEmbedded implements Serializable {
-    // [FK] 회원 번호
 
-    @ManyToOne
-    @JoinColumn(name = "member_no")
-    @NotNull
-    private Member member;
+    // [FK] 회원 번호
+    @Column(name = "member_no")
+    private Long memberNo;
 
     // [FK] 문제 번호
-
-    @ManyToOne
-    @JoinColumn(name = "quiz_no")
-    @NotNull
-    private Quiz quiz;
+    @Column(name = "quiz_no")
+    private Long quizNo;
 }
