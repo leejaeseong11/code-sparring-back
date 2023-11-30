@@ -18,7 +18,14 @@ public enum ErrorCode {
     RANK_NOT_SAVED(BAD_REQUEST, "랭크 정보를 추가할 수 없습니다."),
     ALREADY_STARTED_ROOM(BAD_REQUEST, "이미 게임이 시작된 방입니다."),
 
-    /* 403 FORBIDDEN : 접근 권한 제한 */
+    MISMATCH_PASSWORD(BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+
+    /* 401 UNAUTHORIZED : 사용자 인증실패 */
+    TOKEN_MISMATCH(UNAUTHORIZED, "회원 정보가 일치하지 않습니다."),
+    UNAVAILABLE_REFRESH_TOKEN(UNAUTHORIZED, "유효하지 않은 접근입니다."),
+
+    /* 403 FORBIDDEN : 인가 실패. 특정 리소스에 대한 권한 부족 */
+    UNAUTHORIZED_ACCESS(FORBIDDEN, "접근권한이 없습니다."),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     FILE_NOT_FOUND(NOT_FOUND, "파일을 찾을 수 없습니다."),
@@ -27,11 +34,15 @@ public enum ErrorCode {
     TESTCASE_NOT_FOUND(NOT_FOUND, "테스트케이스를 찾을 수 없습니다."),
     RANK_GAME_NOT_FOUND(NOT_FOUND, "랭크 전적을 찾을 수 없습니다."),
     ROOM_NOT_FOUND(NOT_FOUND, "해당 방 정보를 찾을 수 없습니다."),
+    MEMBER_NOT_FOUND(NOT_FOUND, "해당 회원을 찾을 수 없습니다."),
 
     /* 304 NOT_MODIFIED : 클라이언트가 가지고 있는 Resource 가 수정되지 않았음 */
     QUIZ_NOT_MODIFIED(NOT_MODIFIED, "해당 문제를 수정할 수 없습니다."),
     TESTCASE_NOT_MODIFIED(NOT_MODIFIED, "해당 테스트케이스를 수정할 수 없습니다."),
-    RANK_GAME_NOT_MODIFIED(NOT_MODIFIED, "랭크게임 결과를 업데이트할 수 없습니다.");
+    RANK_GAME_NOT_MODIFIED(NOT_MODIFIED, "랭크게임 결과를 업데이트할 수 없습니다."),
+
+    /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
+    DUPLICATE_MEMBER(CONFLICT, "이미 가입된 회원입니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;

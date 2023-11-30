@@ -1,14 +1,10 @@
 package com.trianglechoke.codesparring.member.dto;
-
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class TokenDTO {
-    private String grantType;
+public class TokenRequestDTO {
     private String accessToken;
     private String refreshToken;
-    private Long accessTokenExpiresIn;
 }

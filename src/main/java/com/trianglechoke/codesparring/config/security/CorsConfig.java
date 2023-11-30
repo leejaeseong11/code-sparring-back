@@ -17,7 +17,7 @@ public class CorsConfig {
       config.addAllowedHeader("*"); // 모든 HTTP HEADER에 허용
       config.addAllowedMethod("*"); // 모든 HTTP METHOD에 허용
 
-      source.registerCorsConfiguration("/**", config);
+      source.registerCorsConfiguration("/api/**", config);
       return new CorsFilter(source);
    }
 }
