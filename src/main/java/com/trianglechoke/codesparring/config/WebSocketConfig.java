@@ -22,6 +22,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketHandler, "/ws/roomChat").setAllowedOrigins(frontURL);
+        registry.addHandler(webSocketHandler, "/ws/session").setAllowedOrigins(frontURL);
     }
 }

@@ -7,7 +7,11 @@ import jakarta.persistence.*;
 
 import lombok.*;
 
+import org.springframework.web.socket.WebSocketSession;
+
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,4 +28,5 @@ public class RoomDTO {
     private String roomTitle;
     private Integer roomStatus;
     private List<RoomMember> roomMemberList;
+    private Set<WebSocketSession> sessions = new HashSet<>();
 }
