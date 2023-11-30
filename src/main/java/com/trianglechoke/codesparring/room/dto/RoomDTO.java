@@ -16,7 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class RoomDTO {
-
     private Long roomNo;
     private Quiz quiz;
     private String roomPwd;

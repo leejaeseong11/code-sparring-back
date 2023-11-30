@@ -1,5 +1,6 @@
 package com.trianglechoke.codesparring.membercode.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
