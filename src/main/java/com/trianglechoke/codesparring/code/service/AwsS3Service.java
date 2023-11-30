@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.code.service;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -21,7 +22,6 @@ public interface AwsS3Service {
      * S3에 저장할 파일명
      *
      * @param originalFileName 원본 파일명
-     *
      * @return S3에 저장할 파일명
      */
     String createFileName(String originalFileName, String quizNo);

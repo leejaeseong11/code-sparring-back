@@ -2,6 +2,7 @@ package com.trianglechoke.codesparring.membercode.entity;
 
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -31,12 +32,10 @@ public class MemberCode {
     @MapsId("memberNo")
     private Member member;
 
-
     @ManyToOne
     @JoinColumn(name = "quiz_no")
     @MapsId("quizNo")
     private Quiz quiz;
-
 
     // 정답 여부 (1은 정답, 0은 오답)
     @Column(name = "quiz_correct", columnDefinition = "NUMBER(1)")
