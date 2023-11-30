@@ -17,6 +17,7 @@ public enum ErrorCode {
     TESTCASE_NOT_SAVED(BAD_REQUEST, "테스트케이스를 추가할 수 없습니다."),
     RANK_NOT_SAVED(BAD_REQUEST, "랭크 정보를 추가할 수 없습니다."),
     ALREADY_STARTED_ROOM(BAD_REQUEST, "이미 게임이 시작된 방입니다."),
+    SESSION_ERROR(BAD_REQUEST, "세션이 만료되었습니다."),
 
     /* 403 FORBIDDEN : 접근 권한 제한 */
 
