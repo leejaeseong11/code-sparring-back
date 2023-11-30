@@ -26,4 +26,5 @@ public class QuizDTO {
     private String outputType;
     private List<ReportDTO> reportDTOList;
     private List<TestcaseDTO> testcaseDTOList;
+    private Long quizCnt;
 }
