@@ -23,7 +23,7 @@ public class RoomMemberKey implements Serializable {
 
     // [FK] 회원 번호
     @ManyToOne
-    @JoinColumn(name = "member_no")
+    @JoinColumn(name = "member_no", unique = true)
     @NotNull
     private Member member;
 }
