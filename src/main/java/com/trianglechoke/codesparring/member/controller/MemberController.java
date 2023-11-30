@@ -1,28 +1,49 @@
 package com.trianglechoke.codesparring.member.controller;
 
+import com.trianglechoke.codesparring.member.dto.MemberRequestDTO;
 import com.trianglechoke.codesparring.member.dto.MemberResponseDTO;
 import com.trianglechoke.codesparring.member.service.MemberService;
 import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/member")
 public class MemberController {
-    private final MemberService memberService;
 
+    private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
     @GetMapping("/me")
-    public ResponseEntity<MemberResponseDTO> findMemberInfoById() {
-        return ResponseEntity.ok(memberService.findMemberInfoById(SecurityUtil.getCurrentMemberNo()));
+    public ResponseEntity<MemberResponseDTO> findMemberInfoByMemberNo() {
+        return ResponseEntity.ok(memberService.findMemberInfoByMemberNo(SecurityUtil.getCurrentMemberNo()));
+
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<MemberResponseDTO> findMemberInfoByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(memberService.findMemberInfoByEmail(email));
+    public ResponseEntity<MemberResponseDTO> findMemberInfoByMemberId(@PathVariable String memberId) {
+        return ResponseEntity.ok(memberService.findMemberInfoByMemberId(memberId));
     }
+
+    @PutMapping("/me/modify")
+    public ResponseEntity<MemberResponseDTO> modifyMemberInfoByMemberNo(@RequestBody MemberRequestDTO memberRequestDTO) {
+        return ResponseEntity.ok(memberService.updateMemberInfo(SecurityUtil.getCurrentMemberNo(), memberRequestDTO));
+    }
+
+    @PutMapping("/me/remove")
+    public ResponseEntity<MemberResponseDTO> removeMember(@RequestBody Map<String, String> passwordMap, MemberRequestDTO memberRequestDTO) {
+        if (passwordEncoder.matches(passwordMap.get("memberPwd"), memberService.findMemberPwd(SecurityUtil.getCurrentMemberNo(), memberRequestDTO))) {
+            return ResponseEntity.ok(memberService.deleteMember(SecurityUtil.getCurrentMemberNo()));
+        } else {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
+    }
+
+
+
 }

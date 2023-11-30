@@ -14,4 +14,5 @@ public class MemberResponseDTO {
     public static MemberResponseDTO of(Member member) {
         return new MemberResponseDTO(member.getMemberId());
     }
+
 }
