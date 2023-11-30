@@ -6,14 +6,19 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.Hibernate;
+
 import java.io.Serializable;
+import java.util.Objects;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Embeddable
 public class RoomMemberKey implements Serializable {
     // [FK] 방 번호

@@ -1,20 +1,25 @@
 package com.trianglechoke.codesparring.room.control;
 
+import com.trianglechoke.codesparring.room.dto.RoomMemberDTO;
 import com.trianglechoke.codesparring.room.service.RoomMemberService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/room-member")
 public class RoomMemberController {
     @Autowired private RoomMemberService service;
 
-    @GetMapping
-    public boolean findMember(Long memberNo) {
-        service.isMemberInRoom(1L);
-        return false;
+    @PostMapping
+    public Long add(
+            @RequestParam(name = "roomPwd", required = false) String roomPwd,
+            @RequestBody RoomMemberDTO roomMember) {
+        return service.addRoomMember(roomPwd, roomMember);
+    }
+
+    @DeleteMapping("/{memberNo}")
+    public void remove(@PathVariable Long memberNo) {
+        service.removeMember(memberNo);
     }
 }
