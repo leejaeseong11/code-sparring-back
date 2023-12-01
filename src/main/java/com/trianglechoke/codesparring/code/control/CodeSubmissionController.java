@@ -114,7 +114,6 @@ public class CodeSubmissionController {
             @RequestPart(value = "dto") RankDTO dto)
             throws IOException {
 
-
         responseResult = new StringBuilder();
         answerCount = 0;
 
@@ -169,17 +168,14 @@ public class CodeSubmissionController {
         service.modifyQuizSubmit(dto.getQuizNo(), correct);
 
         String result = String.valueOf(responseResult);
-//        ResponseDTO resdto = new ResponseDTO();
-//        resdto.setResult(result);
-//        resdto.setGameResult(correct);
-
+        //        ResponseDTO resdto = new ResponseDTO();
+        //        resdto.setResult(result);
+        //        resdto.setGameResult(correct);
 
         Map<String, String> result2 = new HashMap<>();
         result2.put("result", result);
         result2.put("gameResult", String.valueOf(correct));
         return new ResponseEntity<>(result2, HttpStatus.OK);
-
-
     }
 
     public void executeCode2(String fileName, File f, String output, String input) {
@@ -248,7 +244,6 @@ public class CodeSubmissionController {
                 resultBuilder.append(resultLine).append(System.getProperty("line.separator"));
             }
             result = resultBuilder.toString();
-
 
             // 실행 결과를 한번에 리턴하기 위해 StringBuilder사용
             if (result.trim().equals(expectedOutput.trim())) {

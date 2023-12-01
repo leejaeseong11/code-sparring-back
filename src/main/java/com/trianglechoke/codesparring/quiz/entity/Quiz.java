@@ -1,7 +1,6 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
 import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.membercode.entity.MemberCode;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
@@ -80,7 +79,6 @@ public class Quiz {
     @Column(name = "output_type", columnDefinition = "VARCHAR2(20)")
     @NotNull
     private String outputType;
-
 
     // 문제 신고 목록
     @OneToMany(cascade = CascadeType.REMOVE)
