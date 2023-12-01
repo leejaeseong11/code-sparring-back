@@ -2,8 +2,8 @@ package com.trianglechoke.codesparring.rankgame.service;
 
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.member.repository.MemberRepository;
 import com.trianglechoke.codesparring.rankgame.dao.RankGameRepository;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
