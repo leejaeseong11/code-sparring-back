@@ -64,7 +64,7 @@ public class Room {
     private Integer roomStatus;
 
     // 방 멤버 목록
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JoinColumn(name = "room_no")
     private List<RoomMember> roomMemberList;
 }
