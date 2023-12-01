@@ -19,15 +19,13 @@ import java.util.UUID;
 @Service
 public class AwsS3ServiceImpl implements AwsS3Service {
 
-
     private final AmazonS3 amazonS3;
 
     @Value("${cloud.aws.s3.bucketName}")
     private String bucketName;
 
-
-    //문제번호.java이런식을 돌아가야하니까
-    public String uploadImage(MultipartFile file, String bucketPath,  String memberNo, String quizNo) {
+    public String uploadImage(
+            MultipartFile file, String bucketPath, String memberNo, String quizNo) {
         String fileName = createFileName(file.getOriginalFilename(), memberNo, quizNo);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -37,13 +35,13 @@ public class AwsS3ServiceImpl implements AwsS3Service {
         try (InputStream inputStream = file.getInputStream()) {
             uploadFile(inputStream, objectMetadata, fileName, bucketName.concat(bucketPath));
         } catch (IOException e) {
-            throw new IllegalArgumentException(String.format("파일 변환 중 에러가 발생하였습니다 (%s)", file.getOriginalFilename()));
+            throw new IllegalArgumentException(
+                    String.format("파일 변환 중 에러가 발생하였습니다 (%s)", file.getOriginalFilename()));
         }
         return getFileUrl(fileName, bucketName.concat(bucketPath));
     }
 
-    public String createFileName(String originalFileName,  String memberNo, String quizNo) {
-//        return UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
+    public String createFileName(String originalFileName, String memberNo, String quizNo) {
         return (memberNo + "_" + quizNo).concat(getFileExtension(originalFileName));
     }
 

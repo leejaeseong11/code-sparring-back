@@ -25,7 +25,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
-// 코드제출(테스트케이스 10개)
 @RestController
 @RequestMapping("/submit")
 public class CodeSubmissionController {
@@ -45,8 +44,6 @@ public class CodeSubmissionController {
 
         responseResult = new StringBuilder();
         answerCount = 0;
-        String output = "";
-        String input = "";
 
         if (file.isEmpty()) {
             // return "업로드된 파일이 비어 있습니다.";
@@ -58,14 +55,12 @@ public class CodeSubmissionController {
         String filePath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
         File f = new File(filePath, fileName + ".java");
 
-        //사용자 번호에 해당하는 폴더 생성
+        // 사용자 번호에 해당하는 폴더 생성
         String bucketPath = "/" + dto.getMemberNo();
         // S3서버에 제출한 코드 파일 저장
-        String fileUrl = awsS3Service.uploadImage(file, bucketPath, dto.getMemberNo().toString(), dto.getQuizNo().toString());
-        // fileUrl DB에 insert
-
-        String code = Arrays.toString(fileUrl.getBytes());
-
+        String fileUrl =
+                awsS3Service.uploadImage(
+                        file, bucketPath, dto.getMemberNo().toString(), dto.getQuizNo().toString());
 
         try {
             file.transferTo(f);
@@ -83,8 +78,8 @@ public class CodeSubmissionController {
         List<CodeTestcaseDTO> list = service.findByQuizNo(String.valueOf(dto.getQuizNo()));
 
         for (CodeTestcaseDTO ctdto : list) {
-            output = ctdto.getTestcaseOutput();
-            input = ctdto.getTestcaseInput();
+            String output = ctdto.getTestcaseOutput();
+            String input = ctdto.getTestcaseInput();
             executeCode2(fileName, f, output, input);
         }
 
@@ -117,7 +112,6 @@ public class CodeSubmissionController {
         responseResult = new StringBuilder();
         answerCount = 0;
 
-
         if (file.isEmpty()) {
             // return "업로드된 파일이 비어 있습니다.";
             throw new MyException(ErrorCode.FILE_NOT_FOUND);
@@ -127,8 +121,6 @@ public class CodeSubmissionController {
         String fileName = file.getName(); // value값으로 지정
         String filePath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
         File f = new File(filePath, fileName + ".java");
-
-
 
         try {
             file.transferTo(f);
@@ -168,9 +160,6 @@ public class CodeSubmissionController {
         service.modifyQuizSubmit(dto.getQuizNo(), correct);
 
         String result = String.valueOf(responseResult);
-        //        ResponseDTO resdto = new ResponseDTO();
-        //        resdto.setResult(result);
-        //        resdto.setGameResult(correct);
 
         Map<String, String> result2 = new HashMap<>();
         result2.put("result", result);
@@ -182,7 +171,6 @@ public class CodeSubmissionController {
 
         String input2 = " " + input; // 입력값
         String expectedOutput = " " + output; // 예상 출력값
-        String compileResult = "";
         String result = "";
         // -------------------------------컴파일 시작-------------------------------
         String cmd = "cmd.exe";

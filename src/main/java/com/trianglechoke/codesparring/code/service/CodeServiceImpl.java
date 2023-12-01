@@ -23,8 +23,6 @@ public class CodeServiceImpl implements CodeService {
 
     @Autowired private CodeRepository repository;
     @Autowired private QuizRepository quizRepository;
-    @Autowired private MemberCodeRepository memberCodeRepository;
-    //    @Autowired private TestcaseRepository tc;
     @Autowired private TestcaseInputRepository ti;
 
     // quizNo에 해당하는 testcase_no, testcase_output, testcase_input 가져오기
