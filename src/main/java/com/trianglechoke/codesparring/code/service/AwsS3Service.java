@@ -12,19 +12,21 @@ public interface AwsS3Service {
      *
      * @param file 이미지 파일
      * @param bucketPath S3 이미지 저장 Bucket
+     * @param memberNo 회원번호                  
      * @param quizNo 문제번호
      * @return 이미지 저장 주소
      */
-    String uploadImage(MultipartFile file, String bucketPath, String quizNo);
+    public String uploadImage(MultipartFile file, String bucketPath, String memberNo, String quizNo);
 
     /**
      * S3에 저장할 파일명
      *
      * @param originalFileName 원본 파일명
-     *
+     * @param memberNo 회원번호
+     * @param quizNo 문제번호
      * @return S3에 저장할 파일명
      */
-    String createFileName(String originalFileName, String quizNo);
+    public String createFileName(String originalFileName, String memberNo, String quizNo);
 
     /**
      * 파일 포맷 유효성 검사

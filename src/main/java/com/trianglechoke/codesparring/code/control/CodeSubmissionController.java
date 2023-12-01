@@ -3,6 +3,7 @@ package com.trianglechoke.codesparring.code.control;
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.dto.NormalDTO;
 import com.trianglechoke.codesparring.code.dto.RankDTO;
+import com.trianglechoke.codesparring.code.service.AwsS3Service;
 import com.trianglechoke.codesparring.code.service.CodeService;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
@@ -19,12 +20,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 // 코드제출(테스트케이스 10개)
 @RestController
@@ -32,6 +31,7 @@ import java.util.Scanner;
 public class CodeSubmissionController {
 
     @Autowired private CodeService service;
+    @Autowired private AwsS3Service awsS3Service;
     StringBuilder responseResult;
 
     // 테스트케이스 실행결과 정답 수
@@ -58,6 +58,15 @@ public class CodeSubmissionController {
         String filePath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
         File f = new File(filePath, fileName + ".java");
 
+        //사용자 번호에 해당하는 폴더 생성
+        String bucketPath = "/" + dto.getMemberNo();
+        // S3서버에 제출한 코드 파일 저장
+        String fileUrl = awsS3Service.uploadImage(file, bucketPath, dto.getMemberNo().toString(), dto.getQuizNo().toString());
+        // fileUrl DB에 insert
+
+        String code = Arrays.toString(fileUrl.getBytes());
+
+
         try {
             file.transferTo(f);
         } catch (IOException e) {
@@ -95,7 +104,6 @@ public class CodeSubmissionController {
         if (answerCount == list.size()) correct = 1;
         service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct);
 
-        // Quiz테이블의 문제 제출 횟수, 문제 정답 횟수 수정
         String msg = String.valueOf(responseResult);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
@@ -109,8 +117,7 @@ public class CodeSubmissionController {
 
         responseResult = new StringBuilder();
         answerCount = 0;
-        String output = "";
-        String input = "";
+
 
         if (file.isEmpty()) {
             // return "업로드된 파일이 비어 있습니다.";
@@ -121,6 +128,8 @@ public class CodeSubmissionController {
         String fileName = file.getName(); // value값으로 지정
         String filePath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
         File f = new File(filePath, fileName + ".java");
+
+
 
         try {
             file.transferTo(f);
@@ -138,8 +147,8 @@ public class CodeSubmissionController {
         List<CodeTestcaseDTO> list = service.findByQuizNo(String.valueOf(dto.getQuizNo()));
 
         for (CodeTestcaseDTO ctdto : list) {
-            output = ctdto.getTestcaseOutput();
-            input = ctdto.getTestcaseInput();
+            String output = ctdto.getTestcaseOutput();
+            String input = ctdto.getTestcaseInput();
             executeCode2(fileName, f, output, input);
         }
 
@@ -157,7 +166,7 @@ public class CodeSubmissionController {
 
         Integer correct = 0;
         if (answerCount == list.size()) correct = 1;
-        service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct);
+        service.modifyQuizSubmit(dto.getQuizNo(), correct);
 
         String result = String.valueOf(responseResult);
 //        ResponseDTO resdto = new ResponseDTO();

@@ -103,6 +103,11 @@ public class Member {
     @NotNull
     private Integer adminStatus;
 
+    // 회원의 제출한 코드 목록
+    @OneToMany(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "member_no")
+    private List<MemberCode> memberCodeList;
+
     // rankGame 이후 point 변경
     public void modifyPoint(Integer point) {
         this.tierPoint += point;
