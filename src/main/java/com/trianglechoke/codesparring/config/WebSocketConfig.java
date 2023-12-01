@@ -1,4 +1,4 @@
-package com.codeej.websocket.config;
+package com.trianglechoke.codesparring.config;
 
 import lombok.RequiredArgsConstructor;
 
