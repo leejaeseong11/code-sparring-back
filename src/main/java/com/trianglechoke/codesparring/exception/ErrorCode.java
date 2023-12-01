@@ -19,6 +19,7 @@ public enum ErrorCode {
     ALREADY_STARTED_ROOM(BAD_REQUEST, "이미 게임이 시작된 방입니다."),
     ALREADY_MEMBER_IN_ROOM(BAD_REQUEST, "이미 입장된 방이 있습니다."),
     WRONG_ROOM_PASSWORD(BAD_REQUEST, "방 암호를 잘못 입력했습니다."),
+    SESSION_ERROR(BAD_REQUEST, "세션이 만료되었습니다."),
 
     MISMATCH_PASSWORD(BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
 

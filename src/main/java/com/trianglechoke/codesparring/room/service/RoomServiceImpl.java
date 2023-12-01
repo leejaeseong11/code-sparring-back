@@ -23,6 +23,7 @@ import java.util.Optional;
 public class RoomServiceImpl implements RoomService {
     @Autowired private RoomRepository repository;
 
+    @Transactional
     public RoomDTO findRoomByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
 
@@ -43,6 +44,7 @@ public class RoomServiceImpl implements RoomService {
         }
     }
 
+    @Transactional
     public List<RoomDTO> findRoomList(Integer status, Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
         Page<Room> roomList;

@@ -25,10 +25,12 @@ public class RoomMemberServiceImpl implements RoomMemberService {
     @Autowired private MemberRepository memberRepository;
     @Autowired private RoomRepository roomRepository;
 
+    @Transactional
     private boolean isMemberInRoom(Long memberNo) {
         return repository.findByIdMemberMemberNo(memberNo).isPresent();
     }
 
+    @Transactional
     private Member findMember(Long memberNo) {
         Optional<Member> selectedMember = memberRepository.findById(memberNo);
         if (selectedMember.isPresent()) {
