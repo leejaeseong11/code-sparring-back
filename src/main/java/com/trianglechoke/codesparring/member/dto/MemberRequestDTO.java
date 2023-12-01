@@ -1,9 +1,10 @@
 package com.trianglechoke.codesparring.member.dto;
 
-import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.member.entity.Authority;
-import jakarta.validation.constraints.NotBlank;
+import com.trianglechoke.codesparring.member.entity.Member;
+
 import lombok.*;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 

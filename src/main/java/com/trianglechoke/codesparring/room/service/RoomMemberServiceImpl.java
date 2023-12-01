@@ -3,8 +3,8 @@ package com.trianglechoke.codesparring.room.service;
 import static com.trianglechoke.codesparring.exception.ErrorCode.*;
 
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
+import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.room.dao.RoomMemberRepository;
 import com.trianglechoke.codesparring.room.dao.RoomRepository;
 import com.trianglechoke.codesparring.room.dto.RoomMemberDTO;

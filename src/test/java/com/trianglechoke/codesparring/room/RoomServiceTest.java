@@ -53,7 +53,7 @@ public class RoomServiceTest {
                         .loseCnt(1L)
                         .winCnt(1L)
                         .drawCnt(1L)
-//                        .adminStatus(1)
+                        //                        .adminStatus(1)
                         .build();
         Quiz quiz =
                 Quiz.builder()

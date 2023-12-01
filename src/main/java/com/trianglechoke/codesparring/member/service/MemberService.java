@@ -4,8 +4,9 @@ import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.dto.MemberRequestDTO;
 import com.trianglechoke.codesparring.member.dto.MemberResponseDTO;
 import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.member.util.SecurityUtil;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,13 +21,15 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public MemberResponseDTO findMemberInfoByMemberNo(Long memberNo) {
-        return memberRepository.findById(memberNo)
+        return memberRepository
+                .findById(memberNo)
                 .map(MemberResponseDTO::of)
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
     }
 
     public MemberResponseDTO findMemberInfoByMemberId(String memberId) {
-        return memberRepository.findByMemberId(memberId)
+        return memberRepository
+                .findByMemberId(memberId)
                 .map(MemberResponseDTO::of)
                 .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
     }
@@ -56,7 +59,6 @@ public class MemberService {
 
         memberRepository.save(member);
         return MemberResponseDTO.of(member);
-
     }
 
     @Transactional
@@ -73,4 +75,3 @@ public class MemberService {
         return optionalMember.get().getMemberPwd();
     }
 }
-
