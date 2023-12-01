@@ -4,7 +4,6 @@ import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.dto.MemberRequestDTO;
 import com.trianglechoke.codesparring.member.dto.MemberResponseDTO;
 import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,19 +38,19 @@ public class MemberService {
 
         if (memberRequestDTO.getMemberPwd() != null) {
             String encryptedPassword = passwordEncoder.encode(memberRequestDTO.getMemberPwd());
-            member.setMemberPwd(encryptedPassword);
+            member.modifyMemberPwd(encryptedPassword);
         }
 
         if (memberRequestDTO.getMemberName() != null) {
-            member.setMemberName(memberRequestDTO.getMemberName());
+            member.modifyMemberName(memberRequestDTO.getMemberName());
         }
 
         if (memberRequestDTO.getMemberInfo() != null) {
-            member.setMemberInfo(memberRequestDTO.getMemberInfo());
+            member.modifyMemberInfo(memberRequestDTO.getMemberInfo());
         }
 
         if (memberRequestDTO.getMemberProfileImg() != null) {
-            member.setMemberProfileImg(memberRequestDTO.getMemberProfileImg());
+            member.modifyMemberProfileImg(memberRequestDTO.getMemberProfileImg());
         }
 
         memberRepository.save(member);
@@ -63,7 +62,7 @@ public class MemberService {
     public MemberResponseDTO deleteMember(long memberNo) {
         Optional<Member> optionalMember = memberRepository.findById(memberNo);
         Member member = optionalMember.get();
-        member.setMemberStatus(0);
+        member.removeMember(0);
         memberRepository.save(member);
         return MemberResponseDTO.of(member);
     }

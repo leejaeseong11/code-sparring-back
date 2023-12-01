@@ -11,16 +11,16 @@ import jakarta.validation.constraints.NotNull;
 
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @ToString
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "member")
 @DynamicInsert
 @SequenceGenerator(
@@ -116,5 +116,24 @@ public class Member {
         if (gameResult == 0) this.drawCnt++;
         else if (gameResult == 1) this.winCnt++;
         else if (gameResult == -1) this.loseCnt++;
+    }
+
+
+    public void modifyMemberPwd(String memberPwd) {
+           this.memberPwd = memberPwd;
+        }
+    public void modifyMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+    public void modifyMemberInfo(String memberInfo) {
+        this.memberInfo = memberInfo;
+    }
+
+    public void modifyMemberProfileImg(Integer memberProfileImg) {
+        this.memberProfileImg = memberProfileImg;
+    }
+
+    public void removeMember(Integer memberStatus) {
+        this.memberStatus = memberStatus;
     }
 }
