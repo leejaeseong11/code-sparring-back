@@ -9,7 +9,8 @@ public class Message {
     public enum MessageType {
         ROOM_ENTER, // 방 입장
         ROOM_TALK, // 방 채팅
-        ROOM_QUIT // 방 퇴장
+        ROOM_QUIT, // 방 퇴장
+        RANK_MATCHING // 랭크 매칭
     }
 
     /* 메시지 타입 */
@@ -21,6 +22,7 @@ public class Message {
     private String message; // 메시지
 
     /* 랭크 매칭 */
+
 
     /* 코드 공유 */
 }
