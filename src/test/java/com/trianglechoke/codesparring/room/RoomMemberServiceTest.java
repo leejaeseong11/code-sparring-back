@@ -6,8 +6,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
+import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.room.dao.RoomMemberRepository;
 import com.trianglechoke.codesparring.room.dao.RoomRepository;
 import com.trianglechoke.codesparring.room.dto.RoomMemberDTO;

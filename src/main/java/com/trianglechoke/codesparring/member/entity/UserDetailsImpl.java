@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.member.entity;
 
 import lombok.AllArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
