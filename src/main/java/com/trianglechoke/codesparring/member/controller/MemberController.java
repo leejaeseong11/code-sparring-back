@@ -15,30 +15,28 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/member")
+@RequestMapping("/member")
 public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
-    @GetMapping("/me")
+    @GetMapping("/my")
     public ResponseEntity<MemberResponseDTO> findMemberInfoByMemberNo() {
-        System.out.println("token_memberName=" + SecurityUtil.getCurrentMemberName() + "end");
         return ResponseEntity.ok(memberService.findMemberInfoByMemberNo(SecurityUtil.getCurrentMemberNo()));
-
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/{memberId}")
     public ResponseEntity<MemberResponseDTO> findMemberInfoByMemberId(@PathVariable String memberId) {
         return ResponseEntity.ok(memberService.findMemberInfoByMemberId(memberId));
     }
 
-    @PutMapping("/me/modify")
+    @PutMapping("/my/modify")
     public ResponseEntity<MemberResponseDTO> modifyMemberInfoByMemberNo(@RequestBody MemberRequestDTO memberRequestDTO) {
         return ResponseEntity.ok(memberService.updateMemberInfo(SecurityUtil.getCurrentMemberNo(), memberRequestDTO));
     }
 
-    @PutMapping("/me/remove")
+    @PutMapping("/my/remove")
     public ResponseEntity<MemberResponseDTO> removeMember(@RequestBody Map<String, String> passwordMap, MemberRequestDTO memberRequestDTO) {
         if (passwordEncoder.matches(passwordMap.get("memberPwd"), memberService.findMemberPwd(SecurityUtil.getCurrentMemberNo(), memberRequestDTO))) {
             return ResponseEntity.ok(memberService.deleteMember(SecurityUtil.getCurrentMemberNo()));

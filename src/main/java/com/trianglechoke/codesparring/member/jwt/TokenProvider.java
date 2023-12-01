@@ -42,7 +42,7 @@ public class TokenProvider {
 
         long now = (new Date()).getTime();
 
-        // UserDetailsImpl을 사용하는 경우
+        // UserDetailsImpl을 사용
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         // Access Token 생성

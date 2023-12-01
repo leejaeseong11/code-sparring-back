@@ -30,7 +30,8 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     public MemberResponseDTO signup(MemberRequestDTO memberRequestDTO) {
-        if (memberRepository.existsByMemberId(memberRequestDTO.getMemberId())) {
+        if (memberRepository.existsByMemberId(memberRequestDTO.getMemberId())
+                && (memberRepository.findByMemberId(memberRequestDTO.getMemberId())).get().getMemberStatus() == 1) {
             throw new RuntimeException("이미 가입되어 있는 유저입니다");
         }
 

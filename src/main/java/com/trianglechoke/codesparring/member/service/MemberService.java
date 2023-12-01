@@ -50,6 +50,10 @@ public class MemberService {
             member.setMemberInfo(memberRequestDTO.getMemberInfo());
         }
 
+        if (memberRequestDTO.getMemberProfileImg() != null) {
+            member.setMemberProfileImg(memberRequestDTO.getMemberProfileImg());
+        }
+
         memberRepository.save(member);
         return MemberResponseDTO.of(member);
 
