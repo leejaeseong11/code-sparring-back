@@ -37,6 +37,7 @@ public class AuthService {
         Member member = memberRequestDTO.toMember(passwordEncoder);
         return MemberResponseDTO.of(memberRepository.save(member));
     }
+
     @Transactional
     public TokenDTO login(MemberRequestDTO memberRequestDTO) {
         // 1. Login ID/PW 를 기반으로 AuthenticationToken 생성
@@ -67,26 +68,20 @@ public class AuthService {
         if (!tokenProvider.validateToken(tokenRequestDTO.getRefreshToken())) {
             throw new MyException(UNAVAILABLE_REFRESH_TOKEN);
         }
-
         // 2. Access Token 에서 Member ID 가져오기
         Authentication authentication = tokenProvider.getAuthentication(tokenRequestDTO.getAccessToken());
-
         // 3. 저장소에서 Member ID 를 기반으로 Refresh Token 값 가져옴. 로그아웃 된 사용자
         RefreshToken refreshToken = refreshTokenRepository.findByKey(authentication.getName())
                 .orElseThrow(() -> new MyException(UNAUTHORIZED_ACCESS));
-
         // 4. Refresh Token 일치하는지 검사. 유저정보 일치여부
         if (!refreshToken.getValue().equals(tokenRequestDTO.getRefreshToken())) {
             throw new MyException(TOKEN_MISMATCH);
         }
-
         // 5. 새로운 토큰 생성
         TokenDTO tokenDto = tokenProvider.generateTokenDTO(authentication);
-
         // 6. 저장소 정보 업데이트
         RefreshToken newRefreshToken = refreshToken.updateValue(tokenDto.getRefreshToken());
         refreshTokenRepository.save(newRefreshToken);
-
         // 토큰 발급
         return tokenDto;
     }

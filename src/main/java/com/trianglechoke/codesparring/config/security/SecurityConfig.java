@@ -26,10 +26,10 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     public SecurityConfig(
-        TokenProvider tokenProvider,
-        CorsFilter corsFilter,
-        JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-        JwtAccessDeniedHandler jwtAccessDeniedHandler
+            TokenProvider tokenProvider,
+            CorsFilter corsFilter,
+            JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+            JwtAccessDeniedHandler jwtAccessDeniedHandler
     ) {
         this.tokenProvider = tokenProvider;
         this.corsFilter = corsFilter;
@@ -45,32 +45,32 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
-            .csrf(csrf -> csrf.disable())
+                // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
+                .csrf(csrf -> csrf.disable())
 
-            .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(exceptionHandling -> exceptionHandling
-                .accessDeniedHandler(jwtAccessDeniedHandler)
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-            )
-
-            .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-//                .requestMatchers("/auth/**","/api/**").permitAll()  // 토큰 없어도 열어주는것
-                .requestMatchers("/**").permitAll()
-                .anyRequest().authenticated() // 나머지 요청들은 모두 인증 받아야 함
-            )
-
-            // 세션을 사용하지 않기 때문에 STATELESS로 설정
-            .sessionManagement(sessionManagement ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-
-            .headers(headers ->
-                headers.frameOptions(options ->
-                    options.sameOrigin()
+                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedHandler(jwtAccessDeniedHandler)
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
-            )
-            .apply(new JwtSecurityConfig(tokenProvider));
+
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+//                                .requestMatchers("/auth/**", "/api/**").permitAll()  // 토큰 없어도 열어주는것
+                                .requestMatchers("/**").permitAll()
+                                .anyRequest().authenticated() // 나머지 요청들은 모두 인증 받아야 함
+                )
+
+                // 세션을 사용하지 않기 때문에 STATELESS로 설정
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                .headers(headers ->
+                        headers.frameOptions(options ->
+                                options.sameOrigin()
+                        )
+                )
+                .apply(new JwtSecurityConfig(tokenProvider));
 
         return http.build();
     }

@@ -12,15 +12,15 @@ import lombok.*;
 @NoArgsConstructor
 public class UserDTO {
     @NotNull
-    @Size(min = 3,max = 50)
+    @Size(min = 3, max = 50)
     private String memberId;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
-    @Size(min = 3,max = 100)
+    @Size(min = 3, max = 100)
     private String memberPwd;
 
     @NotNull
-    @Size(min = 3,max = 50)
+    @Size(min = 3, max = 50)
     private String memberName;
 }

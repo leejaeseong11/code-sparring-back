@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +20,10 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
+
     @GetMapping("/me")
     public ResponseEntity<MemberResponseDTO> findMemberInfoByMemberNo() {
+        System.out.println("token_memberName=" + SecurityUtil.getCurrentMemberName() + "end");
         return ResponseEntity.ok(memberService.findMemberInfoByMemberNo(SecurityUtil.getCurrentMemberNo()));
 
     }
@@ -43,7 +46,6 @@ public class MemberController {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
     }
-
 
 
 }

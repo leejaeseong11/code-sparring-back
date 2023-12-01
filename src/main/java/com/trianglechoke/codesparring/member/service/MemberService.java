@@ -4,6 +4,7 @@ import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.dto.MemberRequestDTO;
 import com.trianglechoke.codesparring.member.dto.MemberResponseDTO;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponseDTO deleteMember(long memberNo){
+    public MemberResponseDTO deleteMember(long memberNo) {
         Optional<Member> optionalMember = memberRepository.findById(memberNo);
         Member member = optionalMember.get();
         member.setMemberStatus(0);

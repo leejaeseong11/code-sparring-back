@@ -22,12 +22,12 @@ public class MemberRequestDTO {
 
     public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
-            .memberId(memberId)
-            .memberPwd(passwordEncoder.encode(memberPwd))
-            .memberName(memberName)
-            .memberInfo(memberInfo)
-            .authority(Authority.ROLE_USER)
-            .build();
+                .memberId(memberId)
+                .memberPwd(passwordEncoder.encode(memberPwd))
+                .memberName(memberName)
+                .memberInfo(memberInfo)
+                .authority(Authority.ROLE_USER)
+                .build();
     }
 
     public UsernamePasswordAuthenticationToken toAuthentication() {

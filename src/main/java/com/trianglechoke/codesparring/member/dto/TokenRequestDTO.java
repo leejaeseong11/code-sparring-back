@@ -1,4 +1,5 @@
 package com.trianglechoke.codesparring.member.dto;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
