@@ -75,7 +75,6 @@ public class RankGameServiceImpl implements RankGameService {
         if (rankGameDTO.getGameResult() == 0) {
             modifyCnt(rankGameEntity.getMember1().getMemberNo(), 0);
             modifyCnt(rankGameEntity.getMember2().getMemberNo(), 0);
-            return;
         } else calculateRankPoint(rankGameDTO);
     }
 
