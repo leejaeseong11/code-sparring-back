@@ -36,8 +36,22 @@ dependencies {
     implementation 'com.oracle.database.security:oraclepki'
     implementation 'com.oracle.database.security:osdt_core'
 
+    //aws s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+
+    //Spring Security 추가
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    //JWT 추가
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+
+
+    
+    
     // 웹 소켓
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 

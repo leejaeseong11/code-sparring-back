@@ -1,40 +1,77 @@
 package com.trianglechoke.codesparring.member.service;
 
+import com.trianglechoke.codesparring.member.dao.MemberRepository;
+import com.trianglechoke.codesparring.member.dto.MemberRequestDTO;
+import com.trianglechoke.codesparring.member.dto.MemberResponseDTO;
 import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.member.repository.MemberRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberService {
-    @Autowired private MemberRepository repository;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    /* RankGame - member point modify */
-    public void modifyPoint(Long memberNo, Integer point) {
-        Optional<Member> optM = repository.findById(memberNo);
-        Member memberEntity = optM.get();
-        memberEntity.modifyPoint(point);
-        String tier = calculateTier(memberEntity.getTierPoint());
-        memberEntity.modifyTier(tier);
-        repository.save(memberEntity);
+    public MemberResponseDTO findMemberInfoByMemberNo(Long memberNo) {
+        return memberRepository
+                .findById(memberNo)
+                .map(MemberResponseDTO::of)
+                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
     }
 
-    /* RankGame - member cnt modify : winCnt, loseCnt, drawCnt */
-    public void modifyCnt(Long memberNo, Integer gameResult) {
-        Optional<Member> optM = repository.findById(memberNo);
-        Member memberEntity = optM.get();
-        memberEntity.modifyCnt(gameResult);
-        repository.save(memberEntity);
+    public MemberResponseDTO findMemberInfoByMemberId(String memberId) {
+        return memberRepository
+                .findByMemberId(memberId)
+                .map(MemberResponseDTO::of)
+                .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
     }
 
-    /* RankGame - member tier calculate */
-    private String calculateTier(Long point) {
-        if (point > 15000L) return "PLATINUM";
-        else if (point > 5000L) return "GOLD";
-        else if (point > 1000L) return "SILVER";
-        else return "BRONZE";
+    // 회원정보 수정
+    @Transactional
+    public MemberResponseDTO updateMemberInfo(Long memberNo, MemberRequestDTO memberRequestDTO) {
+        Optional<Member> optionalMember = memberRepository.findById(memberNo);
+        Member member = optionalMember.get();
+
+        if (memberRequestDTO.getMemberPwd() != null) {
+            String encryptedPassword = passwordEncoder.encode(memberRequestDTO.getMemberPwd());
+            member.modifyMemberPwd(encryptedPassword);
+        }
+
+        if (memberRequestDTO.getMemberName() != null) {
+            member.modifyMemberName(memberRequestDTO.getMemberName());
+        }
+
+        if (memberRequestDTO.getMemberInfo() != null) {
+            member.modifyMemberInfo(memberRequestDTO.getMemberInfo());
+        }
+
+        if (memberRequestDTO.getMemberProfileImg() != null) {
+            member.modifyMemberProfileImg(memberRequestDTO.getMemberProfileImg());
+        }
+
+        memberRepository.save(member);
+        return MemberResponseDTO.of(member);
+    }
+
+    @Transactional
+    public MemberResponseDTO deleteMember(long memberNo) {
+        Optional<Member> optionalMember = memberRepository.findById(memberNo);
+        Member member = optionalMember.get();
+        member.removeMember(0);
+        memberRepository.save(member);
+        return MemberResponseDTO.of(member);
+    }
+
+    public String findMemberPwd(Long memberNo, MemberRequestDTO memberRequestDTO) {
+        Optional<Member> optionalMember = memberRepository.findById(memberNo);
+        return optionalMember.get().getMemberPwd();
     }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 @Entity
 @Table(name = "member")
 @DynamicInsert
@@ -55,53 +56,44 @@ public class Member {
 
     // 회원 프로필 이미지 번호 (0~9 존재)
     @Column(name = "member_profile_img", columnDefinition = "NUMBER(1) default 0")
-    @NotNull
     private Integer memberProfileImg;
 
     // 회원 레벨
     @Column(name = "member_level", columnDefinition = "NUMBER default 1")
-    @NotNull
     private Long memberLevel;
 
     // 회원 경험치 (100이 되면 레벨이 오르며 0으로 초기화)
     @Column(name = "member_exp", columnDefinition = "NUMBER default 0")
-    @NotNull
     private Integer memberExp;
 
     // 회원 랭크 티어
     @Column(name = "member_tier", columnDefinition = "VARCHAR2(15) default 'BRONZE'")
-    @NotNull
     private String memberTier;
 
     // 회원 티어 포인트
     @Column(name = "tier_point", columnDefinition = "NUMBER default 0")
-    @NotNull
     private Long tierPoint;
 
     // 회원의 랭크 우승 횟수
     @Column(name = "win_cnt", columnDefinition = "NUMBER default 0")
-    @NotNull
     private Long winCnt;
 
     // 회원의 랭크 패배 횟수
     @Column(name = "lose_cnt", columnDefinition = "NUMBER default 0")
-    @NotNull
     private Long loseCnt;
 
     // 회원의 랭크 무승부 횟수
     @Column(name = "draw_cnt", columnDefinition = "NUMBER default 0")
-    @NotNull
     private Long drawCnt;
 
     // 회원의 활성화 상태 (0은 비활성화)
     @Column(name = "member_status", columnDefinition = "NUMBER(1) default 1")
-    @NotNull
     private Integer memberStatus;
 
-    // 회원의 관리자 여부 (0은 관리자)
-    @Column(name = "admin_status", columnDefinition = "NUMBER(1) default 1")
-    @NotNull
-    private Integer adminStatus;
+    // 회원의 권한
+    @Column(name = "admin_status")
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
 
     // 회원의 제출한 코드 목록
     @OneToMany(cascade = CascadeType.REMOVE)
@@ -111,7 +103,6 @@ public class Member {
     // rankGame 이후 point 변경
     public void modifyPoint(Integer point) {
         this.tierPoint += point;
-        if (this.tierPoint < 0L) this.tierPoint = 0L;
     }
 
     // point 에 따른 tier 변경
@@ -124,5 +115,25 @@ public class Member {
         if (gameResult == 0) this.drawCnt++;
         else if (gameResult == 1) this.winCnt++;
         else if (gameResult == -1) this.loseCnt++;
+    }
+
+    public void modifyMemberPwd(String memberPwd) {
+        this.memberPwd = memberPwd;
+    }
+
+    public void modifyMemberName(String memberName) {
+        this.memberName = memberName;
+    }
+
+    public void modifyMemberInfo(String memberInfo) {
+        this.memberInfo = memberInfo;
+    }
+
+    public void modifyMemberProfileImg(Integer memberProfileImg) {
+        this.memberProfileImg = memberProfileImg;
+    }
+
+    public void removeMember(Integer memberStatus) {
+        this.memberStatus = memberStatus;
     }
 }

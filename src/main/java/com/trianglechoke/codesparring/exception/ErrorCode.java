@@ -21,7 +21,14 @@ public enum ErrorCode {
     WRONG_ROOM_PASSWORD(BAD_REQUEST, "방 암호를 잘못 입력했습니다."),
     SESSION_ERROR(BAD_REQUEST, "세션이 만료되었습니다."),
 
-    /* 403 FORBIDDEN : 접근 권한 제한 */
+    MISMATCH_PASSWORD(BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+
+    /* 401 UNAUTHORIZED : 사용자 인증실패 */
+    TOKEN_MISMATCH(UNAUTHORIZED, "회원 정보가 일치하지 않습니다."),
+    UNAVAILABLE_REFRESH_TOKEN(UNAUTHORIZED, "유효하지 않은 접근입니다."),
+
+    /* 403 FORBIDDEN : 인가 실패. 특정 리소스에 대한 권한 부족 */
+    UNAUTHORIZED_ACCESS(FORBIDDEN, "접근권한이 없습니다."),
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     MEMBER_NOT_FOUND(NOT_FOUND, "존재하지 않는 회원입니다."),
@@ -36,7 +43,10 @@ public enum ErrorCode {
     /* 304 NOT_MODIFIED : 클라이언트가 가지고 있는 Resource 가 수정되지 않았음 */
     QUIZ_NOT_MODIFIED(NOT_MODIFIED, "해당 문제를 수정할 수 없습니다."),
     TESTCASE_NOT_MODIFIED(NOT_MODIFIED, "해당 테스트케이스를 수정할 수 없습니다."),
-    RANK_GAME_NOT_MODIFIED(NOT_MODIFIED, "랭크게임 결과를 업데이트할 수 없습니다.");
+    RANK_GAME_NOT_MODIFIED(NOT_MODIFIED, "랭크게임 결과를 업데이트할 수 없습니다."),
+
+    /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
+    DUPLICATE_MEMBER(CONFLICT, "이미 가입된 회원입니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;
