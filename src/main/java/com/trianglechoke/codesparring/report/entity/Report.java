@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.report.entity;
 
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,9 +52,10 @@ public class Report {
     private Member member;
 
     // [FK] 문제 번호
-    @Column(name = "quiz_no")
+    @ManyToOne
+    @JoinColumn(name = "quiz_no")
     @NotNull
-    private Long quizNo;
+    private Quiz quiz;
 
     // 신고 내용
     @Column(name = "report_content", columnDefinition = "VARCHAR2(100)")
