@@ -56,9 +56,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         authorizeHttpRequests ->
                                 authorizeHttpRequests
-                                        //
-                                        // .requestMatchers("/auth/**", "/member/**").permitAll()
-                                        // // 토큰 없어도 열어주는것
+                                        // .requestMatchers("/auth/**", "/member/**").permitAll() //
+                                        // 토큰 없어도 열어주는것
                                         .requestMatchers("/**")
                                         .permitAll()
                                         .anyRequest()
