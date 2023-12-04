@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.report.service;
 
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
+
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -17,5 +18,4 @@ public interface ReportService {
 
     /* 신고 조치 내용 생성 */
     void addReportComment(Long reportNo, String comment);
-
 }

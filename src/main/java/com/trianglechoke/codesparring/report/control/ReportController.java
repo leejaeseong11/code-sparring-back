@@ -2,8 +2,7 @@ package com.trianglechoke.codesparring.report.control;
 
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.service.ReportService;
-import com.trianglechoke.codesparring.room.dto.RoomDTO;
-import com.trianglechoke.codesparring.room.service.RoomService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/report")
 public class ReportController {
-    @Autowired
-    private ReportService reportService;
+    @Autowired private ReportService reportService;
 
     @GetMapping("/{reportNo}")
     public ReportDTO find(@PathVariable Long reportNo) {

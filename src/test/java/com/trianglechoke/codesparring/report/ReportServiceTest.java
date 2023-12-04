@@ -1,11 +1,16 @@
 package com.trianglechoke.codesparring.report;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.report.dao.ReportRepository;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 import com.trianglechoke.codesparring.report.service.ReportServiceImpl;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,19 +27,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
 @ExtendWith(MockitoExtension.class)
 public class ReportServiceTest {
     Report report;
     List<Report> reportList = new ArrayList<>();
 
-    @Mock
-    ReportRepository reportRepository;
-    @InjectMocks
-    ReportServiceImpl reportService;
+    @Mock ReportRepository reportRepository;
+    @InjectMocks ReportServiceImpl reportService;
 
     @BeforeEach
     void init() {
@@ -86,8 +85,7 @@ public class ReportServiceTest {
                         .reportContent("신고 내용2")
                         .quiz(quiz)
                         .member(member)
-                        .build()
-        );
+                        .build());
 
         reportList.add(
                 Report.builder()
@@ -97,8 +95,7 @@ public class ReportServiceTest {
                         .reportContent("신고 내용3")
                         .quiz(quiz)
                         .member(member)
-                        .build()
-        );
+                        .build());
     }
 
     @Test
