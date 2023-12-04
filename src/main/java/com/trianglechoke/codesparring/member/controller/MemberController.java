@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -30,8 +29,7 @@ public class MemberController {
     }
 
     @PutMapping("/my")
-    public ResponseEntity<?> modifyMemberInfoByMemberNo(
-            @RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<?> modifyMemberInfoByMemberNo(@RequestBody MemberDTO memberDTO) {
         memberDTO.setMemberNo(SecurityUtil.getCurrentMemberNo());
         memberServiceImpl.modifyMemberInfo(memberDTO);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -40,7 +38,8 @@ public class MemberController {
     @PutMapping("/my/withdraw")
     public ResponseEntity<?> removeMember(
             @RequestBody Map<String, String> passwordMap, MemberDTO memberDTO) {
-        if (passwordEncoder.matches(passwordMap.get("memberPwd"),
+        if (passwordEncoder.matches(
+                passwordMap.get("memberPwd"),
                 memberServiceImpl.findMemberPwd(SecurityUtil.getCurrentMemberNo(), memberDTO))) {
             memberDTO.setMemberNo(SecurityUtil.getCurrentMemberNo());
             memberServiceImpl.deleteMember(memberDTO);

@@ -1,8 +1,6 @@
 package com.trianglechoke.codesparring.member.service;
 
 import com.trianglechoke.codesparring.member.dto.MemberDTO;
-import com.trianglechoke.codesparring.report.dto.ReportDTO;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 

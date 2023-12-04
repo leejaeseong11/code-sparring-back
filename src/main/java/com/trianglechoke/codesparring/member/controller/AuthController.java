@@ -21,8 +21,7 @@ public class AuthController {
     private final AuthServiceImpl authServiceImpl;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(
-            @RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<?> signup(@RequestBody MemberDTO memberDTO) {
         authServiceImpl.signup(memberDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }

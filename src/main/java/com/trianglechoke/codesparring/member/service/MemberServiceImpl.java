@@ -17,9 +17,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+
     public MemberDTO findMemberInfoByMemberNo(Long memberNo) {
         Optional<Member> optionalMember = memberRepository.findById(memberNo);
         Member member = optionalMember.get();
@@ -61,7 +62,6 @@ public class MemberServiceImpl implements MemberService{
         }
 
         memberRepository.save(member);
-
     }
 
     @Transactional
@@ -82,7 +82,7 @@ public class MemberServiceImpl implements MemberService{
         List<MemberDTO> memberResponseDTOList = new ArrayList<>();
         List<Object[]> rankedList = memberRepository.findRankedMember();
 
-        for(Object[] objArr : rankedList) {
+        for (Object[] objArr : rankedList) {
             MemberDTO dto =
                     MemberDTO.builder()
                             .memberNo((Long) objArr[0])
