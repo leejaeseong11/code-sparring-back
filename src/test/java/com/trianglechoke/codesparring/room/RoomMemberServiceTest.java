@@ -26,7 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class RoomMemberServiceImplTest {
+public class RoomMemberServiceTest {
     @Mock RoomMemberRepository repository;
     @Mock MemberRepository memberRepository;
     @Mock RoomRepository roomRepository;
