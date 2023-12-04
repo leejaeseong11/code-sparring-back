@@ -4,7 +4,6 @@ import com.trianglechoke.codesparring.code.dao.CodeRepository;
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.membercode.dao.MemberCodeRepository;
 import com.trianglechoke.codesparring.membercode.entity.MemberCode;
 import com.trianglechoke.codesparring.membercode.entity.MemberCodeEmbedded;
 import com.trianglechoke.codesparring.quiz.dao.QuizRepository;

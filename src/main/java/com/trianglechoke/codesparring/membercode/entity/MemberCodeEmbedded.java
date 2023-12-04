@@ -1,6 +1,5 @@
 package com.trianglechoke.codesparring.membercode.entity;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
