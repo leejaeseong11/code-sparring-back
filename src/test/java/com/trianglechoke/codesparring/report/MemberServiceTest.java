@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class ReportServiceTest {
+public class MemberServiceTest {
     Report report;
     List<Report> reportList = new ArrayList<>();
 

@@ -1,77 +1,24 @@
 package com.trianglechoke.codesparring.member.service;
 
-import com.trianglechoke.codesparring.member.dao.MemberRepository;
-import com.trianglechoke.codesparring.member.dto.MemberRequestDTO;
-import com.trianglechoke.codesparring.member.dto.MemberResponseDTO;
-import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.member.dto.MemberDTO;
+import com.trianglechoke.codesparring.report.dto.ReportDTO;
+import org.springframework.data.domain.Pageable;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+public interface MemberService {
+    /* 유저정보 상세 조회(회원 번호) */
+    MemberDTO findMemberInfoByMemberNo(Long memberNo);
 
-import java.util.Optional;
+    /* 회원정보 수정 */
+    void modifyMemberInfo(MemberDTO memberDTO);
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class MemberService {
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
+    /* 회원 삭제 */
+    void deleteMember(MemberDTO memberDTO);
 
-    public MemberResponseDTO findMemberInfoByMemberNo(Long memberNo) {
-        return memberRepository
-                .findById(memberNo)
-                .map(MemberResponseDTO::of)
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
-    }
+    /* 회원의 비밀번호 불러오기(검증용) */
+    String findMemberPwd(Long memberNo, MemberDTO memberDTO);
 
-    public MemberResponseDTO findMemberInfoByMemberId(String memberId) {
-        return memberRepository
-                .findByMemberId(memberId)
-                .map(MemberResponseDTO::of)
-                .orElseThrow(() -> new RuntimeException("유저 정보가 없습니다."));
-    }
-
-    // 회원정보 수정
-    @Transactional
-    public MemberResponseDTO updateMemberInfo(Long memberNo, MemberRequestDTO memberRequestDTO) {
-        Optional<Member> optionalMember = memberRepository.findById(memberNo);
-        Member member = optionalMember.get();
-
-        if (memberRequestDTO.getMemberPwd() != null) {
-            String encryptedPassword = passwordEncoder.encode(memberRequestDTO.getMemberPwd());
-            member.modifyMemberPwd(encryptedPassword);
-        }
-
-        if (memberRequestDTO.getMemberName() != null) {
-            member.modifyMemberName(memberRequestDTO.getMemberName());
-        }
-
-        if (memberRequestDTO.getMemberInfo() != null) {
-            member.modifyMemberInfo(memberRequestDTO.getMemberInfo());
-        }
-
-        if (memberRequestDTO.getMemberProfileImg() != null) {
-            member.modifyMemberProfileImg(memberRequestDTO.getMemberProfileImg());
-        }
-
-        memberRepository.save(member);
-        return MemberResponseDTO.of(member);
-    }
-
-    @Transactional
-    public MemberResponseDTO deleteMember(long memberNo) {
-        Optional<Member> optionalMember = memberRepository.findById(memberNo);
-        Member member = optionalMember.get();
-        member.removeMember(0);
-        memberRepository.save(member);
-        return MemberResponseDTO.of(member);
-    }
-
-    public String findMemberPwd(Long memberNo, MemberRequestDTO memberRequestDTO) {
-        Optional<Member> optionalMember = memberRepository.findById(memberNo);
-        return optionalMember.get().getMemberPwd();
-    }
+    /* 랭킹 10위 목록 조회*/
+    List<MemberDTO> rankedMember();
 }
