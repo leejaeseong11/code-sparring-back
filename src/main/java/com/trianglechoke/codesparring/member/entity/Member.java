@@ -91,7 +91,7 @@ public class Member {
     private Integer memberStatus;
 
     // 회원의 권한
-    @Column(name = "admin_status")
+    @Column(name = "authority")
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
