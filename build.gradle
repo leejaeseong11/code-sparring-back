@@ -36,6 +36,10 @@ dependencies {
     implementation 'com.oracle.database.security:oraclepki'
     implementation 'com.oracle.database.security:osdt_core'
 
+    //aws s3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+
     //Spring Security 추가
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -47,6 +51,7 @@ dependencies {
 
     // 웹 소켓
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 }
 
 tasks.named('bootBuildImage') {
