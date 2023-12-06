@@ -28,4 +28,8 @@ public class MemberCode {
     @Column(name = "quiz_correct", columnDefinition = "NUMBER(1)")
     @NotNull
     private Integer quizCorrect;
+
+    @Column(name = "quiz_url", columnDefinition = "VARCHAR2(500)")
+    @NotNull
+    private String quizUrl;
 }
