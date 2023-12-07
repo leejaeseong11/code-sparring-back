@@ -80,6 +80,7 @@ public class RoomServiceImpl implements RoomService {
                                 .roomPwd(roomDTO.getRoomPwd())
                                 .codeShare(roomDTO.getCodeShare())
                                 .roomTitle(roomDTO.getRoomTitle())
+                                .roomDt(roomDTO.getRoomDt())
                                 .roomStatus(1)
                                 .build())
                 .getRoomNo();

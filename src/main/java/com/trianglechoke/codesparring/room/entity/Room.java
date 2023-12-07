@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -69,7 +69,7 @@ public class Room {
     @Column(name = "room_dt")
     @ColumnDefault(value = "SYSDATE")
     @NotNull
-    private Date roomDt;
+    private LocalDateTime roomDt;
 
     // 방 멤버 목록
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)

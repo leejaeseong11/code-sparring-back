@@ -24,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -144,6 +145,7 @@ public class RoomServiceTest {
                         .codeShare(1)
                         .roomTitle("테스트 방3")
                         .roomStatus(0)
+                        .roomDt(LocalDateTime.now())
                         .build();
         when(repository.save(any())).thenReturn(testRoom);
 
