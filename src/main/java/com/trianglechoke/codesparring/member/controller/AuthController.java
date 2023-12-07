@@ -5,14 +5,12 @@ import com.trianglechoke.codesparring.member.dto.TokenDTO;
 import com.trianglechoke.codesparring.member.dto.TokenRequestDTO;
 import com.trianglechoke.codesparring.member.service.AuthServiceImpl;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -21,9 +19,21 @@ public class AuthController {
     private final AuthServiceImpl authServiceImpl;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody MemberDTO memberDTO) {
+    public ResponseEntity<?> signup(@RequestBody @Valid MemberDTO memberDTO) {
         authServiceImpl.signup(memberDTO);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/chkDupId")
+    public ResponseEntity<Boolean> chkDupId(@RequestParam String memberId) {
+        authServiceImpl.checkDuplicateId(memberId);
+        return ResponseEntity.ok(authServiceImpl.checkDuplicateId(memberId));
+    }
+
+    @PostMapping("/chkDupName")
+    public ResponseEntity<Boolean> chkDupName(@RequestParam String memberName) {
+        authServiceImpl.checkDuplicateName(memberName);
+        return ResponseEntity.ok(authServiceImpl.checkDuplicateName(memberName));
     }
 
     @PostMapping("/login")
