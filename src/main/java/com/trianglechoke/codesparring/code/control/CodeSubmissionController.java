@@ -8,7 +8,7 @@ import com.trianglechoke.codesparring.code.service.CodeService;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,14 +25,14 @@ import java.nio.file.Path;
 import java.util.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/submit")
 public class CodeSubmissionController {
 
-    @Autowired private CodeService service;
-    @Autowired private AwsS3Service awsS3Service;
-    StringBuilder responseResult;
+    private final CodeService service;
+    private final AwsS3Service awsS3Service;
 
-    // 테스트케이스 실행결과 정답 수
+    StringBuilder responseResult;
     int answerCount;
 
     @PostMapping("/normalMode")
@@ -56,7 +56,7 @@ public class CodeSubmissionController {
 
         // 사용자 번호에 해당하는 폴더 생성
         String bucketPath = "/" + dto.getMemberNo();
-        // S3서버에 제출한 코드 파일 저장
+        // S3서버에 제출한 코드 파일 저장(.txt)
         String fileUrl =
                 awsS3Service.uploadImage(
                         file, bucketPath, dto.getMemberNo().toString(), dto.getQuizNo().toString());
@@ -96,7 +96,7 @@ public class CodeSubmissionController {
 
         Integer correct = 0;
         if (answerCount == list.size()) correct = 1;
-        service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct);
+        service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct, fileUrl);
 
         String msg = String.valueOf(responseResult);
         return new ResponseEntity<>(msg, HttpStatus.OK);

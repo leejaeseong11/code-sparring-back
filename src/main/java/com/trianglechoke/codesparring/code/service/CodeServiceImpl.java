@@ -4,13 +4,13 @@ import com.trianglechoke.codesparring.code.dao.CodeRepository;
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.membercode.dto.MemberCodeDTO;
 import com.trianglechoke.codesparring.membercode.entity.MemberCode;
 import com.trianglechoke.codesparring.membercode.entity.MemberCodeEmbedded;
 import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
-import com.trianglechoke.codesparring.quiz.dao.TestcaseInputRepository;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,17 +18,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CodeServiceImpl implements CodeService {
-
-    @Autowired private CodeRepository repository;
-    @Autowired private QuizRepository quizRepository;
-    @Autowired private TestcaseInputRepository ti;
+    private final CodeRepository codeRepository;
+    private final QuizRepository quizRepository;
 
     // quizNo에 해당하는 testcase_no, testcase_output, testcase_input 가져오기
     @Override
     public List<CodeTestcaseDTO> findByQuizNo(String quizNo) {
         List<CodeTestcaseDTO> ctDTOList = new ArrayList<>();
-        List<Object[]> list = repository.findByQuizNo(Long.valueOf(quizNo));
+        List<Object[]> list = codeRepository.findByQuizNo(Long.valueOf(quizNo));
 
         for (Object[] objArr : list) {
             CodeTestcaseDTO dto =
@@ -44,13 +43,12 @@ public class CodeServiceImpl implements CodeService {
 
     // MemberCode 회원번호, 문제번호, 정답여부 insert
     @Override
-    public void writeMemberCode(Long memberNo, Long quizNo, Integer correct) {
-        Member member = Member.builder().memberNo(memberNo).build();
-        Quiz quiz = Quiz.builder().quizNo(quizNo).build();
+    public void writeMemberCode(Long memberNo, Long quizNo, Integer correct, String codeUrl) {
         MemberCodeEmbedded embedded =
                 MemberCodeEmbedded.builder().memberNo(memberNo).quizNo(quizNo).build();
-        MemberCode memberCode = MemberCode.builder().id(embedded).quizCorrect(correct).build();
-        repository.save(memberCode);
+        MemberCode memberCode =
+                MemberCode.builder().id(embedded).quizCorrect(correct).quizUrl(codeUrl).build();
+        codeRepository.save(memberCode);
         modifyQuizSubmit(quizNo, correct);
     }
 
@@ -61,5 +59,33 @@ public class CodeServiceImpl implements CodeService {
         Quiz quizEntity = optQ.get();
         quizEntity.modifyQuizSubmit(correct);
         quizRepository.save(quizEntity);
+    }
+
+    // 내가 제출한코드 목록 조회
+    @Override
+    public List<MemberCodeDTO> findByMemberNo(Long memberNo) {
+
+        List<MemberCodeDTO> mcDTOlist = new ArrayList<>();
+        List<Object[]> list = codeRepository.findByMemberNo(memberNo);
+
+        for (Object[] objArr : list) {
+            MemberCodeDTO dto =
+                    MemberCodeDTO.builder()
+                            .memberNo(memberNo)
+                            .quizNo((Long) objArr[2])
+                            .quizCorrect((Integer) objArr[0])
+                            .quizUrl((String) objArr[3])
+                            .build();
+            mcDTOlist.add(dto);
+        }
+        return mcDTOlist;
+    }
+
+    // 내가 제출한 코드 링크 조회
+    @Override
+    public String findByMemberCodeInfo(Long memberNo, Long quizNo) {
+        MemberCode mc = codeRepository.findByQuizUrl(memberNo, quizNo);
+        MemberCodeDTO mcDTO = MemberCodeDTO.builder().quizUrl(mc.getQuizUrl()).build();
+        return mcDTO.getQuizUrl();
     }
 }

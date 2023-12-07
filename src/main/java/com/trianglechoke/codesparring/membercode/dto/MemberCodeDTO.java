@@ -10,8 +10,11 @@ import lombok.*;
 // @AllArgsConstructor
 // @NoArgsConstructor
 @ToString
+@Builder
 public class MemberCodeDTO {
-    private Member memberNo;
-    private Quiz quizNo;
+
+    private Long memberNo;
+    private Long quizNo;
     private Integer quizCorrect;
+    private String quizUrl;
 }
