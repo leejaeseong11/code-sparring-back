@@ -1,7 +1,5 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
-import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
-
 import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,9 +49,5 @@ public class Testcase {
     public void modifyOutput(String output, String input) {
         //        this.testcaseInput = input;
         this.testcaseOutput = output;
-    }
-
-    public void modifyInput(TestcaseInputDTO testcaseInput) {
-        this.testcaseInput = testcaseInput.getTestcaseInput();
     }
 }
