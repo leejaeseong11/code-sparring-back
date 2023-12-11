@@ -136,7 +136,6 @@ public class QuizServiceImpl implements QuizService {
                         .quizTier(quizEntity.getQuizTier())
                         .memberNo(quizEntity.getMember().getMemberNo())
                         .memberName(quizEntity.getMember().getMemberName())
-                        .outputType(quizEntity.getOutputType())
                         .build();
         List<ReportDTO> reportDTOList = new ArrayList<>();
         for (Report r : quizEntity.getReportList()) {
@@ -161,7 +160,6 @@ public class QuizServiceImpl implements QuizService {
                 TestcaseInputDTO dtoIn =
                         TestcaseInputDTO.builder()
                                 .inputNo(input.getInputNo())
-                                .inputVar(input.getInputVar())
                                 .testcaseInput(input.getTestcaseInput())
                                 .build();
                 testcaseInputDTOList.add(dtoIn);
@@ -186,7 +184,6 @@ public class QuizServiceImpl implements QuizService {
                         .quizSuccessCnt(0)
                         .quizInput(quizDTO.getQuizInput())
                         .quizOutput(quizDTO.getQuizOutput())
-                        .outputType(quizDTO.getOutputType())
                         .build();
         repository.save(quizEntity);
         return quizEntity.getQuizNo();
