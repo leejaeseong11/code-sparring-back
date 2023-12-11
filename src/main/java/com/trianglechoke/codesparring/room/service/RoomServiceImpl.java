@@ -48,7 +48,7 @@ public class RoomServiceImpl implements RoomService {
     public List<RoomDTO> findRoomList(Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
         Page<Room> roomList;
-        roomList = repository.findAllOrderByRoomStatusDescRoomDtDesc(pageable);
+        roomList = repository.findByOrderByRoomStatusDescRoomDtDesc(pageable);
 
         for (Room room : roomList) {
             Quiz selectedQuiz = room.getQuiz();

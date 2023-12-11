@@ -117,7 +117,7 @@ public class RoomServiceTest {
     @DisplayName("대기방 전체 조회")
     void findAllRoom() {
         Page<Room> mockRoomPage = new PageImpl(roomList);
-        when(repository.findAllOrderByRoomStatusDescRoomDtDesc(any(Pageable.class)))
+        when(repository.findByOrderByRoomStatusDescRoomDtDesc(any(Pageable.class)))
                 .thenReturn(mockRoomPage);
 
         List<RoomDTO> roomDTOs = service.findRoomList(Pageable.unpaged());
