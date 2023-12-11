@@ -30,4 +30,17 @@ public interface CodeRepository extends JpaRepository<MemberCode, Long> {
     //                            + "where quiz_no =:100",
     //    nativeQuery = true)
     //    public void modifyQuiz(@Param() String quizNo);
+
+    @Query(
+            value = "select *\n" + "from member_code\n" + "where member_no=:memberNo",
+            nativeQuery = true)
+    List<Object[]> findByMemberNo(@Param("memberNo") Long memberNo);
+
+    @Query(
+            value =
+                    "select *\n"
+                            + "from member_code\n"
+                            + "where member_no=:memberNo and quiz_no=:quizNo",
+            nativeQuery = true)
+    MemberCode findByQuizUrl(@Param("memberNo") Long memberNo, @Param("quizNo") Long quizNo);
 }

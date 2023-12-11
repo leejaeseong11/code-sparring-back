@@ -43,7 +43,7 @@ public class Quiz {
     private Member member;
 
     // 문제 제목
-    @Column(name = "quiz_title", columnDefinition = "VARCHAR2(60)")
+    @Column(name = "quiz_title", columnDefinition = "VARCHAR2(300)")
     @NotNull
     private String quizTitle;
 
@@ -80,6 +80,10 @@ public class Quiz {
     @NotNull
     private String outputType;
 
+    // 정답 코드 파일 url
+    @Column(name = "quiz_url", columnDefinition = "VARCHAR2(500)")
+    private String quizUrl;
+
     // 문제 신고 목록
     @OneToMany(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "quiz_no")
@@ -96,7 +100,6 @@ public class Quiz {
         this.quizContent = quizDTO.getQuizContent();
         this.quizInput = quizDTO.getQuizInput();
         this.quizOutput = quizDTO.getQuizOutput();
-        this.outputType = quizDTO.getOutputType();
     }
 
     // [임시] 제출횟수 및 정답횟수 증가 메소드

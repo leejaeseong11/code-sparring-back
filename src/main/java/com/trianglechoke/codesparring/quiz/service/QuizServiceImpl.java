@@ -5,10 +5,8 @@ import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
-import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
@@ -17,6 +15,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +30,6 @@ public class QuizServiceImpl implements QuizService {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findQuizList(start, end);
         Long quizCnt = repository.count();
-        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -40,8 +39,19 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(String.valueOf(objArr[5]))
                             .build();
+            if (dto.getQuizSubmitCnt() == 0) {
+                dto.setQuizCorrectPercent("-");
+            } else if (dto.getQuizSuccessCnt() == 0) {
+                dto.setQuizCorrectPercent("0.00%");
+            } else {
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+                dto.setQuizCorrectPercent(result + "%");
+            }
             quizDTOList.add(dto);
         }
+        quizDTOList.get(0).setQuizCnt(quizCnt);
         return quizDTOList;
     }
 
@@ -53,7 +63,6 @@ public class QuizServiceImpl implements QuizService {
         if (order.equals("asc")) quizList = repository.findOrderByCorrect(start, end);
         else if (order.equals("desc")) quizList = repository.findOrderByCorrectDesc(start, end);
         Long quizCnt = repository.count();
-        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -63,8 +72,19 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(String.valueOf(objArr[5]))
                             .build();
+            if (dto.getQuizSubmitCnt() == 0) {
+                dto.setQuizCorrectPercent("-");
+            } else if (dto.getQuizSuccessCnt() == 0) {
+                dto.setQuizCorrectPercent("0.00%");
+            } else {
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+                dto.setQuizCorrectPercent(result + "%");
+            }
             quizDTOList.add(dto);
         }
+        quizDTOList.get(0).setQuizCnt(quizCnt);
         return quizDTOList;
     }
 
@@ -77,7 +97,6 @@ public class QuizServiceImpl implements QuizService {
         ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
         Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
         Long quizCnt = repository.count(example);
-        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -87,8 +106,19 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(quizTier)
                             .build();
+            if (dto.getQuizSubmitCnt() == 0) {
+                dto.setQuizCorrectPercent("-");
+            } else if (dto.getQuizSuccessCnt() == 0) {
+                dto.setQuizCorrectPercent("0.00%");
+            } else {
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+                dto.setQuizCorrectPercent(result + "%");
+            }
             quizDTOList.add(dto);
         }
+        quizDTOList.get(0).setQuizCnt(quizCnt);
         return quizDTOList;
     }
 
@@ -105,7 +135,6 @@ public class QuizServiceImpl implements QuizService {
         ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
         Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
         Long quizCnt = repository.count(example);
-        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -115,8 +144,19 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(quizTier)
                             .build();
+            if (dto.getQuizSubmitCnt() == 0) {
+                dto.setQuizCorrectPercent("-");
+            } else if (dto.getQuizSuccessCnt() == 0) {
+                dto.setQuizCorrectPercent("0.00%");
+            } else {
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+                dto.setQuizCorrectPercent(result + "%");
+            }
             quizDTOList.add(dto);
         }
+        quizDTOList.get(0).setQuizCnt(quizCnt);
         return quizDTOList;
     }
 
@@ -136,7 +176,6 @@ public class QuizServiceImpl implements QuizService {
                         .quizTier(quizEntity.getQuizTier())
                         .memberNo(quizEntity.getMember().getMemberNo())
                         .memberName(quizEntity.getMember().getMemberName())
-                        .outputType(quizEntity.getOutputType())
                         .build();
         List<ReportDTO> reportDTOList = new ArrayList<>();
         for (Report r : quizEntity.getReportList()) {
@@ -156,17 +195,6 @@ public class QuizServiceImpl implements QuizService {
                             .testcaseNo(tc.getTestcaseNo())
                             .testcaseOutput(tc.getTestcaseOutput())
                             .build();
-            List<TestcaseInputDTO> testcaseInputDTOList = new ArrayList<>();
-            for (TestcaseInput input : tc.getTestcaseInputList()) {
-                TestcaseInputDTO dtoIn =
-                        TestcaseInputDTO.builder()
-                                .inputNo(input.getInputNo())
-                                .inputVar(input.getInputVar())
-                                .testcaseInput(input.getTestcaseInput())
-                                .build();
-                testcaseInputDTOList.add(dtoIn);
-            }
-            dto.setTestcaseInputDTOList(testcaseInputDTOList);
             testcaseDTOList.add(dto);
         }
         quizDTO.setTestcaseDTOList(testcaseDTOList);
@@ -186,7 +214,6 @@ public class QuizServiceImpl implements QuizService {
                         .quizSuccessCnt(0)
                         .quizInput(quizDTO.getQuizInput())
                         .quizOutput(quizDTO.getQuizOutput())
-                        .outputType(quizDTO.getOutputType())
                         .build();
         repository.save(quizEntity);
         return quizEntity.getQuizNo();

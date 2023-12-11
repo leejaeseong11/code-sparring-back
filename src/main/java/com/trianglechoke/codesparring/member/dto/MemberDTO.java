@@ -27,6 +27,9 @@ public class MemberDTO {
     private Integer rank;
 
     public Member toMember(PasswordEncoder passwordEncoder) {
+        if (memberPwd == null) {
+            memberPwd = ""; // 또는 기본값으로 초기화
+        }
         return Member.builder()
                 .memberId(memberId)
                 .memberPwd(passwordEncoder.encode(memberPwd))

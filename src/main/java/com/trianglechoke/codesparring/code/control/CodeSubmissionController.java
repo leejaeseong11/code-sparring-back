@@ -8,7 +8,9 @@ import com.trianglechoke.codesparring.code.service.CodeService;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,22 +19,23 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/submit")
 public class CodeSubmissionController {
 
-    @Autowired private CodeService service;
-    @Autowired private AwsS3Service awsS3Service;
-    StringBuilder responseResult;
+    @Value("${file.filePATH}")
+    private String filePATH;
 
-    // 테스트케이스 실행결과 정답 수
+    private final CodeService service;
+    private final AwsS3Service awsS3Service;
+
+    StringBuilder responseResult;
     int answerCount;
 
     @PostMapping("/normalMode")
@@ -50,13 +53,13 @@ public class CodeSubmissionController {
         }
 
         // 파일 저장
-        String fileName = file.getName(); // value값으로 지정
-        String filePath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
-        File f = new File(filePath, fileName + ".java");
+        String fileName = file.getOriginalFilename(); // value값으로 지정
+        String filePath = filePATH;
+        File f = new File(filePath, fileName);
 
         // 사용자 번호에 해당하는 폴더 생성
         String bucketPath = "/" + dto.getMemberNo();
-        // S3서버에 제출한 코드 파일 저장
+        // S3서버에 제출한 코드 파일 저장(.txt)
         String fileUrl =
                 awsS3Service.uploadImage(
                         file, bucketPath, dto.getMemberNo().toString(), dto.getQuizNo().toString());
@@ -81,22 +84,19 @@ public class CodeSubmissionController {
             String input = ctdto.getTestcaseInput();
             executeCode2(fileName, f, output, input);
         }
+        // 파일 이름에서 마지막 '.' 이후의 문자열 제거(.java제거)
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex != -1) {
+            fileName = fileName.substring(0, lastDotIndex);
+        }
 
         // 파일삭제
-        Files.delete(
-                Path.of(
-                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                + fileName
-                                + ".java"));
-        Files.delete(
-                Path.of(
-                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                + fileName
-                                + ".class"));
+        Files.delete(Path.of(filePath + fileName + ".java"));
+        Files.delete(Path.of(filePath + fileName + ".class"));
 
         Integer correct = 0;
         if (answerCount == list.size()) correct = 1;
-        service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct);
+        service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct, fileUrl);
 
         String msg = String.valueOf(responseResult);
         return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -117,9 +117,9 @@ public class CodeSubmissionController {
         }
 
         // 파일 저장
-        String fileName = file.getName(); // value값으로 지정
-        String filePath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
-        File f = new File(filePath, fileName + ".java");
+        String fileName = file.getOriginalFilename(); // value값으로 지정
+        String filePath = filePATH;
+        File f = new File(filePath, fileName);
 
         try {
             file.transferTo(f);
@@ -141,18 +141,15 @@ public class CodeSubmissionController {
             String input = ctdto.getTestcaseInput();
             executeCode2(fileName, f, output, input);
         }
+        // 파일 이름에서 마지막 '.' 이후의 문자열 제거(.java제거)
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex != -1) {
+            fileName = fileName.substring(0, lastDotIndex);
+        }
 
         // 파일삭제
-        Files.delete(
-                Path.of(
-                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                + fileName
-                                + ".java"));
-        Files.delete(
-                Path.of(
-                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                + fileName
-                                + ".class"));
+        Files.delete(Path.of(filePath + fileName + ".java"));
+        Files.delete(Path.of(filePath + fileName + ".class"));
 
         Integer correct = 0;
         if (answerCount == list.size()) correct = 1;
@@ -168,7 +165,6 @@ public class CodeSubmissionController {
 
     public void executeCode2(String fileName, File f, String output, String input) {
 
-        String input2 = " " + input; // 입력값
         String expectedOutput = " " + output; // 예상 출력값
         String result = "";
         // -------------------------------컴파일 시작-------------------------------
@@ -205,18 +201,26 @@ public class CodeSubmissionController {
         // -------------------------------컴파일 끝-------------------------------
 
         // -------------------------------실행 시작-------------------------------
+        // 파일 이름에서 마지막 '.' 이후의 문자열 제거(.java제거)
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex != -1) {
+            fileName = fileName.substring(0, lastDotIndex);
+        }
+
         cmd = "cmd.exe";
         arg = "/c";
-        pb =
-                new ProcessBuilder(
-                        cmd,
-                        arg,
-                        "java -cp C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/ "
-                                + fileName
-                                + input2);
+        pb = new ProcessBuilder(cmd, arg, "java -cp " + filePATH + " " + fileName);
 
         try {
             Process p = pb.start();
+            OutputStream os = p.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
+
+            writer.write(
+                    "1\n" + "8 100\n" + "70 60 55 43 57 60 44 50\n" + "58 40 47 90 45 52 80 40");
+            writer.flush();
+            writer.close();
+
             int exitCode = p.waitFor();
             System.out.println("실행용 Process start exitCode=" + exitCode);
 

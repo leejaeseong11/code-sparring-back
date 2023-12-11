@@ -71,7 +71,7 @@ public class QuizController {
             List<QuizDTO> list =
                     service.findByTierOrderByCorrect(
                             quizTier, (currentPage - 1) * 10 + 1, currentPage * 10, order);
-            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            if (list.size() <= 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
         } catch (Exception e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);

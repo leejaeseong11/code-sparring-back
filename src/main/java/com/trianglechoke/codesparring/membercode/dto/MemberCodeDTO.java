@@ -1,8 +1,5 @@
 package com.trianglechoke.codesparring.membercode.dto;
 
-import com.trianglechoke.codesparring.member.entity.Member;
-import com.trianglechoke.codesparring.quiz.entity.Quiz;
-
 import lombok.*;
 
 @Getter
@@ -10,8 +7,11 @@ import lombok.*;
 // @AllArgsConstructor
 // @NoArgsConstructor
 @ToString
+@Builder
 public class MemberCodeDTO {
-    private Member memberNo;
-    private Quiz quizNo;
+
+    private Long memberNo;
+    private Long quizNo;
     private Integer quizCorrect;
+    private String quizUrl;
 }
