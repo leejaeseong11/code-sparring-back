@@ -214,6 +214,7 @@ public class QuizServiceImpl implements QuizService {
                         .quizSuccessCnt(0)
                         .quizInput(quizDTO.getQuizInput())
                         .quizOutput(quizDTO.getQuizOutput())
+                        .correctCodeUrl(quizDTO.getCorrectCodeUrl())
                         .build();
         repository.save(quizEntity);
         return quizEntity.getQuizNo();
