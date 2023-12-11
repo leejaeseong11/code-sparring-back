@@ -45,14 +45,10 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
-    public List<RoomDTO> findRoomList(Integer status, Pageable pageable) {
+    public List<RoomDTO> findRoomList(Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
         Page<Room> roomList;
-        if (status == null) {
-            roomList = repository.findAll(pageable);
-        } else {
-            roomList = repository.findAllByRoomStatus(status, pageable);
-        }
+        roomList = repository.findByOrderByRoomStatusDescRoomDtDesc(pageable);
 
         for (Room room : roomList) {
             Quiz selectedQuiz = room.getQuiz();

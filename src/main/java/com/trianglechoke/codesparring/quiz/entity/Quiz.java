@@ -75,15 +75,9 @@ public class Quiz {
     @Column(name = "quiz_output", columnDefinition = "VARCHAR2(500)")
     private String quizOutput;
 
-    // 출력값(리턴) 타입
-    @Column(name = "output_type", columnDefinition = "VARCHAR2(20)")
-    @NotNull
-    private String outputType;
-
     // 정답 코드 파일 url
-    @Column(name = "quiz_url", columnDefinition = "VARCHAR2(500)")
-    @NotNull
-    private String quizUrl;
+    @Column(name = "correct_code_url", columnDefinition = "VARCHAR2(500)")
+    private String correctCodeUrl;
 
     // 문제 신고 목록
     @OneToMany(cascade = CascadeType.REMOVE)

@@ -20,9 +20,8 @@ public class RoomController {
     }
 
     @GetMapping
-    public List<RoomDTO> findAll(
-            @RequestParam(name = "status", required = false) Integer status, Pageable pageable) {
-        return service.findRoomList(status, pageable);
+    public List<RoomDTO> findAll(Pageable pageable) {
+        return service.findRoomList(pageable);
     }
 
     @PostMapping
