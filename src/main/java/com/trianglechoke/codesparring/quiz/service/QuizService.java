@@ -77,15 +77,6 @@ interface QuizService {
     public void modifyQuiz(QuizDTO quizDTO) throws MyException;
 
     /**
-     * 문제의 티어를 변경한다.
-     *
-     * @param quizNo 문제 번호
-     * @param tier 변경될 티어
-     * @throws MyException
-     */
-    public void modifyQuizTier(Long quizNo, String tier) throws MyException;
-
-    /**
      * 문제를 삭제한다.
      *
      * @param quizNo 문제 번호

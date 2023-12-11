@@ -120,20 +120,6 @@ public class QuizController {
         }
     }
 
-    /* 문제 티어 변경하기 */
-    @PutMapping("/{quizNo}/{quizTier}")
-    @Transactional
-    public ResponseEntity<?> modifyQuizTier(
-            @PathVariable Long quizNo, @PathVariable String quizTier) {
-        try {
-            service.modifyQuizTier(quizNo, quizTier);
-            String msg = "티어 변경 성공";
-            return new ResponseEntity<>(msg, HttpStatus.OK);
-        } catch (Exception e) {
-            throw new MyException(ErrorCode.QUIZ_NOT_MODIFIED);
-        }
-    }
-
     /* 문제 삭제하기 */
     @DeleteMapping("/{quizNo}")
     @Transactional

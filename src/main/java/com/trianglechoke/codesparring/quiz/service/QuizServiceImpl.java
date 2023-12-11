@@ -236,6 +236,7 @@ public class QuizServiceImpl implements QuizService {
             TestcaseDTO dto =
                     TestcaseDTO.builder()
                             .testcaseNo(tc.getTestcaseNo())
+                            .testcaseInput(tc.getTestcaseInput())
                             .testcaseOutput(tc.getTestcaseOutput())
                             .build();
             testcaseDTOList.add(dto);
@@ -268,14 +269,6 @@ public class QuizServiceImpl implements QuizService {
         Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
         Quiz quizEntity = optQ.get();
         quizEntity.modifyQuiz(quizDTO);
-        repository.save(quizEntity);
-    }
-
-    /* Update : 문제 tier 변경 */
-    public void modifyQuizTier(Long quizNo, String tier) throws MyException {
-        Optional<Quiz> optQ = repository.findById(quizNo);
-        Quiz quizEntity = optQ.get();
-        quizEntity.modifyQuizTier(tier);
         repository.save(quizEntity);
     }
 
