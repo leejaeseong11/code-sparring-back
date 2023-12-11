@@ -39,14 +39,15 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(String.valueOf(objArr[5]))
                             .build();
-            if(dto.getQuizSubmitCnt()==0) {
+            if (dto.getQuizSubmitCnt() == 0) {
                 dto.setQuizCorrectPercent("-");
-            } else if(dto.getQuizSuccessCnt()==0) {
+            } else if (dto.getQuizSuccessCnt() == 0) {
                 dto.setQuizCorrectPercent("0.00%");
             } else {
-                double tmp = (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
                 BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
-                dto.setQuizCorrectPercent(result+"%");
+                dto.setQuizCorrectPercent(result + "%");
             }
             quizDTOList.add(dto);
         }
@@ -71,14 +72,15 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(String.valueOf(objArr[5]))
                             .build();
-            if(dto.getQuizSubmitCnt()==0) {
+            if (dto.getQuizSubmitCnt() == 0) {
                 dto.setQuizCorrectPercent("-");
-            } else if(dto.getQuizSuccessCnt()==0) {
+            } else if (dto.getQuizSuccessCnt() == 0) {
                 dto.setQuizCorrectPercent("0.00%");
             } else {
-                double tmp = (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
                 BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
-                dto.setQuizCorrectPercent(result+"%");
+                dto.setQuizCorrectPercent(result + "%");
             }
             quizDTOList.add(dto);
         }
@@ -104,14 +106,15 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(quizTier)
                             .build();
-            if(dto.getQuizSubmitCnt()==0) {
+            if (dto.getQuizSubmitCnt() == 0) {
                 dto.setQuizCorrectPercent("-");
-            } else if(dto.getQuizSuccessCnt()==0) {
+            } else if (dto.getQuizSuccessCnt() == 0) {
                 dto.setQuizCorrectPercent("0.00%");
             } else {
-                double tmp = (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
                 BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
-                dto.setQuizCorrectPercent(result+"%");
+                dto.setQuizCorrectPercent(result + "%");
             }
             quizDTOList.add(dto);
         }
@@ -141,14 +144,15 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(quizTier)
                             .build();
-            if(dto.getQuizSubmitCnt()==0) {
+            if (dto.getQuizSubmitCnt() == 0) {
                 dto.setQuizCorrectPercent("-");
-            } else if(dto.getQuizSuccessCnt()==0) {
+            } else if (dto.getQuizSuccessCnt() == 0) {
                 dto.setQuizCorrectPercent("0.00%");
             } else {
-                double tmp = (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
                 BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
-                dto.setQuizCorrectPercent(result+"%");
+                dto.setQuizCorrectPercent(result + "%");
             }
             quizDTOList.add(dto);
         }
