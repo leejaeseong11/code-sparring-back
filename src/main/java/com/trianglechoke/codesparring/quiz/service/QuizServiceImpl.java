@@ -177,6 +177,16 @@ public class QuizServiceImpl implements QuizService {
                         .memberNo(quizEntity.getMember().getMemberNo())
                         .memberName(quizEntity.getMember().getMemberName())
                         .build();
+        if (quizDTO.getQuizSubmitCnt() == 0) {
+            quizDTO.setQuizCorrectPercent("-");
+        } else if (quizDTO.getQuizSuccessCnt() == 0) {
+            quizDTO.setQuizCorrectPercent("0.00%");
+        } else {
+            double tmp =
+                    (double) quizDTO.getQuizSuccessCnt() / (double) quizDTO.getQuizSubmitCnt() * 100;
+            BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+            quizDTO.setQuizCorrectPercent(result + "%");
+        }
         List<ReportDTO> reportDTOList = new ArrayList<>();
         for (Report r : quizEntity.getReportList()) {
             ReportDTO dto =
