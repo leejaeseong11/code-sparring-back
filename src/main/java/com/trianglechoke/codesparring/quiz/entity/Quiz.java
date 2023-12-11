@@ -82,7 +82,6 @@ public class Quiz {
 
     // 정답 코드 파일 url
     @Column(name = "quiz_url", columnDefinition = "VARCHAR2(500)")
-    @NotNull
     private String quizUrl;
 
     // 문제 신고 목록
