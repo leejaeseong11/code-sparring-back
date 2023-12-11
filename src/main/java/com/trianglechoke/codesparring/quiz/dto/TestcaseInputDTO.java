@@ -11,6 +11,5 @@ import lombok.*;
 public class TestcaseInputDTO {
     private Long inputNo;
     private Long testcaseNo;
-    private String inputVar;
     private String testcaseInput;
 }

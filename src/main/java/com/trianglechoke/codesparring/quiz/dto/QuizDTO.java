@@ -23,7 +23,6 @@ public class QuizDTO {
     private Integer quizSuccessCnt;
     private String quizInput;
     private String quizOutput;
-    private String outputType;
     private List<ReportDTO> reportDTOList;
     private List<TestcaseDTO> testcaseDTOList;
     private Long quizCnt;
