@@ -60,10 +60,10 @@ public class RoomServiceImpl implements RoomService {
                             .codeShare(room.getCodeShare())
                             .roomTitle(room.getRoomTitle())
                             .roomStatus(room.getRoomStatus())
+                            .roomDt(room.getRoomDt())
                             .roomMemberList(room.getRoomMemberList())
                             .build());
         }
-
         return selectedRoomList;
     }
 
