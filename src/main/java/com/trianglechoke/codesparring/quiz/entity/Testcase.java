@@ -1,5 +1,7 @@
 package com.trianglechoke.codesparring.quiz.entity;
 
+import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
+
 import jakarta.persistence.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,8 +14,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import org.hibernate.annotations.DynamicInsert;
-
-import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -39,17 +39,21 @@ public class Testcase {
     @Column(name = "quiz_no")
     private Long quizNo;
 
+    // 입력값
+    @Column(name = "testcase_input", columnDefinition = "VARCHAR2(10000)")
+    private String testcaseInput;
+
     // 출력값
     @Column(name = "testcase_output", columnDefinition = "VARCHAR2(10000)")
     private String testcaseOutput;
 
-    // 입력값 목록
-    @OneToMany(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "testcase_no")
-    private List<TestcaseInput> testcaseInputList;
-
     // 출력값 수정 메소드
-    public void modifyOutput(String output) {
+    public void modifyOutput(String output, String input) {
+        //        this.testcaseInput = input;
         this.testcaseOutput = output;
+    }
+
+    public void modifyInput(TestcaseInputDTO testcaseInput) {
+        this.testcaseInput = testcaseInput.getTestcaseInput();
     }
 }

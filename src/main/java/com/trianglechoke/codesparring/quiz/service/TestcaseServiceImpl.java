@@ -34,7 +34,6 @@ public class TestcaseServiceImpl implements TestcaseService {
             TestcaseInput inputEntity =
                     TestcaseInput.builder()
                             .testcaseNo(tcEntity.getTestcaseNo())
-                            .inputVar(input.getInputVar())
                             .testcaseInput(input.getTestcaseInput())
                             .build();
             inputRepository.save(inputEntity);

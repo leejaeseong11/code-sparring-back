@@ -5,7 +5,8 @@ import com.trianglechoke.codesparring.code.service.CodeService;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +19,11 @@ import java.util.*;
 
 // 코드실행(테스트케이스 3개)
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/code")
 public class CodeExecutionController {
 
-    @Autowired private CodeService service;
+    private final CodeService service;
 
     StringBuilder responseResult;
 
