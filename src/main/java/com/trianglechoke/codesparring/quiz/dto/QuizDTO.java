@@ -26,4 +26,5 @@ public class QuizDTO {
     private List<ReportDTO> reportDTOList;
     private List<TestcaseDTO> testcaseDTOList;
     private Long quizCnt;
+    private String quizCorrectPercent;
 }

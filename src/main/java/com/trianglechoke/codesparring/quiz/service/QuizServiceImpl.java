@@ -5,10 +5,8 @@ import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
-import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
@@ -155,16 +153,6 @@ public class QuizServiceImpl implements QuizService {
                             .testcaseNo(tc.getTestcaseNo())
                             .testcaseOutput(tc.getTestcaseOutput())
                             .build();
-            List<TestcaseInputDTO> testcaseInputDTOList = new ArrayList<>();
-            for (TestcaseInput input : tc.getTestcaseInputList()) {
-                TestcaseInputDTO dtoIn =
-                        TestcaseInputDTO.builder()
-                                .inputNo(input.getInputNo())
-                                .testcaseInput(input.getTestcaseInput())
-                                .build();
-                testcaseInputDTOList.add(dtoIn);
-            }
-            dto.setTestcaseInputDTOList(testcaseInputDTOList);
             testcaseDTOList.add(dto);
         }
         quizDTO.setTestcaseDTOList(testcaseDTOList);
