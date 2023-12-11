@@ -73,6 +73,7 @@ public class RoomServiceTest {
                         .quiz(quiz)
                         .codeShare(0)
                         .roomTitle("테스트 방")
+                        .roomDt(LocalDateTime.of(2023, 12, 1, 12, 20, 0))
                         .roomStatus(1)
                         .build();
 
@@ -83,6 +84,7 @@ public class RoomServiceTest {
                         .quiz(Quiz.builder().build())
                         .codeShare(1)
                         .roomTitle("테스트 방2")
+                        .roomDt(LocalDateTime.of(2023, 12, 1, 12, 0, 0))
                         .roomStatus(0)
                         .build());
         roomList.add(
@@ -91,7 +93,8 @@ public class RoomServiceTest {
                         .quiz(Quiz.builder().build())
                         .codeShare(1)
                         .roomTitle("테스트 방3")
-                        .roomStatus(0)
+                        .roomStatus(1)
+                        .roomDt(LocalDateTime.of(2023, 12, 1, 12, 10, 0))
                         .build());
     }
 
@@ -115,24 +118,12 @@ public class RoomServiceTest {
     @DisplayName("대기방 전체 조회")
     void findAllRoom() {
         Page<Room> mockRoomPage = new PageImpl(roomList);
-        when(repository.findAll(any(Pageable.class))).thenReturn(mockRoomPage);
+        when(repository.findAllOrderByRoomStatusDescRoomDtDesc(any(Pageable.class)))
+                .thenReturn(mockRoomPage);
 
-        List<RoomDTO> roomDTOs = service.findRoomList(null, Pageable.unpaged());
+        List<RoomDTO> roomDTOs = service.findRoomList(Pageable.unpaged());
 
         assertThat(roomDTOs.size()).isEqualTo(3);
-    }
-
-    @Test
-    @DisplayName("대기방 전체 조회 - 게임 중인 방")
-    void findAllRoomPaging() {
-        List<Room> testRoomList =
-                roomList.stream().filter(r -> r.getRoomStatus().equals(0)).toList();
-        Page<Room> mockRoomPage = new PageImpl(testRoomList);
-        when(repository.findAllByRoomStatus(eq(0), any(Pageable.class))).thenReturn(mockRoomPage);
-
-        List<RoomDTO> roomDTOs = service.findRoomList(0, Pageable.unpaged());
-
-        assertThat(roomDTOs.size()).isEqualTo(2);
     }
 
     @Test
