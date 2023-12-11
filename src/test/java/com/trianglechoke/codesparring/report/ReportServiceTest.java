@@ -62,7 +62,6 @@ public class ReportServiceTest {
                         .quizTier("SILVER")
                         .quizSubmitCnt(0)
                         .quizSuccessCnt(0)
-                        .outputType("int")
                         .build();
 
         Date LocalDate = new Date();
