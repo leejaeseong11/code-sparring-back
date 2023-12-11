@@ -64,7 +64,6 @@ public class RoomServiceTest {
                         .quizTier("SILVER")
                         .quizSubmitCnt(0)
                         .quizSuccessCnt(0)
-                        .outputType("int")
                         .build();
 
         room =
