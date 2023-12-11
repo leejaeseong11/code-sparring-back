@@ -34,26 +34,29 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     public void signup(MemberDTO memberDTO) {
+        checkDuplicateId(memberDTO.getMemberId());
+        checkDuplicateName(memberDTO.getMemberName());
         Member member = memberDTO.toMember(passwordEncoder);
         memberRepository.save(member);
     }
 
+    @Transactional
     public boolean checkDuplicateId(String memberId) {
         Optional<Member> existingMember = memberRepository.findByMemberId(memberId);
         // 이미 존재하면서 상태가 활성화된 경우에만 중복으로 처리
         if (existingMember.isPresent() && existingMember.get().getMemberStatus() == 1) {
-            return true;
+            throw new MyException(DUPLICATE_ID);
         }
-        return false;  // 중복되지 않은 경우
+        return false; // 중복된 아이디 아님
     }
-
+    @Transactional
     public boolean checkDuplicateName(String memberName) {
         Optional<Member> existingMember = memberRepository.findByMemberName(memberName);
         // 이미 존재하면서 상태가 활성화된 경우에만 중복으로 처리
         if (existingMember.isPresent() && existingMember.get().getMemberStatus() == 1) {
-            return true;
+            throw new MyException(DUPLICATE_NAME);
         }
-        return false;  // 중복되지 않은 경우
+        return false; // 중복된 아이디 아님
     }
 
     @Transactional
