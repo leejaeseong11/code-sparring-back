@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -45,10 +46,9 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
-    public List<RoomDTO> findRoomList(Pageable pageable) {
+    public Page<RoomDTO> findRoomList(Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
-        Page<Room> roomList;
-        roomList = repository.findByOrderByRoomStatusDescRoomDtDesc(pageable);
+        Page<Room> roomList = repository.findByOrderByRoomStatusDescRoomDtDesc(pageable);
 
         for (Room room : roomList) {
             Quiz selectedQuiz = room.getQuiz();
@@ -64,7 +64,7 @@ public class RoomServiceImpl implements RoomService {
                             .roomMemberList(room.getRoomMemberList())
                             .build());
         }
-        return selectedRoomList;
+        return new PageImpl<>(selectedRoomList, pageable, roomList.getTotalElements());
     }
 
     @Transactional
