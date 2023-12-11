@@ -3,6 +3,7 @@ package com.trianglechoke.codesparring.member.service;
 import com.trianglechoke.codesparring.member.dto.MemberDTO;
 import com.trianglechoke.codesparring.member.dto.TokenDTO;
 import com.trianglechoke.codesparring.member.dto.TokenRequestDTO;
+import org.springframework.http.ResponseCookie;
 
 public interface AuthService {
     /* 회원가입 */
@@ -19,4 +20,7 @@ public interface AuthService {
 
     /* refreshToken 재발행 */
     TokenDTO reissue(TokenRequestDTO tokenRequestDTO);
+
+    /* refreshToken 쿠키에 넣기*/
+    ResponseCookie putTokenInCookie(final TokenDTO tokenDTO);
 }
