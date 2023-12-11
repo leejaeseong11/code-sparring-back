@@ -23,7 +23,7 @@ public class Message {
     /* 랭크 매칭 */
 
     /* 코드 공유 */
-    private Long codeRoomNo; //방 번호
+    private Long codeRoomNo; // 방 번호
     private String codeSender; // 코드 보낸 사람
-    private String code;  // 코드
+    private String code; // 코드
 }

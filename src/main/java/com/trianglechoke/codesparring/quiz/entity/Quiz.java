@@ -80,7 +80,6 @@ public class Quiz {
     @NotNull
     private String outputType;
 
-
     // 정답 코드 파일 url
     @Column(name = "quiz_url", columnDefinition = "VARCHAR2(500)")
     @NotNull
