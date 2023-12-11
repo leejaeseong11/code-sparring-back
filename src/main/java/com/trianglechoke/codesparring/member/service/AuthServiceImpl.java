@@ -21,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -30,16 +32,32 @@ public class AuthServiceImpl implements AuthService {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Transactional
     public void signup(MemberDTO memberDTO) {
-        if (memberRepository.existsByMemberId(memberDTO.getMemberId())
-                && (memberRepository.findByMemberId(memberDTO.getMemberId()))
-                                .get()
-                                .getMemberStatus()
-                        == 1) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다");
-        }
+        checkDuplicateId(memberDTO.getMemberId());
+        checkDuplicateName(memberDTO.getMemberName());
         Member member = memberDTO.toMember(passwordEncoder);
         memberRepository.save(member);
+    }
+
+    @Transactional
+    public boolean checkDuplicateId(String memberId) {
+        Optional<Member> existingMember = memberRepository.findByMemberId(memberId);
+        // 이미 존재하면서 상태가 활성화된 경우에만 중복으로 처리
+        if (existingMember.isPresent() && existingMember.get().getMemberStatus() == 1) {
+            throw new MyException(DUPLICATE_ID);
+        }
+        return false; // 중복된 아이디 아님
+    }
+
+    @Transactional
+    public boolean checkDuplicateName(String memberName) {
+        Optional<Member> existingMember = memberRepository.findByMemberName(memberName);
+        // 이미 존재하면서 상태가 활성화된 경우에만 중복으로 처리
+        if (existingMember.isPresent() && existingMember.get().getMemberStatus() == 1) {
+            throw new MyException(DUPLICATE_NAME);
+        }
+        return false; // 중복된 아이디 아님
     }
 
     @Transactional
