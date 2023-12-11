@@ -45,7 +45,7 @@ public class CodeServiceImpl implements CodeService {
     @Override
     public void writeMemberCode(Long memberNo, Long quizNo, Integer correct, String codeUrl) {
         MemberCodeEmbedded embedded =
-        MemberCodeEmbedded.builder().memberNo(memberNo).quizNo(quizNo).build();
+                MemberCodeEmbedded.builder().memberNo(memberNo).quizNo(quizNo).build();
         MemberCode memberCode =
                 MemberCode.builder().id(embedded).quizCorrect(correct).quizUrl(codeUrl).build();
         codeRepository.save(memberCode);
