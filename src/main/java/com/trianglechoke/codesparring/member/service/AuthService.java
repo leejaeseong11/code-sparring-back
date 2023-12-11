@@ -19,5 +19,4 @@ public interface AuthService {
 
     /* refreshToken 재발행 */
     TokenDTO reissue(TokenRequestDTO tokenRequestDTO);
-
 }

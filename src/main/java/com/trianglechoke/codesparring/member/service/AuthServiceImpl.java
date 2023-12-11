@@ -49,6 +49,7 @@ public class AuthServiceImpl implements AuthService {
         }
         return false; // 중복된 아이디 아님
     }
+
     @Transactional
     public boolean checkDuplicateName(String memberName) {
         Optional<Member> existingMember = memberRepository.findByMemberName(memberName);
