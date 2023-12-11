@@ -67,7 +67,7 @@ public class Room {
 
     // 방 만든 시간
     @Column(name = "room_dt")
-    @ColumnDefault(value="SYSDATE")
+    @ColumnDefault(value = "SYSDATE")
     @NotNull
     private Date roomDt;
 
