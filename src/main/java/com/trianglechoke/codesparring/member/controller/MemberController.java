@@ -30,8 +30,7 @@ public class MemberController {
 
     @GetMapping("/{memberNo}")
     public ResponseEntity<?> findMemberInfoByMemberNo(@PathVariable Long memberNo) {
-        return ResponseEntity.ok(
-                memberServiceImpl.findMemberInfoByMemberNo(memberNo));
+        return ResponseEntity.ok(memberServiceImpl.findMemberInfoByMemberNo(memberNo));
     }
 
     @PutMapping("/my")
