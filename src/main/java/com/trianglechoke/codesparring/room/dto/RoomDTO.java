@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -22,5 +23,6 @@ public class RoomDTO {
     private Integer codeShare;
     private String roomTitle;
     private Integer roomStatus;
+    private LocalDateTime roomDt;
     private List<RoomMember> roomMemberList;
 }

@@ -3,12 +3,11 @@ package com.trianglechoke.codesparring.quiz.service;
 import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
+import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
-import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
@@ -17,6 +16,8 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +27,18 @@ public class QuizServiceImpl implements QuizService {
     @Autowired private QuizRepository repository;
 
     /* Read : 전체 목록 조회 - default */
-    public List<QuizDTO> findQuizList(Integer start, Integer end) throws MyException {
+    public PageGroup<QuizDTO> findQuizList(Integer currentPage) throws MyException {
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
+
+        int start;
+        int end;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
+
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findQuizList(start, end);
         Long quizCnt = repository.count();
-        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -40,20 +48,38 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(String.valueOf(objArr[5]))
                             .build();
+            if (dto.getQuizSubmitCnt() == 0) {
+                dto.setQuizCorrectPercent("-");
+            } else if (dto.getQuizSuccessCnt() == 0) {
+                dto.setQuizCorrectPercent("0.00%");
+            } else {
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+                dto.setQuizCorrectPercent(result + "%");
+            }
             quizDTOList.add(dto);
         }
-        return quizDTOList;
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        return pg;
     }
 
     /* Read : 전체 목록 조회 - 정답률순 */
-    public List<QuizDTO> findOrderByCorrect(Integer start, Integer end, String order)
+    public PageGroup<QuizDTO> findOrderByCorrect(Integer currentPage, String order)
             throws MyException {
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
+
+        int start;
+        int end;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
+
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = new ArrayList<>();
         if (order.equals("asc")) quizList = repository.findOrderByCorrect(start, end);
         else if (order.equals("desc")) quizList = repository.findOrderByCorrectDesc(start, end);
         Long quizCnt = repository.count();
-        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -63,21 +89,39 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(String.valueOf(objArr[5]))
                             .build();
+            if (dto.getQuizSubmitCnt() == 0) {
+                dto.setQuizCorrectPercent("-");
+            } else if (dto.getQuizSuccessCnt() == 0) {
+                dto.setQuizCorrectPercent("0.00%");
+            } else {
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+                dto.setQuizCorrectPercent(result + "%");
+            }
             quizDTOList.add(dto);
         }
-        return quizDTOList;
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        return pg;
     }
 
     /* Read : 티어 별 목록 조회 - default */
-    public List<QuizDTO> findByQuizTier(String quizTier, Integer start, Integer end)
+    public PageGroup<QuizDTO> findByQuizTier(String quizTier, Integer currentPage)
             throws MyException {
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
+
+        int start;
+        int end;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
+
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findListByQuizTier(quizTier, start, end);
         Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
         ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
         Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
         Long quizCnt = repository.count(example);
-        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -87,14 +131,33 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(quizTier)
                             .build();
+            if (dto.getQuizSubmitCnt() == 0) {
+                dto.setQuizCorrectPercent("-");
+            } else if (dto.getQuizSuccessCnt() == 0) {
+                dto.setQuizCorrectPercent("0.00%");
+            } else {
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+                dto.setQuizCorrectPercent(result + "%");
+            }
             quizDTOList.add(dto);
         }
-        return quizDTOList;
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        return pg;
     }
 
     /* Read : 티어 별 목록 조회 - 정답률순 */
-    public List<QuizDTO> findByTierOrderByCorrect(
-            String quizTier, Integer start, Integer end, String order) throws MyException {
+    public PageGroup<QuizDTO> findByTierOrderByCorrect(
+            String quizTier, Integer currentPage, String order) throws MyException {
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
+
+        int start;
+        int end;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
+
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = new ArrayList<>();
         if (order.equals("asc"))
@@ -105,7 +168,6 @@ public class QuizServiceImpl implements QuizService {
         ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
         Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
         Long quizCnt = repository.count(example);
-        quizDTOList.add(QuizDTO.builder().quizCnt(quizCnt).build());
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
@@ -115,9 +177,20 @@ public class QuizServiceImpl implements QuizService {
                             .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
                             .quizTier(quizTier)
                             .build();
+            if (dto.getQuizSubmitCnt() == 0) {
+                dto.setQuizCorrectPercent("-");
+            } else if (dto.getQuizSuccessCnt() == 0) {
+                dto.setQuizCorrectPercent("0.00%");
+            } else {
+                double tmp =
+                        (double) dto.getQuizSuccessCnt() / (double) dto.getQuizSubmitCnt() * 100;
+                BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+                dto.setQuizCorrectPercent(result + "%");
+            }
             quizDTOList.add(dto);
         }
-        return quizDTOList;
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        return pg;
     }
 
     /* Read : 문제 상세 조회 */
@@ -136,8 +209,19 @@ public class QuizServiceImpl implements QuizService {
                         .quizTier(quizEntity.getQuizTier())
                         .memberNo(quizEntity.getMember().getMemberNo())
                         .memberName(quizEntity.getMember().getMemberName())
-                        .outputType(quizEntity.getOutputType())
                         .build();
+        if (quizDTO.getQuizSubmitCnt() == 0) {
+            quizDTO.setQuizCorrectPercent("-");
+        } else if (quizDTO.getQuizSuccessCnt() == 0) {
+            quizDTO.setQuizCorrectPercent("0.00%");
+        } else {
+            double tmp =
+                    (double) quizDTO.getQuizSuccessCnt()
+                            / (double) quizDTO.getQuizSubmitCnt()
+                            * 100;
+            BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+            quizDTO.setQuizCorrectPercent(result + "%");
+        }
         List<ReportDTO> reportDTOList = new ArrayList<>();
         for (Report r : quizEntity.getReportList()) {
             ReportDTO dto =
@@ -154,19 +238,9 @@ public class QuizServiceImpl implements QuizService {
             TestcaseDTO dto =
                     TestcaseDTO.builder()
                             .testcaseNo(tc.getTestcaseNo())
+                            .testcaseInput(tc.getTestcaseInput())
                             .testcaseOutput(tc.getTestcaseOutput())
                             .build();
-            List<TestcaseInputDTO> testcaseInputDTOList = new ArrayList<>();
-            for (TestcaseInput input : tc.getTestcaseInputList()) {
-                TestcaseInputDTO dtoIn =
-                        TestcaseInputDTO.builder()
-                                .inputNo(input.getInputNo())
-                                .inputVar(input.getInputVar())
-                                .testcaseInput(input.getTestcaseInput())
-                                .build();
-                testcaseInputDTOList.add(dtoIn);
-            }
-            dto.setTestcaseInputDTOList(testcaseInputDTOList);
             testcaseDTOList.add(dto);
         }
         quizDTO.setTestcaseDTOList(testcaseDTOList);
@@ -186,7 +260,7 @@ public class QuizServiceImpl implements QuizService {
                         .quizSuccessCnt(0)
                         .quizInput(quizDTO.getQuizInput())
                         .quizOutput(quizDTO.getQuizOutput())
-                        .outputType(quizDTO.getOutputType())
+                        .correctCodeUrl(quizDTO.getCorrectCodeUrl())
                         .build();
         repository.save(quizEntity);
         return quizEntity.getQuizNo();
@@ -197,14 +271,6 @@ public class QuizServiceImpl implements QuizService {
         Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
         Quiz quizEntity = optQ.get();
         quizEntity.modifyQuiz(quizDTO);
-        repository.save(quizEntity);
-    }
-
-    /* Update : 문제 tier 변경 */
-    public void modifyQuizTier(Long quizNo, String tier) throws MyException {
-        Optional<Quiz> optQ = repository.findById(quizNo);
-        Quiz quizEntity = optQ.get();
-        quizEntity.modifyQuizTier(tier);
         repository.save(quizEntity);
     }
 

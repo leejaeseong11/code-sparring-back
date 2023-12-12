@@ -25,4 +25,7 @@ public class Message {
 
 
     /* 코드 공유 */
+    private Long codeRoomNo; // 방 번호
+    private String codeSender; // 코드 보낸 사람
+    private String code; // 코드
 }

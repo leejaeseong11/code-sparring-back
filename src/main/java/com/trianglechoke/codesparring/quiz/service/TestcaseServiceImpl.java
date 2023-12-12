@@ -1,12 +1,9 @@
 package com.trianglechoke.codesparring.quiz.service;
 
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.quiz.dao.TestcaseInputRepository;
 import com.trianglechoke.codesparring.quiz.dao.TestcaseRepository;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
-import com.trianglechoke.codesparring.quiz.dto.TestcaseInputDTO;
 import com.trianglechoke.codesparring.quiz.entity.Testcase;
-import com.trianglechoke.codesparring.quiz.entity.TestcaseInput;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,38 +16,23 @@ import java.util.Optional;
 @Slf4j
 public class TestcaseServiceImpl implements TestcaseService {
     @Autowired private TestcaseRepository testcaseRepository;
-    @Autowired private TestcaseInputRepository inputRepository;
 
     /* Create : 테스트케이스 추가 */
     public void addTestcase(TestcaseDTO tcDTO) throws MyException {
         Testcase tcEntity =
                 Testcase.builder()
                         .quizNo(tcDTO.getQuizNo())
+                        .testcaseInput(tcDTO.getTestcaseInput())
                         .testcaseOutput(tcDTO.getTestcaseOutput())
                         .build();
         testcaseRepository.save(tcEntity);
-        log.error("{}", tcDTO.getTestcaseInputDTOList().size());
-        for (TestcaseInputDTO input : tcDTO.getTestcaseInputDTOList()) {
-            TestcaseInput inputEntity =
-                    TestcaseInput.builder()
-                            .testcaseNo(tcEntity.getTestcaseNo())
-                            .inputVar(input.getInputVar())
-                            .testcaseInput(input.getTestcaseInput())
-                            .build();
-            inputRepository.save(inputEntity);
-        }
     }
 
     /* Update : 테스트케이스 수정 */
     public void modifyTestcase(TestcaseDTO tcDTO) throws MyException {
         Optional<Testcase> optTc = testcaseRepository.findById(tcDTO.getTestcaseNo());
         Testcase tcEntity = optTc.get();
-        tcEntity.modifyOutput(tcDTO.getTestcaseOutput());
-        for (int i = 0; i < tcDTO.getTestcaseInputDTOList().size(); i++) {
-            tcEntity.getTestcaseInputList()
-                    .get(i)
-                    .modifyInput(tcDTO.getTestcaseInputDTOList().get(i));
-        }
+        tcEntity.modifyTc(tcDTO.getTestcaseInput(), tcDTO.getTestcaseOutput());
         testcaseRepository.save(tcEntity);
     }
 

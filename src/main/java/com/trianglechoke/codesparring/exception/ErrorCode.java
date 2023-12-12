@@ -46,7 +46,9 @@ public enum ErrorCode {
     RANK_GAME_NOT_MODIFIED(NOT_MODIFIED, "랭크게임 결과를 업데이트할 수 없습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
-    DUPLICATE_MEMBER(CONFLICT, "이미 가입된 회원입니다.");
+    DUPLICATE_MEMBER(CONFLICT, "이미 가입된 회원입니다."),
+    DUPLICATE_ID(CONFLICT, "중복된 아이디입니다."),
+    DUPLICATE_NAME(CONFLICT, "중복된 닉네임입니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;

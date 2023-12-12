@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -45,14 +46,9 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
-    public List<RoomDTO> findRoomList(Integer status, Pageable pageable) {
+    public Page<RoomDTO> findRoomList(Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
-        Page<Room> roomList;
-        if (status == null) {
-            roomList = repository.findAll(pageable);
-        } else {
-            roomList = repository.findAllByRoomStatus(status, pageable);
-        }
+        Page<Room> roomList = repository.findByOrderByRoomStatusDescRoomDtDesc(pageable);
 
         for (Room room : roomList) {
             Quiz selectedQuiz = room.getQuiz();
@@ -64,11 +60,11 @@ public class RoomServiceImpl implements RoomService {
                             .codeShare(room.getCodeShare())
                             .roomTitle(room.getRoomTitle())
                             .roomStatus(room.getRoomStatus())
+                            .roomDt(room.getRoomDt())
                             .roomMemberList(room.getRoomMemberList())
                             .build());
         }
-
-        return selectedRoomList;
+        return new PageImpl<>(selectedRoomList, pageable, roomList.getTotalElements());
     }
 
     @Transactional
@@ -80,6 +76,7 @@ public class RoomServiceImpl implements RoomService {
                                 .roomPwd(roomDTO.getRoomPwd())
                                 .codeShare(roomDTO.getCodeShare())
                                 .roomTitle(roomDTO.getRoomTitle())
+                                .roomDt(roomDTO.getRoomDt())
                                 .roomStatus(1)
                                 .build())
                 .getRoomNo();

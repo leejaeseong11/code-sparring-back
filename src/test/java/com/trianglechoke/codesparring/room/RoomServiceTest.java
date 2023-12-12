@@ -24,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +64,6 @@ public class RoomServiceTest {
                         .quizTier("SILVER")
                         .quizSubmitCnt(0)
                         .quizSuccessCnt(0)
-                        .outputType("int")
                         .build();
 
         room =
@@ -72,6 +72,7 @@ public class RoomServiceTest {
                         .quiz(quiz)
                         .codeShare(0)
                         .roomTitle("테스트 방")
+                        .roomDt(LocalDateTime.of(2023, 12, 1, 12, 20, 0))
                         .roomStatus(1)
                         .build();
 
@@ -82,6 +83,7 @@ public class RoomServiceTest {
                         .quiz(Quiz.builder().build())
                         .codeShare(1)
                         .roomTitle("테스트 방2")
+                        .roomDt(LocalDateTime.of(2023, 12, 1, 12, 0, 0))
                         .roomStatus(0)
                         .build());
         roomList.add(
@@ -90,7 +92,8 @@ public class RoomServiceTest {
                         .quiz(Quiz.builder().build())
                         .codeShare(1)
                         .roomTitle("테스트 방3")
-                        .roomStatus(0)
+                        .roomStatus(1)
+                        .roomDt(LocalDateTime.of(2023, 12, 1, 12, 10, 0))
                         .build());
     }
 
@@ -114,24 +117,26 @@ public class RoomServiceTest {
     @DisplayName("대기방 전체 조회")
     void findAllRoom() {
         Page<Room> mockRoomPage = new PageImpl(roomList);
-        when(repository.findAll(any(Pageable.class))).thenReturn(mockRoomPage);
+        when(repository.findByOrderByRoomStatusDescRoomDtDesc(any(Pageable.class)))
+                .thenReturn(mockRoomPage);
 
-        List<RoomDTO> roomDTOs = service.findRoomList(null, Pageable.unpaged());
+        Page<RoomDTO> roomDTOs = service.findRoomList(Pageable.unpaged());
 
-        assertThat(roomDTOs.size()).isEqualTo(3);
+        assertThat(roomDTOs.getContent().size()).isEqualTo(3);
     }
 
     @Test
-    @DisplayName("대기방 전체 조회 - 게임 중인 방")
+    @DisplayName("대기방 전체 조회 - 페이징 처리")
     void findAllRoomPaging() {
-        List<Room> testRoomList =
-                roomList.stream().filter(r -> r.getRoomStatus().equals(0)).toList();
-        Page<Room> mockRoomPage = new PageImpl(testRoomList);
-        when(repository.findAllByRoomStatus(eq(0), any(Pageable.class))).thenReturn(mockRoomPage);
+        Page<Room> mockRoomPage = new PageImpl<>(roomList, Pageable.ofSize(2), roomList.size());
+        when(repository.findByOrderByRoomStatusDescRoomDtDesc(Pageable.ofSize(2)))
+                .thenReturn(mockRoomPage);
 
-        List<RoomDTO> roomDTOs = service.findRoomList(0, Pageable.unpaged());
+        Page<RoomDTO> roomDTOs = service.findRoomList(Pageable.ofSize(2));
 
-        assertThat(roomDTOs.size()).isEqualTo(2);
+        assertThat(roomDTOs.getTotalElements()).isEqualTo(3);
+        assertThat(roomDTOs.getTotalPages()).isEqualTo(2);
+        assertThat(roomDTOs.getSize()).isEqualTo(2);
     }
 
     @Test
@@ -144,6 +149,7 @@ public class RoomServiceTest {
                         .codeShare(1)
                         .roomTitle("테스트 방3")
                         .roomStatus(0)
+                        .roomDt(LocalDateTime.now())
                         .build();
         when(repository.save(any())).thenReturn(testRoom);
 

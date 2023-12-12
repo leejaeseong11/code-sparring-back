@@ -22,10 +22,14 @@ public class MemberCode {
 
     // [FK] 회원 번호
     // [FK] 문제 번호
-    @EmbeddedId private MemberCodeEmbedded id = new MemberCodeEmbedded();
+    @EmbeddedId private MemberCodeEmbedded id;
 
     // 정답 여부 (1은 정답, 0은 오답)
     @Column(name = "quiz_correct", columnDefinition = "NUMBER(1)")
     @NotNull
     private Integer quizCorrect;
+
+    @Column(name = "quiz_url", columnDefinition = "VARCHAR2(500)")
+    @NotNull
+    private String quizUrl;
 }

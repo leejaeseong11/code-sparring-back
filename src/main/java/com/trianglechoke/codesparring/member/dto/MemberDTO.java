@@ -13,15 +13,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberRequestDTO {
+public class MemberDTO {
     private Long memberNo;
     private String memberId;
     private String memberPwd;
     private String memberName;
     private String memberInfo;
     private Integer memberProfileImg;
+    private Long memberLevel;
+    private Integer memberExp;
+    private String memberTier;
+    private Long tierPoint;
+    private Integer rank;
 
     public Member toMember(PasswordEncoder passwordEncoder) {
+        if (memberPwd == null) {
+            memberPwd = ""; // 또는 기본값으로 초기화
+        }
         return Member.builder()
                 .memberId(memberId)
                 .memberPwd(passwordEncoder.encode(memberPwd))

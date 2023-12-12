@@ -2,8 +2,13 @@ package com.trianglechoke.codesparring.code.control;
 
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.service.CodeService;
+import com.trianglechoke.codesparring.exception.ErrorCode;
+import com.trianglechoke.codesparring.exception.MyException;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,24 +19,24 @@ import java.util.*;
 
 // 코드실행(테스트케이스 3개)
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/code")
 public class CodeExecutionController {
 
-    @Autowired private CodeService service;
+    private final CodeService service;
 
-    StringBuilder responseResult = new StringBuilder();
+    StringBuilder responseResult;
 
     @PostMapping("/executeCode")
-    public String executeCode(
-            @RequestPart("quiz_no") String quizNo, @RequestPart("Main") MultipartFile file)
+    public ResponseEntity<?> executeCode(
+            @RequestPart("quizNo") String quizNo, @RequestPart("Main") MultipartFile file)
             throws IOException {
 
-        String output = "";
-        String input = "";
+        responseResult = new StringBuilder();
 
         // 전달받은 파일이 비었는지 확인
         if (file.isEmpty()) {
-            return "업로드된 파일이 비어 있습니다.";
+            throw new MyException(ErrorCode.FILE_NOT_FOUND);
         }
 
         // 파일 저장
@@ -43,49 +48,46 @@ public class CodeExecutionController {
             file.transferTo(f);
         } catch (IOException e) {
             e.printStackTrace();
-            return "파일 저장 중 오류가 발생했습니다.";
+            throw new MyException(ErrorCode.FILE_NOT_SAVED);
         }
 
         if (!f.exists()) {
-            return "파일이 존재하지 않음!";
+            throw new MyException(ErrorCode.FILE_NOT_FOUND);
         }
 
         // 문제번호에 해당하는 테스트케이스 가져오기(input, expectedOutput에 넣어주기)
         List<CodeTestcaseDTO> list = service.findByQuizNo(quizNo);
-        System.out.println(list.size());
 
         int count = 0;
         for (CodeTestcaseDTO dto : list) {
             if (count < 3) {
-                output = dto.getTestcaseOutput();
-                input = dto.getTestcaseInput();
+                String output = dto.getTestcaseOutput();
+                String input = dto.getTestcaseInput();
 
                 executeCode2(fileName, f, output, input);
                 count++;
-            } else {
-                // 파일삭제
-                Files.delete(
-                        Path.of(
-                                "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                        + fileName
-                                        + ".java"));
-                Files.delete(
-                        Path.of(
-                                "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                        + fileName
-                                        + ".class"));
-                return String.valueOf(responseResult);
             }
         }
+        // 파일삭제
+        Files.delete(
+                Path.of(
+                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
+                                + fileName
+                                + ".java"));
+        Files.delete(
+                Path.of(
+                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
+                                + fileName
+                                + ".class"));
 
-        return "";
+        String msg = String.valueOf(responseResult);
+        return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     public void executeCode2(String fileName, File f, String output, String input) {
 
         String input2 = " " + input; // 입력값
-        String expectedOutput = "0.8"; // 예상 출력값
-        String compileResult = "";
+        String expectedOutput = " " + output; // 예상 출력값
         String result = "";
 
         // -------------------------------컴파일 시작-------------------------------

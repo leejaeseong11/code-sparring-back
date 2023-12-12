@@ -14,8 +14,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -62,6 +64,12 @@ public class Room {
     @Column(name = "room_status", columnDefinition = "NUMBER(1) default 1")
     @NotNull
     private Integer roomStatus;
+
+    // 방 만든 시간
+    @Column(name = "room_dt")
+    @ColumnDefault(value = "SYSDATE")
+    @NotNull
+    private LocalDateTime roomDt;
 
     // 방 멤버 목록
     @OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)

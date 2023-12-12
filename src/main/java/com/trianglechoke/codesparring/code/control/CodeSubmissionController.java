@@ -3,11 +3,14 @@ package com.trianglechoke.codesparring.code.control;
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.code.dto.NormalDTO;
 import com.trianglechoke.codesparring.code.dto.RankDTO;
+import com.trianglechoke.codesparring.code.service.AwsS3Service;
 import com.trianglechoke.codesparring.code.service.CodeService;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,23 +19,23 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-// 코드제출(테스트케이스 10개)
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/submit")
 public class CodeSubmissionController {
 
-    @Autowired private CodeService service;
-    StringBuilder responseResult;
+    @Value("${file.filePATH}")
+    private String filePATH;
 
-    // 테스트케이스 실행결과 정답 수
+    private final CodeService service;
+    private final AwsS3Service awsS3Service;
+
+    StringBuilder responseResult;
     int answerCount;
 
     @PostMapping("/normalMode")
@@ -43,8 +46,6 @@ public class CodeSubmissionController {
 
         responseResult = new StringBuilder();
         answerCount = 0;
-        String output = "";
-        String input = "";
 
         if (file.isEmpty()) {
             // return "업로드된 파일이 비어 있습니다.";
@@ -52,9 +53,16 @@ public class CodeSubmissionController {
         }
 
         // 파일 저장
-        String fileName = file.getName(); // value값으로 지정
-        String filePath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
-        File f = new File(filePath, fileName + ".java");
+        String fileName = file.getOriginalFilename(); // value값으로 지정
+        String filePath = filePATH;
+        File f = new File(filePath, fileName);
+
+        // 사용자 번호에 해당하는 폴더 생성
+        String bucketPath = "/" + dto.getMemberNo();
+        // S3서버에 제출한 코드 파일 저장(.txt)
+        String fileUrl =
+                awsS3Service.uploadImage(
+                        file, bucketPath, dto.getMemberNo().toString(), dto.getQuizNo().toString());
 
         try {
             file.transferTo(f);
@@ -72,44 +80,92 @@ public class CodeSubmissionController {
         List<CodeTestcaseDTO> list = service.findByQuizNo(String.valueOf(dto.getQuizNo()));
 
         for (CodeTestcaseDTO ctdto : list) {
-            output = ctdto.getTestcaseOutput();
-            input = ctdto.getTestcaseInput();
+            String output = ctdto.getTestcaseOutput();
+            String input = ctdto.getTestcaseInput();
             executeCode2(fileName, f, output, input);
+        }
+        // 파일 이름에서 마지막 '.' 이후의 문자열 제거(.java제거)
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex != -1) {
+            fileName = fileName.substring(0, lastDotIndex);
         }
 
         // 파일삭제
-        Files.delete(
-                Path.of(
-                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                + fileName
-                                + ".java"));
-        Files.delete(
-                Path.of(
-                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                + fileName
-                                + ".class"));
+        Files.delete(Path.of(filePath + fileName + ".java"));
+        Files.delete(Path.of(filePath + fileName + ".class"));
 
         Integer correct = 0;
         if (answerCount == list.size()) correct = 1;
-        service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct);
+        service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct, fileUrl);
 
-        // Quiz테이블의 문제 제출 횟수, 문제 정답 횟수 수정
-        // return responseResult + ", " + answerCount;
-        String msg = responseResult + ", " + answerCount;
+        String msg = String.valueOf(responseResult);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
 
     @PostMapping("/rankMode")
-    public String rankMode(@RequestPart MultipartFile file, @RequestPart RankDTO dto) {
+    public ResponseEntity<?> rankMode(
+            @RequestPart(value = "Main") MultipartFile file,
+            @RequestPart(value = "dto") RankDTO dto)
+            throws IOException {
 
-        return "";
+        responseResult = new StringBuilder();
+        answerCount = 0;
+
+        if (file.isEmpty()) {
+            // return "업로드된 파일이 비어 있습니다.";
+            throw new MyException(ErrorCode.FILE_NOT_FOUND);
+        }
+
+        // 파일 저장
+        String fileName = file.getOriginalFilename(); // value값으로 지정
+        String filePath = filePATH;
+        File f = new File(filePath, fileName);
+
+        try {
+            file.transferTo(f);
+        } catch (IOException e) {
+            e.printStackTrace();
+            // return "파일 저장 중 오류가 발생했습니다.";
+            throw new MyException(ErrorCode.FILE_NOT_SAVED);
+        }
+
+        if (!f.exists()) {
+            throw new MyException(ErrorCode.FILE_NOT_FOUND);
+        }
+
+        // 문제번호에 해당하는 테스트케이스 가져오기(input, expectedOutput에 넣어주기)
+        List<CodeTestcaseDTO> list = service.findByQuizNo(String.valueOf(dto.getQuizNo()));
+
+        for (CodeTestcaseDTO ctdto : list) {
+            String output = ctdto.getTestcaseOutput();
+            String input = ctdto.getTestcaseInput();
+            executeCode2(fileName, f, output, input);
+        }
+        // 파일 이름에서 마지막 '.' 이후의 문자열 제거(.java제거)
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex != -1) {
+            fileName = fileName.substring(0, lastDotIndex);
+        }
+
+        // 파일삭제
+        Files.delete(Path.of(filePath + fileName + ".java"));
+        Files.delete(Path.of(filePath + fileName + ".class"));
+
+        Integer correct = 0;
+        if (answerCount == list.size()) correct = 1;
+        service.modifyQuizSubmit(dto.getQuizNo(), correct);
+
+        String result = String.valueOf(responseResult);
+
+        Map<String, String> result2 = new HashMap<>();
+        result2.put("result", result);
+        result2.put("gameResult", String.valueOf(correct));
+        return new ResponseEntity<>(result2, HttpStatus.OK);
     }
 
     public void executeCode2(String fileName, File f, String output, String input) {
 
-        String input2 = " " + input; // 입력값
-        String expectedOutput = "0.8"; // 예상 출력값
-        String compileResult = "";
+        String expectedOutput = " " + output; // 예상 출력값
         String result = "";
         // -------------------------------컴파일 시작-------------------------------
         String cmd = "cmd.exe";
@@ -145,18 +201,26 @@ public class CodeSubmissionController {
         // -------------------------------컴파일 끝-------------------------------
 
         // -------------------------------실행 시작-------------------------------
+        // 파일 이름에서 마지막 '.' 이후의 문자열 제거(.java제거)
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex != -1) {
+            fileName = fileName.substring(0, lastDotIndex);
+        }
+
         cmd = "cmd.exe";
         arg = "/c";
-        pb =
-                new ProcessBuilder(
-                        cmd,
-                        arg,
-                        "java -cp C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/ "
-                                + fileName
-                                + input2);
+        pb = new ProcessBuilder(cmd, arg, "java -cp " + filePATH + " " + fileName);
 
         try {
             Process p = pb.start();
+            OutputStream os = p.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
+
+            writer.write(
+                    "1\n" + "8 100\n" + "70 60 55 43 57 60 44 50\n" + "58 40 47 90 45 52 80 40");
+            writer.flush();
+            writer.close();
+
             int exitCode = p.waitFor();
             System.out.println("실행용 Process start exitCode=" + exitCode);
 

@@ -43,7 +43,7 @@ public class Quiz {
     private Member member;
 
     // 문제 제목
-    @Column(name = "quiz_title", columnDefinition = "VARCHAR2(60)")
+    @Column(name = "quiz_title", columnDefinition = "VARCHAR2(300)")
     @NotNull
     private String quizTitle;
 
@@ -75,10 +75,9 @@ public class Quiz {
     @Column(name = "quiz_output", columnDefinition = "VARCHAR2(500)")
     private String quizOutput;
 
-    // 출력값(리턴) 타입
-    @Column(name = "output_type", columnDefinition = "VARCHAR2(20)")
-    @NotNull
-    private String outputType;
+    // 정답 코드 파일 url
+    @Column(name = "correct_code_url", columnDefinition = "VARCHAR2(500)")
+    private String correctCodeUrl;
 
     // 문제 신고 목록
     @OneToMany(cascade = CascadeType.REMOVE)
@@ -96,17 +95,12 @@ public class Quiz {
         this.quizContent = quizDTO.getQuizContent();
         this.quizInput = quizDTO.getQuizInput();
         this.quizOutput = quizDTO.getQuizOutput();
-        this.outputType = quizDTO.getOutputType();
+        this.quizTier = quizDTO.getQuizTier();
     }
 
     // [임시] 제출횟수 및 정답횟수 증가 메소드
     public void modifyQuizSubmit(Integer correct) {
         this.quizSubmitCnt++;
         if (correct == 1) this.quizSuccessCnt++;
-    }
-
-    // 티어 변경 메소드
-    public void modifyQuizTier(String tier) {
-        this.quizTier = tier;
     }
 }
