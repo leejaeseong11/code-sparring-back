@@ -46,7 +46,7 @@ public class Testcase {
     private String testcaseOutput;
 
     // 출력값 수정 메소드
-    public void modifyOutput(String output, String input) {
+    public void modifyTc(String input, String output) {
         this.testcaseInput = input;
         this.testcaseOutput = output;
     }
