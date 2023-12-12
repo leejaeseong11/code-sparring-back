@@ -3,6 +3,7 @@ package com.trianglechoke.codesparring.quiz.service;
 import com.trianglechoke.codesparring.exception.*;
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
+import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
@@ -26,7 +27,15 @@ public class QuizServiceImpl implements QuizService {
     @Autowired private QuizRepository repository;
 
     /* Read : 전체 목록 조회 - default */
-    public List<QuizDTO> findQuizList(Integer start, Integer end) throws MyException {
+    public PageGroup<QuizDTO> findQuizList(Integer currentPage) throws MyException {
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
+
+        int start;
+        int end;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
+
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findQuizList(start, end);
         Long quizCnt = repository.count();
@@ -51,13 +60,21 @@ public class QuizServiceImpl implements QuizService {
             }
             quizDTOList.add(dto);
         }
-        quizDTOList.get(0).setQuizCnt(quizCnt);
-        return quizDTOList;
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        return pg;
     }
 
     /* Read : 전체 목록 조회 - 정답률순 */
-    public List<QuizDTO> findOrderByCorrect(Integer start, Integer end, String order)
+    public PageGroup<QuizDTO> findOrderByCorrect(Integer currentPage, String order)
             throws MyException {
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
+
+        int start;
+        int end;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
+
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = new ArrayList<>();
         if (order.equals("asc")) quizList = repository.findOrderByCorrect(start, end);
@@ -84,13 +101,21 @@ public class QuizServiceImpl implements QuizService {
             }
             quizDTOList.add(dto);
         }
-        quizDTOList.get(0).setQuizCnt(quizCnt);
-        return quizDTOList;
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        return pg;
     }
 
     /* Read : 티어 별 목록 조회 - default */
-    public List<QuizDTO> findByQuizTier(String quizTier, Integer start, Integer end)
+    public PageGroup<QuizDTO> findByQuizTier(String quizTier, Integer currentPage)
             throws MyException {
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
+
+        int start;
+        int end;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
+
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findListByQuizTier(quizTier, start, end);
         Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
@@ -118,13 +143,21 @@ public class QuizServiceImpl implements QuizService {
             }
             quizDTOList.add(dto);
         }
-        quizDTOList.get(0).setQuizCnt(quizCnt);
-        return quizDTOList;
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        return pg;
     }
 
     /* Read : 티어 별 목록 조회 - 정답률순 */
-    public List<QuizDTO> findByTierOrderByCorrect(
-            String quizTier, Integer start, Integer end, String order) throws MyException {
+    public PageGroup<QuizDTO> findByTierOrderByCorrect(
+            String quizTier, Integer currentPage, String order) throws MyException {
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
+
+        int start;
+        int end;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
+
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = new ArrayList<>();
         if (order.equals("asc"))
@@ -156,8 +189,8 @@ public class QuizServiceImpl implements QuizService {
             }
             quizDTOList.add(dto);
         }
-        quizDTOList.get(0).setQuizCnt(quizCnt);
-        return quizDTOList;
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        return pg;
     }
 
     /* Read : 문제 상세 조회 */
@@ -177,6 +210,18 @@ public class QuizServiceImpl implements QuizService {
                         .memberNo(quizEntity.getMember().getMemberNo())
                         .memberName(quizEntity.getMember().getMemberName())
                         .build();
+        if (quizDTO.getQuizSubmitCnt() == 0) {
+            quizDTO.setQuizCorrectPercent("-");
+        } else if (quizDTO.getQuizSuccessCnt() == 0) {
+            quizDTO.setQuizCorrectPercent("0.00%");
+        } else {
+            double tmp =
+                    (double) quizDTO.getQuizSuccessCnt()
+                            / (double) quizDTO.getQuizSubmitCnt()
+                            * 100;
+            BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+            quizDTO.setQuizCorrectPercent(result + "%");
+        }
         List<ReportDTO> reportDTOList = new ArrayList<>();
         for (Report r : quizEntity.getReportList()) {
             ReportDTO dto =
@@ -193,6 +238,7 @@ public class QuizServiceImpl implements QuizService {
             TestcaseDTO dto =
                     TestcaseDTO.builder()
                             .testcaseNo(tc.getTestcaseNo())
+                            .testcaseInput(tc.getTestcaseInput())
                             .testcaseOutput(tc.getTestcaseOutput())
                             .build();
             testcaseDTOList.add(dto);
@@ -225,14 +271,6 @@ public class QuizServiceImpl implements QuizService {
         Optional<Quiz> optQ = repository.findById(quizDTO.getQuizNo());
         Quiz quizEntity = optQ.get();
         quizEntity.modifyQuiz(quizDTO);
-        repository.save(quizEntity);
-    }
-
-    /* Update : 문제 tier 변경 */
-    public void modifyQuizTier(Long quizNo, String tier) throws MyException {
-        Optional<Quiz> optQ = repository.findById(quizNo);
-        Quiz quizEntity = optQ.get();
-        quizEntity.modifyQuizTier(tier);
         repository.save(quizEntity);
     }
 

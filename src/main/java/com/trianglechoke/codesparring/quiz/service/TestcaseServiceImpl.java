@@ -22,6 +22,7 @@ public class TestcaseServiceImpl implements TestcaseService {
         Testcase tcEntity =
                 Testcase.builder()
                         .quizNo(tcDTO.getQuizNo())
+                        .testcaseInput(tcDTO.getTestcaseInput())
                         .testcaseOutput(tcDTO.getTestcaseOutput())
                         .build();
         testcaseRepository.save(tcEntity);
@@ -31,6 +32,7 @@ public class TestcaseServiceImpl implements TestcaseService {
     public void modifyTestcase(TestcaseDTO tcDTO) throws MyException {
         Optional<Testcase> optTc = testcaseRepository.findById(tcDTO.getTestcaseNo());
         Testcase tcEntity = optTc.get();
+        tcEntity.modifyTc(tcDTO.getTestcaseInput(), tcDTO.getTestcaseOutput());
         testcaseRepository.save(tcEntity);
     }
 
