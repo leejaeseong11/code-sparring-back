@@ -5,18 +5,16 @@ import com.trianglechoke.codesparring.member.dto.TokenDTO;
 import com.trianglechoke.codesparring.member.dto.TokenRequestDTO;
 import com.trianglechoke.codesparring.member.service.AuthServiceImpl;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
-
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,10 +43,10 @@ public class AuthController {
         return ResponseEntity.ok(authServiceImpl.checkDuplicateName(memberName));
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<TokenDTO> login(@RequestBody MemberDTO memberDTO) {
-//        return ResponseEntity.ok(authServiceImpl.login(memberDTO));
-//    }
+    //    @PostMapping("/login")
+    //    public ResponseEntity<TokenDTO> login(@RequestBody MemberDTO memberDTO) {
+    //        return ResponseEntity.ok(authServiceImpl.login(memberDTO));
+    //    }
 
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> login(@RequestBody MemberDTO memberDTO) {
@@ -70,9 +68,9 @@ public class AuthController {
         combinedHeaders.addAll(headers);
 
         // Create a new ResponseEntity with the updated headers
-        return new ResponseEntity<>(responseEntity.getBody(), combinedHeaders, responseEntity.getStatusCode());
+        return new ResponseEntity<>(
+                responseEntity.getBody(), combinedHeaders, responseEntity.getStatusCode());
     }
-
 
     @PostMapping("/reissue")
     public ResponseEntity<TokenDTO> reissue(@RequestBody TokenRequestDTO tokenRequestDTO) {
@@ -85,13 +83,14 @@ public class AuthController {
         SecurityContextHolder.clearContext();
 
         // 클라이언트의 Refresh Token을 삭제하는 로직
-        ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
-                .maxAge(0)
-                .path("/")
-                .sameSite("None")
-                .secure(true)
-                .httpOnly(true)
-                .build();
+        ResponseCookie cookie =
+                ResponseCookie.from("refreshToken", "")
+                        .maxAge(0)
+                        .path("/")
+                        .sameSite("None")
+                        .secure(true)
+                        .httpOnly(true)
+                        .build();
 
         response.addHeader("Set-Cookie", cookie.toString());
 

@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
         return tokenDTO;
     }
 
-        @Transactional
+    @Transactional
     public TokenDTO reissue(TokenRequestDTO tokenRequestDTO) {
         // 1. Refresh Token 검증
         if (!tokenProvider.validateToken(tokenRequestDTO.getRefreshToken())) {
@@ -112,8 +112,6 @@ public class AuthServiceImpl implements AuthService {
         // 토큰 발급
         return tokenDto;
     }
-
-
 
     public ResponseCookie putTokenInCookie(final TokenDTO tokenDTO) {
         return ResponseCookie.from("refreshToken", tokenDTO.getRefreshToken())
