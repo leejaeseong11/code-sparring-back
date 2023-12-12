@@ -5,8 +5,6 @@ import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 
-import java.util.List;
-
 public interface RankGameService {
     /**
      * 회원의 랭크 게임 전적을 조회한다.

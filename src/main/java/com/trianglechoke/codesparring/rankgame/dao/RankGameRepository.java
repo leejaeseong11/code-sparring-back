@@ -39,7 +39,10 @@ public interface RankGameRepository extends JpaRepository<RankGame, Long> {
                             + ")\n"
                             + "WHERE rn BETWEEN :start AND :end",
             nativeQuery = true)
-    public List<Object[]> findListByMemberNo(@Param("memberNo")Long memberNo, @Param("start")Integer start, @Param("end")Integer end);
+    public List<Object[]> findListByMemberNo(
+            @Param("memberNo") Long memberNo,
+            @Param("start") Integer start,
+            @Param("end") Integer end);
 
     /* 랭크 게임 정보 추가 */
     @Modifying
@@ -49,5 +52,6 @@ public interface RankGameRepository extends JpaRepository<RankGame, Long> {
                             + "VALUES (rank_no_seq.NEXTVAL, :member1No, :member2No)",
             nativeQuery = true)
     @Transactional
-    public void saveRankGame(@Param("member1No")Long member1No, @Param("member2No")Long member2No);
+    public void saveRankGame(
+            @Param("member1No") Long member1No, @Param("member2No") Long member2No);
 }
