@@ -76,16 +76,34 @@ public class RoomServiceImpl implements RoomService {
 
         for (Room room : roomList) {
             Quiz selectedQuiz = room.getQuiz();
+            List<RoomMemberDTO> inputRoomMemberList = new ArrayList<>();
+            room.getRoomMemberList()
+                    .forEach(
+                            roomMember -> {
+                                Member inputMember = roomMember.getId().getMember();
+                                inputRoomMemberList.add(
+                                        RoomMemberDTO.builder()
+                                                .memberNo(inputMember.getMemberNo())
+                                                .memberName(inputMember.getMemberName())
+                                                .memberProfileImg(inputMember.getMemberProfileImg())
+                                                .memberLevel(inputMember.getMemberLevel())
+                                                .memberTier(inputMember.getMemberTier())
+                                                .hostStatus(roomMember.getHostStatus())
+                                                .build());
+                            });
             selectedRoomList.add(
                     RoomDTO.builder()
                             .roomNo(room.getRoomNo())
-                            //                            .quiz(selectedQuiz)
+                            .quizNo(selectedQuiz.getQuizNo())
+                            .quizTitle(selectedQuiz.getQuizTitle())
+                            .quizContent(selectedQuiz.getQuizContent())
+                            .memberName(selectedQuiz.getMember().getMemberName())
                             .roomPwd(room.getRoomPwd())
                             .codeShare(room.getCodeShare())
                             .roomTitle(room.getRoomTitle())
                             .roomStatus(room.getRoomStatus())
                             .roomDt(room.getRoomDt())
-                            //                            .roomMemberList(room.getRoomMemberList())
+                            .roomMemberList(inputRoomMemberList)
                             .build());
         }
         return new PageImpl<>(selectedRoomList, pageable, roomList.getTotalElements());
