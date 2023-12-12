@@ -4,6 +4,9 @@ import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.quiz.dto.PageGroup;
+import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
+import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.rankgame.dao.RankGameRepository;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
@@ -12,6 +15,8 @@ import com.trianglechoke.codesparring.rankgame.entity.RankGame;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,33 +29,69 @@ public class RankGameServiceImpl implements RankGameService {
     @Autowired private RankGameRepository repository;
 
     /* Read : 랭크게임 전적 조회 */
-    public List<MyRankDTO> findAllByMemberNo(Long memberNo, Integer start, Integer end)
+    public PageGroup<MyRankDTO> findAllByMemberNo(Long memberNo, Integer currentPage)
             throws MyException {
+        if (currentPage < 1) currentPage = 1;
+        Integer cntPerPage = 10;
+
+        Integer start;
+        Integer end;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
+
+        RankGame exampleRankGame1 = RankGame.builder().member1(Member.builder().memberNo(memberNo).build()).build();
+        ExampleMatcher exampleMatcher1 = ExampleMatcher.matchingAll();
+        Example<RankGame> example1 = Example.of(exampleRankGame1, exampleMatcher1);
+        Long cnt = repository.count(example1);
+
+        RankGame exampleRankGame2 = RankGame.builder().member2(Member.builder().memberNo(memberNo).build()).build();
+        ExampleMatcher exampleMatcher2 = ExampleMatcher.matchingAll();
+        Example<RankGame> example2 = Example.of(exampleRankGame2, exampleMatcher2);
+        cnt+=repository.count(example2);
+
         List<Object[]> list = repository.findListByMemberNo(memberNo, start, end);
         List<MyRankDTO> rankGameDTOList = new ArrayList<>();
+        String tier = "";
+        Long point= 0L;
+        Long nextPoint=0L;
+        String memberName="";
         for (Object[] objArr : list) {
             if (objArr[6] == null) continue;
-            Long result = Long.valueOf(String.valueOf(objArr[6]));
+            Long result = Long.valueOf(String.valueOf(objArr[8]));
             Long member1No = Long.valueOf(String.valueOf(objArr[2]));
-            Long member2No = Long.valueOf(String.valueOf(objArr[4]));
+            Long member2No = Long.valueOf(String.valueOf(objArr[5]));
             MyRankDTO dto =
                     MyRankDTO.builder().rankNo(Long.valueOf(String.valueOf(objArr[1]))).build();
             if (memberNo == member1No) {
                 dto.setOpposingNo(member2No);
-                dto.setOpposingName(String.valueOf(objArr[5]));
+                dto.setOpposingName(String.valueOf(objArr[6]));
+                tier=String.valueOf(objArr[4]);
+                point=Long.valueOf(String.valueOf(objArr[9]));
+                memberName=String.valueOf(objArr[3]);
                 if (result == 0) dto.setGameResult("DRAW");
                 else if (result == 1) dto.setGameResult("WIN");
                 else if (result == 2) dto.setGameResult("LOSE");
             } else {
                 dto.setOpposingNo(member1No);
                 dto.setOpposingName(String.valueOf(objArr[3]));
+                tier=String.valueOf(objArr[7]);
+                point=Long.valueOf(String.valueOf(objArr[10]));
+                memberName=String.valueOf(objArr[6]);
                 if (result == 0) dto.setGameResult("DRAW");
                 else if (result == 1) dto.setGameResult("LOSE");
                 else if (result == 2) dto.setGameResult("WIN");
             }
             rankGameDTOList.add(dto);
         }
-        return rankGameDTOList;
+        if(tier.equals("BRONZE")) nextPoint=1000L;
+        else if(tier.equals("SILVER")) nextPoint=5000L;
+        else if(tier.equals("GOLD")) nextPoint=15000L;
+        rankGameDTOList.get(0).setMyTier(tier);
+        rankGameDTOList.get(0).setMyPoint(point);
+        rankGameDTOList.get(0).setNextPoint(nextPoint);
+        rankGameDTOList.get(0).setMemberName(memberName);
+        PageGroup<MyRankDTO> pg = new PageGroup<>(rankGameDTOList, currentPage, cnt);
+        return pg;
     }
 
     /* Create : 랭크게임 정보 저장 */

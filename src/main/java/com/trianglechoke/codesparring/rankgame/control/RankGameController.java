@@ -2,6 +2,7 @@ package com.trianglechoke.codesparring.rankgame.control;
 
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.service.RankGameServiceImpl;
@@ -22,11 +23,11 @@ public class RankGameController {
 
     /* 회원의 랭크 게임 전적 목록 조회하기 */
     @GetMapping("/{memberNo}/{currentPage}")
-    public List<MyRankDTO> list(@PathVariable Long memberNo, @PathVariable Integer currentPage) {
+    public PageGroup<MyRankDTO> list(@PathVariable Long memberNo, @PathVariable Integer currentPage) {
         try {
-            List<MyRankDTO> list =
-                    service.findAllByMemberNo(memberNo, (currentPage - 1) * 5 + 1, currentPage * 5);
-            if (list.size() == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
+            PageGroup<MyRankDTO> list =
+                    service.findAllByMemberNo(memberNo, currentPage);
+            if (list.getList().size() == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
             else return list;
         } catch (Exception e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);

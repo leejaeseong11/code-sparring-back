@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -22,9 +23,13 @@ public interface RankGameRepository extends JpaRepository<RankGame, Long> {
                             + "            r.rank_no,\n"
                             + "            r.member1_no,\n"
                             + "            m1.member_name AS member1_name,\n"
+                            + "            m1.member_tier AS member1_tier,\n"
                             + "            r.member2_no,\n"
                             + "            m2.member_name AS member2_name,\n"
-                            + "            r.game_result\n"
+                            + "            m2.member_tier AS member2_tier,\n"
+                            + "            r.game_result,\n"
+                            + "            m1.tier_point AS member1_point,\n"
+                            + "            m2.tier_point AS member2_point\n"
                             + "        FROM rank_game r\n"
                             + "        JOIN \"MEMBER\" m1 ON r.member1_no = m1.member_no\n"
                             + "        JOIN \"MEMBER\" m2 ON r.member2_no = m2.member_no\n"
@@ -34,7 +39,7 @@ public interface RankGameRepository extends JpaRepository<RankGame, Long> {
                             + ")\n"
                             + "WHERE rn BETWEEN :start AND :end",
             nativeQuery = true)
-    public List<Object[]> findListByMemberNo(Long memberNo, Integer start, Integer end);
+    public List<Object[]> findListByMemberNo(@Param("memberNo")Long memberNo, @Param("start")Integer start, @Param("end")Integer end);
 
     /* 랭크 게임 정보 추가 */
     @Modifying
@@ -44,5 +49,5 @@ public interface RankGameRepository extends JpaRepository<RankGame, Long> {
                             + "VALUES (rank_no_seq.NEXTVAL, :member1No, :member2No)",
             nativeQuery = true)
     @Transactional
-    public void saveRankGame(Long member1No, Long member2No);
+    public void saveRankGame(@Param("member1No")Long member1No, @Param("member2No")Long member2No);
 }

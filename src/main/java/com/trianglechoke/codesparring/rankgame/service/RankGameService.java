@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.rankgame.service;
 
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 
@@ -11,12 +12,11 @@ public interface RankGameService {
      * 회원의 랭크 게임 전적을 조회한다.
      *
      * @param memberNo 회원 번호
-     * @param start 시작
-     * @param end 끝
+     * @param currentPage 현재 페이지
      * @return 회원의 랭크 게임 전적 목록
      * @throws MyException
      */
-    public List<MyRankDTO> findAllByMemberNo(Long memberNo, Integer start, Integer end)
+    public PageGroup<MyRankDTO> findAllByMemberNo(Long memberNo, Integer currentPage)
             throws MyException;
 
     /**
