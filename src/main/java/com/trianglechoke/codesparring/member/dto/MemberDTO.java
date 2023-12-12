@@ -24,6 +24,9 @@ public class MemberDTO {
     private Integer memberExp;
     private String memberTier;
     private Long tierPoint;
+    private Long loseCnt;
+    private Long drawCnt;
+    private Long winCnt;
     private Integer rank;
 
     public Member toMember(PasswordEncoder passwordEncoder) {
