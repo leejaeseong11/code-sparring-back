@@ -1,11 +1,15 @@
 package com.trianglechoke.codesparring.room.service;
 
+import static com.trianglechoke.codesparring.exception.ErrorCode.QUIZ_NOT_FOUND;
 import static com.trianglechoke.codesparring.exception.ErrorCode.ROOM_NOT_FOUND;
 
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.room.dao.RoomRepository;
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
+import com.trianglechoke.codesparring.room.dto.RoomMemberDTO;
 import com.trianglechoke.codesparring.room.entity.Room;
 
 import jakarta.transaction.Transactional;
@@ -23,6 +27,7 @@ import java.util.Optional;
 @Service
 public class RoomServiceImpl implements RoomService {
     @Autowired private RoomRepository repository;
+    @Autowired private QuizRepository quizRepository;
 
     @Transactional
     public RoomDTO findRoomByRoomNo(Long roomNo) {
@@ -31,14 +36,33 @@ public class RoomServiceImpl implements RoomService {
         if (room.isPresent()) {
             Room selectedRoom = room.get();
             Quiz selectedQuiz = selectedRoom.getQuiz();
+            List<RoomMemberDTO> inputRoomMemberList = new ArrayList<>();
+            selectedRoom
+                    .getRoomMemberList()
+                    .forEach(
+                            roomMember -> {
+                                Member inputMember = roomMember.getId().getMember();
+                                inputRoomMemberList.add(
+                                        RoomMemberDTO.builder()
+                                                .memberNo(inputMember.getMemberNo())
+                                                .memberName(inputMember.getMemberName())
+                                                .memberProfileImg(inputMember.getMemberProfileImg())
+                                                .memberLevel(inputMember.getMemberLevel())
+                                                .memberTier(inputMember.getMemberTier())
+                                                .hostStatus(roomMember.getHostStatus())
+                                                .build());
+                            });
             return RoomDTO.builder()
                     .roomNo(selectedRoom.getRoomNo())
-                    .quiz(selectedQuiz)
+                    .quizNo(selectedQuiz.getQuizNo())
+                    .quizTitle(selectedQuiz.getQuizTitle())
+                    .quizContent(selectedQuiz.getQuizContent())
+                    .memberName(selectedQuiz.getMember().getMemberName())
                     .roomPwd(selectedRoom.getRoomPwd())
                     .codeShare(selectedRoom.getCodeShare())
                     .roomTitle(selectedRoom.getRoomTitle())
                     .roomStatus(selectedRoom.getRoomStatus())
-                    .roomMemberList(selectedRoom.getRoomMemberList())
+                    .roomMemberList(inputRoomMemberList)
                     .build();
         } else {
             throw new MyException(ROOM_NOT_FOUND);
@@ -55,13 +79,13 @@ public class RoomServiceImpl implements RoomService {
             selectedRoomList.add(
                     RoomDTO.builder()
                             .roomNo(room.getRoomNo())
-                            .quiz(selectedQuiz)
+                            //                            .quiz(selectedQuiz)
                             .roomPwd(room.getRoomPwd())
                             .codeShare(room.getCodeShare())
                             .roomTitle(room.getRoomTitle())
                             .roomStatus(room.getRoomStatus())
                             .roomDt(room.getRoomDt())
-                            .roomMemberList(room.getRoomMemberList())
+                            //                            .roomMemberList(room.getRoomMemberList())
                             .build());
         }
         return new PageImpl<>(selectedRoomList, pageable, roomList.getTotalElements());
@@ -69,10 +93,14 @@ public class RoomServiceImpl implements RoomService {
 
     @Transactional
     public Long addRoom(RoomDTO roomDTO) {
+        Optional<Quiz> selectedQuiz = quizRepository.findById(roomDTO.getQuizNo());
+        if (selectedQuiz.isEmpty()) {
+            throw new MyException(QUIZ_NOT_FOUND);
+        }
         return repository
                 .save(
                         Room.builder()
-                                .quiz(roomDTO.getQuiz())
+                                .quiz(selectedQuiz.get())
                                 .roomPwd(roomDTO.getRoomPwd())
                                 .codeShare(roomDTO.getCodeShare())
                                 .roomTitle(roomDTO.getRoomTitle())
