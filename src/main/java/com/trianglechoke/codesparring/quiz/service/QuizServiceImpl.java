@@ -28,13 +28,13 @@ public class QuizServiceImpl implements QuizService {
 
     /* Read : 전체 목록 조회 - default */
     public PageGroup<QuizDTO> findQuizList(Integer currentPage) throws MyException {
-        if(currentPage<1) currentPage=1;
-        int cntPerPage=10;
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
 
         int start;
         int end;
-        end=currentPage*cntPerPage;
-        start=(currentPage-1)*cntPerPage+1;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
 
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findQuizList(start, end);
@@ -60,20 +60,20 @@ public class QuizServiceImpl implements QuizService {
             }
             quizDTOList.add(dto);
         }
-        PageGroup<QuizDTO> pg=new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
         return pg;
     }
 
     /* Read : 전체 목록 조회 - 정답률순 */
     public PageGroup<QuizDTO> findOrderByCorrect(Integer currentPage, String order)
             throws MyException {
-        if(currentPage<1) currentPage=1;
-        int cntPerPage=10;
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
 
         int start;
         int end;
-        end=currentPage*cntPerPage;
-        start=(currentPage-1)*cntPerPage+1;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
 
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = new ArrayList<>();
@@ -101,20 +101,20 @@ public class QuizServiceImpl implements QuizService {
             }
             quizDTOList.add(dto);
         }
-        PageGroup<QuizDTO> pg=new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
         return pg;
     }
 
     /* Read : 티어 별 목록 조회 - default */
     public PageGroup<QuizDTO> findByQuizTier(String quizTier, Integer currentPage)
             throws MyException {
-        if(currentPage<1) currentPage=1;
-        int cntPerPage=10;
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
 
         int start;
         int end;
-        end=currentPage*cntPerPage;
-        start=(currentPage-1)*cntPerPage+1;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
 
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = repository.findListByQuizTier(quizTier, start, end);
@@ -143,20 +143,20 @@ public class QuizServiceImpl implements QuizService {
             }
             quizDTOList.add(dto);
         }
-        PageGroup<QuizDTO> pg=new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
         return pg;
     }
 
     /* Read : 티어 별 목록 조회 - 정답률순 */
     public PageGroup<QuizDTO> findByTierOrderByCorrect(
             String quizTier, Integer currentPage, String order) throws MyException {
-        if(currentPage<1) currentPage=1;
-        int cntPerPage=10;
+        if (currentPage < 1) currentPage = 1;
+        int cntPerPage = 10;
 
         int start;
         int end;
-        end=currentPage*cntPerPage;
-        start=(currentPage-1)*cntPerPage+1;
+        end = currentPage * cntPerPage;
+        start = (currentPage - 1) * cntPerPage + 1;
 
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = new ArrayList<>();
@@ -189,7 +189,7 @@ public class QuizServiceImpl implements QuizService {
             }
             quizDTOList.add(dto);
         }
-        PageGroup<QuizDTO> pg=new PageGroup<>(quizDTOList, currentPage, quizCnt);
+        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
         return pg;
     }
 
@@ -216,7 +216,9 @@ public class QuizServiceImpl implements QuizService {
             quizDTO.setQuizCorrectPercent("0.00%");
         } else {
             double tmp =
-                    (double) quizDTO.getQuizSuccessCnt() / (double) quizDTO.getQuizSubmitCnt() * 100;
+                    (double) quizDTO.getQuizSuccessCnt()
+                            / (double) quizDTO.getQuizSubmitCnt()
+                            * 100;
             BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
             quizDTO.setQuizCorrectPercent(result + "%");
         }

@@ -4,8 +4,6 @@ import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 
-import java.util.List;
-
 interface QuizService {
     /**
      * default (제출 횟수 순) 정렬된 전체 문제 목록을 start 부터 end 까지 조회한다.

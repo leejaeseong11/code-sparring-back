@@ -14,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/quiz")
 public class QuizController {
@@ -39,8 +37,7 @@ public class QuizController {
     public PageGroup<QuizDTO> quizListOrderByCorrect(
             @PathVariable Integer currentPage, @PathVariable String order) {
         try {
-            PageGroup<QuizDTO> list =
-                    service.findOrderByCorrect(currentPage, order);
+            PageGroup<QuizDTO> list = service.findOrderByCorrect(currentPage, order);
             if (list.getList().size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
         } catch (Exception e) {
@@ -53,8 +50,7 @@ public class QuizController {
     public PageGroup<QuizDTO> quizListByQuizTier(
             @PathVariable String quizTier, @PathVariable Integer currentPage) {
         try {
-            PageGroup<QuizDTO> list =
-                    service.findByQuizTier(quizTier, currentPage);
+            PageGroup<QuizDTO> list = service.findByQuizTier(quizTier, currentPage);
             if (list.getList().size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
         } catch (Exception e) {
@@ -70,8 +66,7 @@ public class QuizController {
             @PathVariable String order) {
         try {
             PageGroup<QuizDTO> list =
-                    service.findByTierOrderByCorrect(
-                            quizTier, currentPage, order);
+                    service.findByTierOrderByCorrect(quizTier, currentPage, order);
             if (list.getList().size() <= 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
         } catch (Exception e) {
