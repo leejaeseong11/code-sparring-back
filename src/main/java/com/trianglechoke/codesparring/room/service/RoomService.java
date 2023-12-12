@@ -2,16 +2,15 @@ package com.trianglechoke.codesparring.room.service;
 
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface RoomService {
     /* 대기방 상세 조회 */
     RoomDTO findRoomByRoomNo(Long roomNo);
 
     /* 방 목록 조회 */
-    List<RoomDTO> findRoomList(Pageable pageable);
+    Page<RoomDTO> findRoomList(Pageable pageable);
 
     /* 대기방 생성 */
     Long addRoom(RoomDTO roomDTO);

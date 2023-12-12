@@ -120,9 +120,23 @@ public class RoomServiceTest {
         when(repository.findByOrderByRoomStatusDescRoomDtDesc(any(Pageable.class)))
                 .thenReturn(mockRoomPage);
 
-        List<RoomDTO> roomDTOs = service.findRoomList(Pageable.unpaged());
+        Page<RoomDTO> roomDTOs = service.findRoomList(Pageable.unpaged());
 
-        assertThat(roomDTOs.size()).isEqualTo(3);
+        assertThat(roomDTOs.getContent().size()).isEqualTo(3);
+    }
+
+    @Test
+    @DisplayName("대기방 전체 조회 - 페이징 처리")
+    void findAllRoomPaging() {
+        Page<Room> mockRoomPage = new PageImpl<>(roomList, Pageable.ofSize(2), roomList.size());
+        when(repository.findByOrderByRoomStatusDescRoomDtDesc(Pageable.ofSize(2)))
+                .thenReturn(mockRoomPage);
+
+        Page<RoomDTO> roomDTOs = service.findRoomList(Pageable.ofSize(2));
+
+        assertThat(roomDTOs.getTotalElements()).isEqualTo(3);
+        assertThat(roomDTOs.getTotalPages()).isEqualTo(2);
+        assertThat(roomDTOs.getSize()).isEqualTo(2);
     }
 
     @Test
