@@ -7,10 +7,13 @@ import static org.mockito.Mockito.*;
 
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.room.dao.RoomRepository;
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
 import com.trianglechoke.codesparring.room.entity.Room;
+import com.trianglechoke.codesparring.room.entity.RoomMember;
+import com.trianglechoke.codesparring.room.entity.RoomMemberKey;
 import com.trianglechoke.codesparring.room.service.RoomServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +37,7 @@ public class RoomServiceTest {
     Room room;
     List<Room> roomList = new ArrayList<>();
     @Mock RoomRepository repository;
+    @Mock QuizRepository quizRepository;
 
     @InjectMocks RoomServiceImpl service;
 
@@ -65,7 +69,11 @@ public class RoomServiceTest {
                         .quizSubmitCnt(0)
                         .quizSuccessCnt(0)
                         .build();
-
+        List<RoomMember> roomMemberList = new ArrayList<>();
+        roomMemberList.add(
+                RoomMember.builder()
+                        .id(RoomMemberKey.builder().member(member).roomNo(1L).build())
+                        .build());
         room =
                 Room.builder()
                         .roomNo(1L)
@@ -73,6 +81,7 @@ public class RoomServiceTest {
                         .codeShare(0)
                         .roomTitle("테스트 방")
                         .roomDt(LocalDateTime.of(2023, 12, 1, 12, 20, 0))
+                        .roomMemberList(roomMemberList)
                         .roomStatus(1)
                         .build();
 
@@ -152,12 +161,13 @@ public class RoomServiceTest {
                         .roomDt(LocalDateTime.now())
                         .build();
         when(repository.save(any())).thenReturn(testRoom);
-
+        Quiz testQuiz = Quiz.builder().quizNo(1L).build();
+        when(quizRepository.findById(1L)).thenReturn(Optional.of(testQuiz));
         Long registeredRoomNo =
                 service.addRoom(
                         RoomDTO.builder()
                                 .roomNo(10L)
-                                .quiz(Quiz.builder().build())
+                                .quizNo(testQuiz.getQuizNo())
                                 .codeShare(1)
                                 .roomTitle("테스트 방3")
                                 .roomStatus(0)
