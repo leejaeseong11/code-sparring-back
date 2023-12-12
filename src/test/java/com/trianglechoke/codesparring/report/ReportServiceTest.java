@@ -110,8 +110,8 @@ public class ReportServiceTest {
     void findAllRoom() {
         Page<Report> mockReportPage = new PageImpl(reportList);
         when(reportRepository.findAll(any(Pageable.class))).thenReturn(mockReportPage);
-        List<ReportDTO> reportDTOs = reportService.findReportList(Pageable.unpaged());
-        assertThat(reportDTOs.size()).isEqualTo(3);
+        Page<ReportDTO> reportDTOs = reportService.findReportList(Pageable.unpaged());
+        assertThat(reportDTOs.getTotalElements()).isEqualTo(3);
     }
 
     @Test
@@ -145,7 +145,7 @@ public class ReportServiceTest {
     @Test
     @DisplayName("신고조치내역 추가")
     void addComment() {
-        reportService.addReportComment(1L, "추가함. 2023/12/04");
-        verify(reportRepository, times(1)).addReportComment(1L, "추가함. 2023/12/04");
+        reportService.modifyReportComment(1L, "추가함. 2023/12/04");
+        verify(reportRepository, times(1)).updateReportComment(1L, "추가함. 2023/12/04");
     }
 }

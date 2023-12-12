@@ -4,6 +4,7 @@ import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.service.ReportService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +20,18 @@ public class ReportController {
         return reportService.findReportByReportNo(reportNo);
     }
 
-    @GetMapping
-    public List<ReportDTO> findAll(Pageable pageable) {
+    @GetMapping("/all")
+    public Page<ReportDTO> findAll(Pageable pageable) {
+        return reportService.findReportList(pageable);
+    }
+
+    @GetMapping("/date")
+    public Page<ReportDTO> findByOrderByReportDateDesc(Pageable pageable) {
+        return reportService.findReportList(pageable);
+    }
+
+    @GetMapping("/commentNull")
+    public Page<ReportDTO> findByReportCommentIsNullOrderByReportDateDesc(Pageable pageable) {
         return reportService.findReportList(pageable);
     }
 
@@ -30,7 +41,7 @@ public class ReportController {
     }
 
     @PutMapping("/{reportNo}")
-    public void addComment(@PathVariable Long reportNo, String comment) {
-        reportService.addReportComment(reportNo, comment);
+    public void updateComment(@PathVariable Long reportNo, String comment) {
+        reportService.modifyReportComment(reportNo, comment);
     }
 }
