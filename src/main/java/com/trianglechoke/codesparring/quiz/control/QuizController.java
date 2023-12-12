@@ -27,7 +27,7 @@ public class QuizController {
             PageGroup<QuizDTO> list = service.findQuizList(currentPage);
             if (list.getList().size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
-        } catch (Exception e) {
+        } catch (MyException e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
         }
     }

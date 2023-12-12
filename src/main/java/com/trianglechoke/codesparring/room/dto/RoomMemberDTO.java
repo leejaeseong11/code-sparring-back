@@ -11,5 +11,9 @@ import lombok.*;
 public class RoomMemberDTO {
     private Long roomNo;
     private Long memberNo;
+    private String memberName;
+    private Integer memberProfileImg;
+    private Long memberLevel;
+    private String memberTier;
     private Integer hostStatus;
 }
