@@ -14,6 +14,7 @@ import com.trianglechoke.codesparring.member.jwt.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -81,7 +82,6 @@ public class AuthServiceImpl implements AuthService {
                         .build();
 
         refreshTokenRepository.save(refreshToken);
-
         // 5. 토큰 발급
         return tokenDTO;
     }
@@ -111,5 +111,15 @@ public class AuthServiceImpl implements AuthService {
         refreshTokenRepository.save(newRefreshToken);
         // 토큰 발급
         return tokenDto;
+    }
+
+    public ResponseCookie putTokenInCookie(final TokenDTO tokenDTO) {
+        return ResponseCookie.from("refreshToken", tokenDTO.getRefreshToken())
+                .maxAge(tokenDTO.getAccessTokenExpiresIn())
+                .path("/")
+                .sameSite("None")
+                .secure(true)
+                .httpOnly(true)
+                .build();
     }
 }
