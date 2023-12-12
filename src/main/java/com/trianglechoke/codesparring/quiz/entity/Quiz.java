@@ -95,16 +95,12 @@ public class Quiz {
         this.quizContent = quizDTO.getQuizContent();
         this.quizInput = quizDTO.getQuizInput();
         this.quizOutput = quizDTO.getQuizOutput();
+        this.quizTier = quizDTO.getQuizTier();
     }
 
     // [임시] 제출횟수 및 정답횟수 증가 메소드
     public void modifyQuizSubmit(Integer correct) {
         this.quizSubmitCnt++;
         if (correct == 1) this.quizSuccessCnt++;
-    }
-
-    // 티어 변경 메소드
-    public void modifyQuizTier(String tier) {
-        this.quizTier = tier;
     }
 }

@@ -26,6 +26,5 @@ public class QuizDTO {
     private String correctCodeUrl;
     private List<ReportDTO> reportDTOList;
     private List<TestcaseDTO> testcaseDTOList;
-    private Long quizCnt;
     private String quizCorrectPercent;
 }
