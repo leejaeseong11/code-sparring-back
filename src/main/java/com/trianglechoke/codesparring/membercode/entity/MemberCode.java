@@ -8,7 +8,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -32,4 +35,9 @@ public class MemberCode {
     @Column(name = "quiz_url", columnDefinition = "VARCHAR2(500)")
     @NotNull
     private String quizUrl;
+
+    @Column(name = "quiz_dt")
+    @ColumnDefault(value = "SYSDATE")
+    @NotNull
+    private LocalDateTime quizDt;
 }
