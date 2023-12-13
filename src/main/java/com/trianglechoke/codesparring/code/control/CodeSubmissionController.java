@@ -35,6 +35,7 @@ public class CodeSubmissionController {
 
     StringBuilder responseResult;
     int answerCount;
+    int numberCount;
 
     @PostMapping("/normalMode")
     public ResponseEntity<?> normalMode(
@@ -43,6 +44,7 @@ public class CodeSubmissionController {
             throws IOException {
 
         responseResult = new StringBuilder();
+        numberCount = 0;
         answerCount = 0;
 
         if (file.isEmpty()) {
@@ -51,9 +53,9 @@ public class CodeSubmissionController {
         }
 
         // 파일 저장
-        String fileName = file.getOriginalFilename(); // value값으로 지정
+        String fileName = file.getName(); //Main
         String filePath = filePATH;
-        File f = new File(filePath, fileName);
+        File f = new File(filePath, fileName + ".java");
 
         // 사용자 번호에 해당하는 폴더 생성
         String bucketPath = "/" + dto.getMemberNo();
@@ -107,6 +109,7 @@ public class CodeSubmissionController {
             throws IOException {
 
         responseResult = new StringBuilder();
+        numberCount = 0;
         answerCount = 0;
 
         if (file.isEmpty()) {
@@ -115,9 +118,9 @@ public class CodeSubmissionController {
         }
 
         // 파일 저장
-        String fileName = file.getOriginalFilename(); // value값으로 지정
+        String fileName = file.getName(); //Main
         String filePath = filePATH;
-        File f = new File(filePath, fileName);
+        File f = new File(filePath, fileName + ".java");
 
         try {
             file.transferTo(f);
@@ -233,17 +236,20 @@ public class CodeSubmissionController {
                 resultBuilder.append(resultLine).append(System.getProperty("line.separator"));
             }
             result = resultBuilder.toString();
-
             // 실행 결과를 한번에 리턴하기 위해 StringBuilder사용
             if (result.trim().equals(expectedOutput.trim())) {
-                responseResult.append("테스트 통과! 출력값:").append(result);
+                responseResult
+                        .append("테스트 ")
+                        .append(numberCount += 1)
+                        .append(": 통과!")
+                        .append(System.getProperty("line.separator"));
                 answerCount += 1;
             } else {
                 responseResult
-                        .append("테스트 실패! 예상 출력값:")
-                        .append(expectedOutput)
-                        .append(", 실제 출력값:")
-                        .append(result);
+                        .append("테스트 ")
+                        .append(numberCount += 1)
+                        .append(": 실패!")
+                        .append(System.getProperty("line.separator"));
             }
 
         } catch (Exception e) {
