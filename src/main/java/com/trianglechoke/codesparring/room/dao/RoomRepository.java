@@ -14,7 +14,8 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
 
     @Query(
             value =
-                    "SELECT * FROM room WHERE room_no LIKE CONCAT(:roomNo, '%') ORDER BY room_status DESC, room_dt DESC",
+                    "SELECT * FROM room WHERE room_no LIKE CONCAT(:roomNo, '%') ORDER BY"
+                        + " room_status DESC, room_dt DESC",
             nativeQuery = true)
     Page<Room> findByRoomNoStartsWithOrderByRoomStatusDescRoomDtDesc(
             @Param("roomNo") Long roomNo, Pageable pageable);
