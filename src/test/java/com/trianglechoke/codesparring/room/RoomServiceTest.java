@@ -129,7 +129,7 @@ public class RoomServiceTest {
         when(repository.findByOrderByRoomStatusDescRoomDtDesc(any(Pageable.class)))
                 .thenReturn(mockRoomPage);
 
-        Page<RoomDTO> roomDTOs = service.findRoomList(Pageable.unpaged());
+        Page<RoomDTO> roomDTOs = service.findRoomList(null, Pageable.unpaged());
 
         assertThat(roomDTOs.getContent().size()).isEqualTo(3);
     }
@@ -141,7 +141,7 @@ public class RoomServiceTest {
         when(repository.findByOrderByRoomStatusDescRoomDtDesc(Pageable.ofSize(2)))
                 .thenReturn(mockRoomPage);
 
-        Page<RoomDTO> roomDTOs = service.findRoomList(Pageable.ofSize(2));
+        Page<RoomDTO> roomDTOs = service.findRoomList(null, Pageable.ofSize(2));
 
         assertThat(roomDTOs.getTotalElements()).isEqualTo(3);
         assertThat(roomDTOs.getTotalPages()).isEqualTo(2);
