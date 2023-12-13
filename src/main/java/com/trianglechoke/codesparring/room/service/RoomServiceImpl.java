@@ -70,13 +70,25 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
-    public Page<RoomDTO> findRoomList(Pageable pageable) {
+    public Page<RoomDTO> findRoomList(Long searchNo, Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
-        Page<Room> roomList = repository.findByOrderByRoomStatusDescRoomDtDesc(pageable);
+        Page<Room> roomList;
+        if (searchNo == null) {
+            roomList = repository.findByOrderByRoomStatusDescRoomDtDesc(pageable);
+        } else {
+            roomList =
+                    repository.findByRoomNoStartsWithOrderByRoomStatusDescRoomDtDesc(
+                            searchNo, pageable);
+        }
 
         for (Room room : roomList) {
             Quiz selectedQuiz = room.getQuiz();
             List<RoomMemberDTO> inputRoomMemberList = new ArrayList<>();
+            if (searchNo != null) {
+                if (!room.getRoomNo().toString().startsWith(searchNo.toString())) {
+                    continue;
+                }
+            }
             room.getRoomMemberList()
                     .forEach(
                             roomMember -> {
