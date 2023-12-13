@@ -11,25 +11,15 @@ import java.util.List;
 
 public interface CodeRepository extends JpaRepository<MemberCode, Long> {
 
+    //    * quizNo에 해당하는 테스트케이스(testcase_no, testcase_output, testcase_input) 가져오기
     @Modifying
     @Query(
             value =
-                    "select tc.testcase_no, tc.testcase_output, ti.testcase_input\n"
-                            + "from testcase tc join testcase_input ti on(tc.testcase_no ="
-                            + " ti.testcase_no)\n"
-                            + "where tc.quiz_no=:quizNo",
+                    "select testcase_no, testcase_output, testcase_input\n"
+                            + "from testcase\n"
+                            + "where quiz_no=:quizNo",
             nativeQuery = true)
     public List<Object[]> findByQuizNo(@Param("quizNo") Long quizNo);
-
-    //    @Modifying
-    //    @Query(
-    //            value =
-    //                    "update quiz \n"
-    //                            + "set quiz_submit_cnt=quiz_submit_cnt+1, \n"
-    //                            + "    quiz_success_cnt=quiz_success_cnt+1\n"
-    //                            + "where quiz_no =:100",
-    //    nativeQuery = true)
-    //    public void modifyQuiz(@Param() String quizNo);
 
     @Query(
             value = "select *\n" + "from member_code\n" + "where member_no=:memberNo",

@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -37,6 +34,7 @@ public class CodeSubmissionController {
 
     StringBuilder responseResult;
     int answerCount;
+    int numberCount;
 
     @PostMapping("/normalMode")
     public ResponseEntity<?> normalMode(
@@ -45,6 +43,7 @@ public class CodeSubmissionController {
             throws IOException {
 
         responseResult = new StringBuilder();
+        numberCount = 0;
         answerCount = 0;
 
         if (file.isEmpty()) {
@@ -53,9 +52,9 @@ public class CodeSubmissionController {
         }
 
         // 파일 저장
-        String fileName = file.getOriginalFilename(); // value값으로 지정
+        String fileName = file.getName(); // Main
         String filePath = filePATH;
-        File f = new File(filePath, fileName);
+        File f = new File(filePath, fileName + ".java");
 
         // 사용자 번호에 해당하는 폴더 생성
         String bucketPath = "/" + dto.getMemberNo();
@@ -109,6 +108,7 @@ public class CodeSubmissionController {
             throws IOException {
 
         responseResult = new StringBuilder();
+        numberCount = 0;
         answerCount = 0;
 
         if (file.isEmpty()) {
@@ -117,9 +117,9 @@ public class CodeSubmissionController {
         }
 
         // 파일 저장
-        String fileName = file.getOriginalFilename(); // value값으로 지정
+        String fileName = file.getName(); // Main
         String filePath = filePATH;
-        File f = new File(filePath, fileName);
+        File f = new File(filePath, fileName + ".java");
 
         try {
             file.transferTo(f);
@@ -235,17 +235,20 @@ public class CodeSubmissionController {
                 resultBuilder.append(resultLine).append(System.getProperty("line.separator"));
             }
             result = resultBuilder.toString();
-
             // 실행 결과를 한번에 리턴하기 위해 StringBuilder사용
             if (result.trim().equals(expectedOutput.trim())) {
-                responseResult.append("테스트 통과! 출력값:").append(result);
+                responseResult
+                        .append("테스트 ")
+                        .append(numberCount += 1)
+                        .append(": 통과!")
+                        .append(System.getProperty("line.separator"));
                 answerCount += 1;
             } else {
                 responseResult
-                        .append("테스트 실패! 예상 출력값:")
-                        .append(expectedOutput)
-                        .append(", 실제 출력값:")
-                        .append(result);
+                        .append("테스트 ")
+                        .append(numberCount += 1)
+                        .append(": 실패!")
+                        .append(System.getProperty("line.separator"));
             }
 
         } catch (Exception e) {
@@ -253,5 +256,11 @@ public class CodeSubmissionController {
         }
         // -------------------------------실행 끝-------------------------------
 
+    }
+
+    @GetMapping("/{quizNo}")
+    public ResponseEntity<?> testcase(@PathVariable Long quizNo) {
+        List<CodeTestcaseDTO> list = service.findByQuizNo(String.valueOf(quizNo));
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
