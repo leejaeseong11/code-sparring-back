@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface CodeRepository extends JpaRepository<MemberCode, Long> {
 
-//    * quizNo에 해당하는 테스트케이스(testcase_no, testcase_output, testcase_input) 가져오기
+    //    * quizNo에 해당하는 테스트케이스(testcase_no, testcase_output, testcase_input) 가져오기
     @Modifying
     @Query(
             value =
