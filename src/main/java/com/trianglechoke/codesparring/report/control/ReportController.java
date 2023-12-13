@@ -6,6 +6,8 @@ import com.trianglechoke.codesparring.report.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class ReportController {
     }
 
     @GetMapping("/all")
-    public Page<ReportDTO> findAll(Pageable pageable) {
+    public Page<ReportDTO> findAll(@PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC) Pageable pageable) {
         return reportService.findReportList(pageable);
     }
 
@@ -31,7 +33,7 @@ public class ReportController {
     }
 
     @GetMapping("/commentNull")
-    public Page<ReportDTO> findByReportCommentIsNullOrderByReportDateDesc(Pageable pageable) {
+    public Page<ReportDTO> findByReportCommentIsNullOrderByReportDateDesc(@PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC) Pageable pageable) {
         return reportService.findReportList(pageable);
     }
 
