@@ -28,7 +28,7 @@ public class ReportController {
     }
 
     @GetMapping("/date")
-    public Page<ReportDTO> findByOrderByReportDateDesc(Pageable pageable) {
+    public Page<ReportDTO> findByOrderByReportDateDesc(@PageableDefault(size = 10) Pageable pageable) {
         return reportService.findReportList(pageable);
     }
 
