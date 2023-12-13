@@ -18,6 +18,9 @@ public class RoomDTO {
     private Long quizNo;
     private String quizTitle;
     private String quizContent;
+    private String quizTier;
+    private Integer quizSubmitCnt;
+    private Integer quizSuccessCnt;
     private String memberName;
     private String roomPwd;
     private Integer codeShare;

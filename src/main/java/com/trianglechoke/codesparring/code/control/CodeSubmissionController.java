@@ -8,7 +8,6 @@ import com.trianglechoke.codesparring.code.service.CodeService;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 
-import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +52,7 @@ public class CodeSubmissionController {
         }
 
         // 파일 저장
-        String fileName = file.getName(); //Main
+        String fileName = file.getName(); // Main
         String filePath = filePATH;
         File f = new File(filePath, fileName + ".java");
 
@@ -118,7 +117,7 @@ public class CodeSubmissionController {
         }
 
         // 파일 저장
-        String fileName = file.getName(); //Main
+        String fileName = file.getName(); // Main
         String filePath = filePATH;
         File f = new File(filePath, fileName + ".java");
 
@@ -264,5 +263,4 @@ public class CodeSubmissionController {
         List<CodeTestcaseDTO> list = service.findByQuizNo(String.valueOf(quizNo));
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-
 }
