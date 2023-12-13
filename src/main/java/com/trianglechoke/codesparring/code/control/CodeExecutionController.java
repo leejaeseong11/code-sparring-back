@@ -7,6 +7,7 @@ import com.trianglechoke.codesparring.exception.MyException;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,12 @@ import java.util.*;
 @RequestMapping("/code")
 public class CodeExecutionController {
 
-    private final CodeService service;
+    @Value("${file.filePATH}")
+    private String filePATH;
 
+    private final CodeService service;
     StringBuilder responseResult;
+    int numberCount;
 
     @PostMapping("/executeCode")
     public ResponseEntity<?> executeCode(
@@ -33,15 +37,15 @@ public class CodeExecutionController {
             throws IOException {
 
         responseResult = new StringBuilder();
-
-        // 전달받은 파일이 비었는지 확인
+        numberCount = 0;
         if (file.isEmpty()) {
+            // return "업로드된 파일이 비어 있습니다.";
             throw new MyException(ErrorCode.FILE_NOT_FOUND);
         }
 
         // 파일 저장
-        String fileName = file.getName(); // 원하는 파일명으로 변경
-        String filePath = "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/";
+        String fileName = file.getName(); // Main
+        String filePath = filePATH;
         File f = new File(filePath, fileName + ".java");
 
         try {
@@ -68,17 +72,16 @@ public class CodeExecutionController {
                 count++;
             }
         }
+
+        // 파일 이름에서 마지막 '.' 이후의 문자열 제거(.java제거)
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex != -1) {
+            fileName = fileName.substring(0, lastDotIndex);
+        }
+
         // 파일삭제
-        Files.delete(
-                Path.of(
-                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                + fileName
-                                + ".java"));
-        Files.delete(
-                Path.of(
-                        "C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/"
-                                + fileName
-                                + ".class"));
+        Files.delete(Path.of(filePath + fileName + ".java"));
+        Files.delete(Path.of(filePath + fileName + ".class"));
 
         String msg = String.valueOf(responseResult);
         return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -99,7 +102,7 @@ public class CodeExecutionController {
         try {
             Process p = pb.start();
             int exitCode = p.waitFor();
-            System.out.println("Process start exitCode=" + exitCode);
+            System.out.println("컴파일 Process start exitCode=" + exitCode);
 
             InputStream is = p.getInputStream();
             Scanner sc = new Scanner(is);
@@ -124,18 +127,25 @@ public class CodeExecutionController {
         // -------------------------------컴파일 끝-------------------------------
 
         // -------------------------------실행 시작-------------------------------
+        // 파일 이름에서 마지막 '.' 이후의 문자열 제거(.java제거)
+        int lastDotIndex = fileName.lastIndexOf('.');
+        if (lastDotIndex != -1) {
+            fileName = fileName.substring(0, lastDotIndex);
+        }
         cmd = "cmd.exe";
         arg = "/c";
-        pb =
-                new ProcessBuilder(
-                        cmd,
-                        arg,
-                        "java -cp C:/KOSA202307/GitHub/code-sparring-back/src/main/resources/ "
-                                + fileName
-                                + input2);
+        pb = new ProcessBuilder(cmd, arg, "java -cp " + filePATH + " " + fileName);
 
         try {
             Process p = pb.start();
+            OutputStream os = p.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
+
+            writer.write(
+                    "1\n" + "8 100\n" + "70 60 55 43 57 60 44 50\n" + "58 40 47 90 45 52 80 40");
+            writer.flush();
+            writer.close();
+
             int exitCode = p.waitFor();
             System.out.println("실행용 Process start exitCode=" + exitCode);
 
@@ -153,14 +163,33 @@ public class CodeExecutionController {
 
             // 실행 결과를 한번에 리턴하기 위해 StringBuilder사용
             if (result.trim().equals(expectedOutput.trim())) {
-                responseResult.append("테스트 통과! 출력값:").append(result);
-                ;
+                responseResult
+                        .append("테스트 ")
+                        .append(numberCount += 1)
+                        .append(": 통과!")
+                        .append(System.getProperty("line.separator"))
+                        .append("       출력값:")
+                        .append(System.getProperty("line.separator"))
+                        .append("       " + result)
+                        .append(System.getProperty("line.separator"))
+                        .append("--------------------------------------")
+                        .append(System.getProperty("line.separator"));
             } else {
                 responseResult
-                        .append("테스트 실패! 예상 출력값:")
-                        .append(expectedOutput)
-                        .append(", 실제 출력값:")
-                        .append(result);
+                        .append("테스트 ")
+                        .append(numberCount += 1)
+                        .append(": 실패!")
+                        .append(System.getProperty("line.separator"))
+                        .append("       예상 출력값:")
+                        .append(System.getProperty("line.separator"))
+                        .append("       " + expectedOutput)
+                        .append(System.getProperty("line.separator"))
+                        .append("       실제 출력값:")
+                        .append(System.getProperty("line.separator"))
+                        .append("       " + result)
+                        .append(System.getProperty("line.separator"))
+                        .append("--------------------------------------")
+                        .append(System.getProperty("line.separator"));
             }
 
         } catch (Exception e) {
