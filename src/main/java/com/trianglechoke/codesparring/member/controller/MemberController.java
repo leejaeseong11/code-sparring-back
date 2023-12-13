@@ -23,9 +23,14 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/my")
-    public ResponseEntity<?> findMemberInfoByMemberNo() {
+    public ResponseEntity<?> findMemberInfoByCurrentMemberNo() {
         return ResponseEntity.ok(
                 memberServiceImpl.findMemberInfoByMemberNo(SecurityUtil.getCurrentMemberNo()));
+    }
+
+    @GetMapping("/{memberNo}")
+    public ResponseEntity<?> findMemberInfoByMemberNo(@PathVariable Long memberNo) {
+        return ResponseEntity.ok(memberServiceImpl.findMemberInfoByMemberNo(memberNo));
     }
 
     @PutMapping("/my")
