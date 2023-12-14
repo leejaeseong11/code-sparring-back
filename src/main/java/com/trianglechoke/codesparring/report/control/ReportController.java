@@ -10,8 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/report")
 public class ReportController {
@@ -23,17 +21,22 @@ public class ReportController {
     }
 
     @GetMapping("/all")
-    public Page<ReportDTO> findAll(@PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Page<ReportDTO> findAll(
+            @PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC)
+                    Pageable pageable) {
         return reportService.findReportList(pageable);
     }
 
     @GetMapping("/date")
-    public Page<ReportDTO> findByOrderByReportDateDesc(@PageableDefault(size = 10) Pageable pageable) {
+    public Page<ReportDTO> findByOrderByReportDateDesc(
+            @PageableDefault(size = 10) Pageable pageable) {
         return reportService.findReportList(pageable);
     }
 
     @GetMapping("/commentNull")
-    public Page<ReportDTO> findByReportCommentIsNullOrderByReportDateDesc(@PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC) Pageable pageable) {
+    public Page<ReportDTO> findByReportCommentIsNullOrderByReportDateDesc(
+            @PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC)
+                    Pageable pageable) {
         return reportService.findReportList(pageable);
     }
 

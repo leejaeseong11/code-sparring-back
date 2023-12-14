@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ReportRepository extends JpaRepository<Report, Long> {
     Page<Report> findAll(Pageable pageable);
+
     Page<Report> findByOrderByReportDateDesc(Pageable pageable);
 
     Page<Report> findByReportCommentIsNullOrderByReportDateDesc(Pageable pageable);
@@ -23,8 +24,4 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
                             + "WHERE report_no = :reportNo",
             nativeQuery = true)
     void updateReportComment(@Param("reportNo") Long reportNo, @Param("comment") String comment);
-
-
-
-
 }
