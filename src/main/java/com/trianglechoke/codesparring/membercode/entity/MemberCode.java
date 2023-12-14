@@ -38,6 +38,5 @@ public class MemberCode {
 
     @Column(name = "quiz_dt")
     @ColumnDefault(value = "SYSDATE")
-    @NotNull
     private LocalDateTime quizDt;
 }
