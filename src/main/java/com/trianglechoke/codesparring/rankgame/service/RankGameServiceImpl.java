@@ -142,8 +142,8 @@ public class RankGameServiceImpl implements RankGameService {
     public Long modifyGameQuiz(Long rankNo) throws MyException {
         Optional<RankGame> optRg = repository.findById(rankNo);
         RankGame entity = optRg.get();
-        String tier=entity.getMember1().getMemberTier();
-        Long quizNo=matchingRandomQuiz(tier);
+        String tier = entity.getMember1().getMemberTier();
+        Long quizNo = matchingRandomQuiz(tier);
         entity.modifyGameQuiz(quizNo);
         repository.save(entity);
         return quizNo;
@@ -218,12 +218,12 @@ public class RankGameServiceImpl implements RankGameService {
         Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
         ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
         Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
-        List<Quiz> quizList=quizRepository.findAll(example);
+        List<Quiz> quizList = quizRepository.findAll(example);
 
         Random random = new Random();
-        int size=quizList.size();
-        int index=random.nextInt(size);
-        Long quizNo= quizList.get(index).getQuizNo();
+        int size = quizList.size();
+        int index = random.nextInt(size);
+        Long quizNo = quizList.get(index).getQuizNo();
 
         return quizNo;
     }

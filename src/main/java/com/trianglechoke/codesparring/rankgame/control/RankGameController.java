@@ -61,7 +61,7 @@ public class RankGameController {
     @PutMapping("/quiz/{rankNo}")
     public Long matchingQuiz(@PathVariable Long rankNo) {
         try {
-            Long quizNo=service.modifyGameQuiz(rankNo);
+            Long quizNo = service.modifyGameQuiz(rankNo);
             return quizNo;
         } catch (MyException e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_MODIFIED);
