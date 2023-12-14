@@ -53,4 +53,9 @@ public class MemberController {
             throw new RuntimeException("비밀번호가 일치하지 않습니다.");
         }
     }
+
+    @GetMapping("/ranking")
+    public ResponseEntity<?> rankedMember() {
+        return ResponseEntity.ok(memberServiceImpl.rankedMember());
+    }
 }
