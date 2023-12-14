@@ -3,6 +3,8 @@ package com.trianglechoke.codesparring.room.control;
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
 import com.trianglechoke.codesparring.room.service.RoomService;
 
+import jakarta.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +21,8 @@ public class RoomController {
     }
 
     @GetMapping
-    public Page<RoomDTO> findAll(Pageable pageable) {
-        return service.findRoomList(pageable);
+    public Page<RoomDTO> findAll(@PathParam("searchNo") Long searchNo, Pageable pageable) {
+        return service.findRoomList(searchNo, pageable);
     }
 
     @PostMapping

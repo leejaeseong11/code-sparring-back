@@ -10,7 +10,7 @@ public interface RoomService {
     RoomDTO findRoomByRoomNo(Long roomNo);
 
     /* 방 목록 조회 */
-    Page<RoomDTO> findRoomList(Pageable pageable);
+    Page<RoomDTO> findRoomList(Long searchNo, Pageable pageable);
 
     /* 대기방 생성 */
     Long addRoom(RoomDTO roomDTO);

@@ -35,6 +35,9 @@ public class MemberServiceImpl implements MemberService {
                         .memberExp(member.getMemberExp())
                         .memberTier(member.getMemberTier())
                         .tierPoint(member.getTierPoint())
+                        .winCnt(member.getWinCnt())
+                        .loseCnt(member.getLoseCnt())
+                        .drawCnt(member.getDrawCnt())
                         .build();
         return memberDTO;
     }

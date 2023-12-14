@@ -57,6 +57,9 @@ public class RoomServiceImpl implements RoomService {
                     .quizNo(selectedQuiz.getQuizNo())
                     .quizTitle(selectedQuiz.getQuizTitle())
                     .quizContent(selectedQuiz.getQuizContent())
+                    .quizTier(selectedQuiz.getQuizTier())
+                    .quizSubmitCnt(selectedQuiz.getQuizSubmitCnt())
+                    .quizSuccessCnt(selectedQuiz.getQuizSuccessCnt())
                     .memberName(selectedQuiz.getMember().getMemberName())
                     .roomPwd(selectedRoom.getRoomPwd())
                     .codeShare(selectedRoom.getCodeShare())
@@ -70,13 +73,25 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
-    public Page<RoomDTO> findRoomList(Pageable pageable) {
+    public Page<RoomDTO> findRoomList(Long searchNo, Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
-        Page<Room> roomList = repository.findByOrderByRoomStatusDescRoomDtDesc(pageable);
+        Page<Room> roomList;
+        if (searchNo == null) {
+            roomList = repository.findByOrderByRoomStatusDescRoomDtDesc(pageable);
+        } else {
+            roomList =
+                    repository.findByRoomNoStartsWithOrderByRoomStatusDescRoomDtDesc(
+                            searchNo, pageable);
+        }
 
         for (Room room : roomList) {
             Quiz selectedQuiz = room.getQuiz();
             List<RoomMemberDTO> inputRoomMemberList = new ArrayList<>();
+            if (searchNo != null) {
+                if (!room.getRoomNo().toString().startsWith(searchNo.toString())) {
+                    continue;
+                }
+            }
             room.getRoomMemberList()
                     .forEach(
                             roomMember -> {
@@ -97,6 +112,9 @@ public class RoomServiceImpl implements RoomService {
                             .quizNo(selectedQuiz.getQuizNo())
                             .quizTitle(selectedQuiz.getQuizTitle())
                             .quizContent(selectedQuiz.getQuizContent())
+                            .quizTier(selectedQuiz.getQuizTier())
+                            .quizSubmitCnt(selectedQuiz.getQuizSubmitCnt())
+                            .quizSuccessCnt(selectedQuiz.getQuizSuccessCnt())
                             .memberName(selectedQuiz.getMember().getMemberName())
                             .roomPwd(room.getRoomPwd())
                             .codeShare(room.getCodeShare())
