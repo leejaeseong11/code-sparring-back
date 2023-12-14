@@ -33,7 +33,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
                             + "        m.member_status = 1\n"
                             + ") \n"
                             + "WHERE \n"
-                            + "    rank <= 10",
+                            + "    rank <= 5",
             nativeQuery = true)
     List<Object[]> findRankedMember();
 }
