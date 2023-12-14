@@ -27,7 +27,18 @@ public class RankGameController {
             PageGroup<MyRankDTO> list = service.findAllByMemberNo(memberNo, currentPage);
             if (list.getList().size() == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
             else return list;
-        } catch (Exception e) {
+        } catch (MyException e) {
+            throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
+        }
+    }
+
+    /* 랭크 정보 조회하기 */
+    @GetMapping("/{rankNo}")
+    public RankGameDTO rank(@PathVariable Long rankNo) {
+        try {
+            RankGameDTO dto = service.findByRankNo(rankNo);
+            return dto;
+        } catch (MyException e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
         }
     }
@@ -38,10 +49,22 @@ public class RankGameController {
     public ResponseEntity<?> add(@RequestBody RankGameDTO rankGameDTO) {
         try {
             service.addRankGame(rankGameDTO);
+
             String msg = "랭크 정보 추가 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (MyException e) {
             throw new MyException(ErrorCode.RANK_NOT_SAVED);
+        }
+    }
+
+    /* 랭크 게임 문제 랜덤 매칭하기 */
+    @PutMapping("/quiz/{rankNo}")
+    public Long matchingQuiz(@PathVariable Long rankNo) {
+        try {
+            Long quizNo = service.modifyGameQuiz(rankNo);
+            return quizNo;
+        } catch (MyException e) {
+            throw new MyException(ErrorCode.RANK_GAME_NOT_MODIFIED);
         }
     }
 
@@ -55,7 +78,7 @@ public class RankGameController {
             service.modifyGameResult(rankGameDTO);
             String msg = "랭크게임 결과 업데이트 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (MyException e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_MODIFIED);
         }
     }
