@@ -55,22 +55,22 @@ public class RankGameServiceImpl implements RankGameService {
         Long point = 0L;
         Long nextPoint = 0L;
         String memberName = "";
-        Long win=0L, lose=0L, draw=0L;
+        Long win = 0L, lose = 0L, draw = 0L;
 
-        if(Long.valueOf(String.valueOf(list.get(0)[2]))==memberNo) {
+        if (Long.valueOf(String.valueOf(list.get(0)[2])) == memberNo) {
             tier = String.valueOf(list.get(0)[4]);
             point = Long.valueOf(String.valueOf(list.get(0)[9]));
             memberName = String.valueOf(list.get(0)[3]);
-            win=Long.valueOf(String.valueOf(list.get(0)[11]));
-            lose=Long.valueOf(String.valueOf(list.get(0)[12]));
-            draw=Long.valueOf(String.valueOf(list.get(0)[13]));
+            win = Long.valueOf(String.valueOf(list.get(0)[11]));
+            lose = Long.valueOf(String.valueOf(list.get(0)[12]));
+            draw = Long.valueOf(String.valueOf(list.get(0)[13]));
         } else {
             tier = String.valueOf(list.get(0)[7]);
             point = Long.valueOf(String.valueOf(list.get(0)[10]));
             memberName = String.valueOf(list.get(0)[6]);
-            win=Long.valueOf(String.valueOf(list.get(0)[14]));
-            lose=Long.valueOf(String.valueOf(list.get(0)[15]));
-            draw=Long.valueOf(String.valueOf(list.get(0)[16]));
+            win = Long.valueOf(String.valueOf(list.get(0)[14]));
+            lose = Long.valueOf(String.valueOf(list.get(0)[15]));
+            draw = Long.valueOf(String.valueOf(list.get(0)[16]));
         }
 
         for (Object[] objArr : list) {
