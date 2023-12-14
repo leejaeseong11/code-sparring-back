@@ -21,7 +21,4 @@ public interface AuthService {
 
     /* refreshToken 재발행 */
     TokenDTO reissue(TokenRequestDTO tokenRequestDTO);
-
-    /* refreshToken 쿠키에 넣기*/
-    ResponseCookie putTokenInCookie(final TokenDTO tokenDTO);
 }

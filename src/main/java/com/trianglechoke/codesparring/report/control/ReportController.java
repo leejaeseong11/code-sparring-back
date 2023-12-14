@@ -8,45 +8,55 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/report")
 public class ReportController {
     @Autowired private ReportService reportService;
 
-    @GetMapping("/{reportNo}")
-    public ReportDTO find(@PathVariable Long reportNo) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin/report/{reportNo}")
+    public ReportDTO findReportByReportNo(@PathVariable Long reportNo) {
         return reportService.findReportByReportNo(reportNo);
     }
 
-    @GetMapping("/all")
-    public Page<ReportDTO> findAll(
-            @PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC)
-                    Pageable pageable) {
-        return reportService.findReportList(pageable);
-    }
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @GetMapping("/admin/report/all")
+//    public Page<ReportDTO> findAll(
+//            @PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC)
+//                    Pageable pageable) {
+//        return reportService.findReportList(pageable);
+//    }
 
-    @GetMapping("/date")
-    public Page<ReportDTO> findByOrderByReportDateDesc(
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin/report/all")
+    public Page<ReportDTO> findAllByOrderByReportDateDesc(
             @PageableDefault(size = 10) Pageable pageable) {
-        return reportService.findReportList(pageable);
+        return reportService.findAllByOrderByReportDateDesc(pageable);
     }
-
-    @GetMapping("/commentNull")
-    public Page<ReportDTO> findByReportCommentIsNullOrderByReportDateDesc(
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin/report/commentNull")
+    public Page<ReportDTO> findAllByReportCommentIsNullOrderByReportDateDesc(
             @PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC)
                     Pageable pageable) {
-        return reportService.findReportList(pageable);
+        return reportService.findAllByReportCommentIsNullOrderByReportDateDesc(pageable);
     }
 
-    @PostMapping
+    @PostMapping("/report")
     public Long add(@RequestBody ReportDTO reportDTO) {
         return reportService.addReport(reportDTO);
     }
 
-    @PutMapping("/{reportNo}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/admin/report/{reportNo}")
     public void updateComment(@PathVariable Long reportNo, String comment) {
         reportService.modifyReportComment(reportNo, comment);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/admin/report/{reportNo}")
+    public void remove(@PathVariable Long reportNo) {
+        reportService.removeReport(reportNo);
     }
 }
