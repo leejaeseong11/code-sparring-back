@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +37,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Transactional
-    public List<ReportDTO> findReportList(Pageable pageable) {
+    public Page<ReportDTO> findReportList(Pageable pageable) {
         List<ReportDTO> selectedReportList = new ArrayList<>();
         Page<Report> reportList;
         reportList = reportRepository.findAll(pageable);
@@ -51,7 +52,7 @@ public class ReportServiceImpl implements ReportService {
                             .reportContent(report.getReportContent())
                             .build());
         }
-        return selectedReportList;
+        return new PageImpl<>(selectedReportList, pageable, reportList.getTotalElements());
     }
 
     @Transactional
@@ -71,7 +72,45 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void addReportComment(Long reportNo, String comment) {
-        reportRepository.addReportComment(reportNo, comment);
+    public void modifyReportComment(Long reportNo, String comment) {
+        reportRepository.updateReportComment(reportNo, comment);
+    }
+
+    @Transactional
+    public Page<ReportDTO> findByOrderByReportDateDesc(Pageable pageable) {
+        List<ReportDTO> selectedReportList = new ArrayList<>();
+        Page<Report> reportList;
+        reportList = reportRepository.findByOrderByReportDateDesc(pageable);
+        for (Report report : reportList) {
+            selectedReportList.add(
+                    ReportDTO.builder()
+                            .reportNo(report.getReportNo())
+                            .quizNo(report.getQuiz().getQuizNo())
+                            .memberName(report.getMember().getMemberName())
+                            .reportDate(report.getReportDate())
+                            .reportType(report.getReportType())
+                            .reportContent(report.getReportContent())
+                            .build());
+        }
+        return new PageImpl<>(selectedReportList, pageable, reportList.getTotalElements());
+    }
+
+    @Transactional
+    public Page<ReportDTO> findByReportCommentIsNullOrderByReportDateDesc(Pageable pageable) {
+        List<ReportDTO> selectedReportList = new ArrayList<>();
+        Page<Report> reportList;
+        reportList = reportRepository.findByReportCommentIsNullOrderByReportDateDesc(pageable);
+        for (Report report : reportList) {
+            selectedReportList.add(
+                    ReportDTO.builder()
+                            .reportNo(report.getReportNo())
+                            .quizNo(report.getQuiz().getQuizNo())
+                            .memberName(report.getMember().getMemberName())
+                            .reportDate(report.getReportDate())
+                            .reportType(report.getReportType())
+                            .reportContent(report.getReportContent())
+                            .build());
+        }
+        return new PageImpl<>(selectedReportList, pageable, reportList.getTotalElements());
     }
 }
