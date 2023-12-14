@@ -95,6 +95,7 @@ public class RankGameServiceImpl implements RankGameService {
             }
             rankGameDTOList.add(dto);
         }
+
         if (tier.equals("BRONZE")) nextPoint = 1000L;
         else if (tier.equals("SILVER")) nextPoint = 5000L;
         else if (tier.equals("GOLD")) nextPoint = 15000L;
@@ -109,12 +110,37 @@ public class RankGameServiceImpl implements RankGameService {
         return pg;
     }
 
+    /* Read : 랭크번호로 랭크 조회 */
+    public RankGameDTO findByRankNo(Long rankNo) throws MyException {
+        Optional<RankGame> optRg = repository.findById(rankNo);
+        RankGame entity = optRg.get();
+
+        RankGameDTO dto =
+                RankGameDTO.builder()
+                        .member1No(entity.getMember1().getMemberNo())
+                        .member2No(entity.getMember2().getMemberNo())
+                        .member1Name(entity.getMember1().getMemberName())
+                        .member2Name(entity.getMember2().getMemberName())
+                        .quizNo(entity.getQuizNo())
+                        .build();
+
+        return dto;
+    }
+
     /* Create : 랭크게임 정보 저장 */
     public void addRankGame(RankGameDTO rankGameDTO) throws MyException {
         if (rankGameDTO.getMember1No() == rankGameDTO.getMember2No()) {
             throw new MyException(ErrorCode.RANK_NOT_SAVED);
         }
         repository.saveRankGame(rankGameDTO.getMember1No(), rankGameDTO.getMember2No());
+    }
+
+    /* Update : 랭크게임 문제 업데이트 */
+    public void modifyGameQuiz(RankGameDTO rankGameDTO) throws MyException {
+        Optional<RankGame> optRg=repository.findById(rankGameDTO.getRankNo());
+        RankGame entity=optRg.get();
+        entity.modifyGameQuiz(rankGameDTO.getQuizNo());
+        repository.save(entity);
     }
 
     /* Update : 랭크게임 결과 업데이트 */
@@ -166,54 +192,16 @@ public class RankGameServiceImpl implements RankGameService {
     private void calculateRankPoint(RankGameDTO rankGameDTO) throws MyException {
         Optional<RankGame> optRG = repository.findById(rankGameDTO.getRankNo());
         RankGame rankGame = optRG.get();
-        // member 간 tier 계산
-        String tier1 = rankGame.getMember1().getMemberTier();
-        String tier2 = rankGame.getMember2().getMemberTier();
-
-        if (tier1.equals(tier2)) {
-            // 동일한 tier : 100만큼 증가하거나 감소
-            if (rankGameDTO.getGameResult() == 1) {
-                modifyPoint(rankGame.getMember1().getMemberNo(), 100);
-                modifyPoint(rankGame.getMember2().getMemberNo(), -100);
-                modifyCnt(rankGame.getMember1().getMemberNo(), 1);
-                modifyCnt(rankGame.getMember2().getMemberNo(), -1);
-            } else if (rankGameDTO.getGameResult() == 2) {
-                modifyPoint(rankGame.getMember1().getMemberNo(), -100);
-                modifyPoint(rankGame.getMember2().getMemberNo(), 100);
-                modifyCnt(rankGame.getMember1().getMemberNo(), -1);
-                modifyCnt(rankGame.getMember2().getMemberNo(), 1);
-            }
-        } else {
-            // 다른 tier : 100*(tier 차이+1)만큼 증가하거나 감소
-            // 더 높은 tier 가 이기거나 더 낮은 tier 가 지는 경우 : 50 증가/감소로 고정
-            String[] tiers = {"BRONZE", "SILVER", "GOLD", "PLATINUM"};
-            int idx1 = -1, idx2 = -1;
-            for (int i = 0; i < tiers.length; i++) {
-                if (tier1.equals(tiers[i])) idx1 = i;
-                if (tier2.equals(tiers[i])) idx2 = i;
-            }
-
-            if (rankGameDTO.getGameResult() == 1) {
-                if (idx1 > idx2) {
-                    modifyPoint(rankGame.getMember1().getMemberNo(), 50);
-                    modifyPoint(rankGame.getMember2().getMemberNo(), -50);
-                } else {
-                    modifyPoint(rankGame.getMember1().getMemberNo(), 100 * (idx2 - idx1 + 1));
-                    modifyPoint(rankGame.getMember2().getMemberNo(), -100 * (idx2 - idx1 + 1));
-                }
-                modifyCnt(rankGame.getMember1().getMemberNo(), 1);
-                modifyCnt(rankGame.getMember2().getMemberNo(), -1);
-            } else if (rankGameDTO.getGameResult() == 2) {
-                if (idx1 > idx2) {
-                    modifyPoint(rankGame.getMember1().getMemberNo(), -100 * (idx1 - idx2 + 1));
-                    modifyPoint(rankGame.getMember2().getMemberNo(), 100 * (idx1 - idx2 + 1));
-                } else {
-                    modifyPoint(rankGame.getMember1().getMemberNo(), -50);
-                    modifyPoint(rankGame.getMember2().getMemberNo(), 50);
-                }
-                modifyCnt(rankGame.getMember1().getMemberNo(), -1);
-                modifyCnt(rankGame.getMember2().getMemberNo(), 1);
-            }
+        if (rankGameDTO.getGameResult() == 1) {
+            modifyPoint(rankGame.getMember1().getMemberNo(), 100);
+            modifyPoint(rankGame.getMember2().getMemberNo(), -100);
+            modifyCnt(rankGame.getMember1().getMemberNo(), 1);
+            modifyCnt(rankGame.getMember2().getMemberNo(), -1);
+        } else if (rankGameDTO.getGameResult() == 2) {
+            modifyPoint(rankGame.getMember1().getMemberNo(), -100);
+            modifyPoint(rankGame.getMember2().getMemberNo(), 100);
+            modifyCnt(rankGame.getMember1().getMemberNo(), -1);
+            modifyCnt(rankGame.getMember2().getMemberNo(), 1);
         }
     }
 }
