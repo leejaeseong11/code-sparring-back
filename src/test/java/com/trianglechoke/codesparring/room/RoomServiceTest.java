@@ -89,20 +89,22 @@ public class RoomServiceTest {
         roomList.add(
                 Room.builder()
                         .roomNo(2L)
-                        .quiz(Quiz.builder().build())
+                        .quiz(quiz)
                         .codeShare(1)
                         .roomTitle("테스트 방2")
                         .roomDt(LocalDateTime.of(2023, 12, 1, 12, 0, 0))
+                        .roomMemberList(roomMemberList)
                         .roomStatus(0)
                         .build());
         roomList.add(
                 Room.builder()
                         .roomNo(3L)
-                        .quiz(Quiz.builder().build())
+                        .quiz(quiz)
                         .codeShare(1)
                         .roomTitle("테스트 방3")
                         .roomStatus(1)
                         .roomDt(LocalDateTime.of(2023, 12, 1, 12, 10, 0))
+                        .roomMemberList(roomMemberList)
                         .build());
     }
 
