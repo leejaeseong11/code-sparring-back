@@ -44,9 +44,18 @@ public class RankGame {
     @NotNull
     private Member member2;
 
+    // 문제 번호
+    @Column(name = "quiz_no")
+    private Long quizNo;
+
     // 랭크 게임 결과 (0은 draw, 1은 회원1 win, 2는 회원2 win)
     @Column(name = "game_result", columnDefinition = "NUMBER(1)")
     private Integer gameResult;
+
+    // 게임 문제 업데이트 메소드
+    public void modifyGameQuiz(Long quizNo) {
+        this.quizNo = quizNo;
+    }
 
     // 게임 결과 업데이트 메소드
     public void modifyGameResult(Integer result) {

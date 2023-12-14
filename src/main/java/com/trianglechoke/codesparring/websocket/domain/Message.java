@@ -10,7 +10,9 @@ public class Message {
         ROOM_ENTER, // 방 입장
         ROOM_TALK, // 방 채팅
         ROOM_QUIT, // 방 퇴장
-        RANK_MATCHING // 랭크 매칭
+        RANK_ENTER,
+        RANK_MATCHING,
+        RANK_QUIT
     }
 
     /* 메시지 타입 */
@@ -22,6 +24,8 @@ public class Message {
     private String message; // 메시지
 
     /* 랭크 매칭 */
+    private Long memberNo;
+    private String memberTier;
 
     /* 코드 공유 */
     private Long codeRoomNo; // 방 번호
