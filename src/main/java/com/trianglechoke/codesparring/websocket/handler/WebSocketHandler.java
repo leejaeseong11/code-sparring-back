@@ -32,7 +32,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message)
             throws Exception {
         String payload = message.getPayload();
-        System.out.println(payload);
         Message readMessage = objectMapper.readValue(payload, Message.class);
         MessageType readMessageType = readMessage.getType();
 
@@ -59,17 +58,17 @@ public class WebSocketHandler extends TextWebSocketHandler {
             if (readMessageType.equals(MessageType.ROOM_ENTER)) {
                 roomSessions.add(session);
                 // todo - set user nickname from member token (security util)
-                readMessage.setMessage("님이 입장했습니다.");
                 sendToEachSocket(
-                        roomSessions, new TextMessage(objectMapper.writeValueAsString(message)));
+                        roomSessions, new TextMessage(readMessage.getSender() + "님이 입장했습니다."));
             } else if (readMessageType.equals(MessageType.ROOM_TALK)) {
-                sendToEachSocket(roomSessions, message);
+                sendToEachSocket(
+                        roomSessions,
+                        new TextMessage(readMessage.getSender() + ": " + readMessage.getMessage()));
             } else if (readMessageType.equals(MessageType.ROOM_QUIT)) {
                 roomSessions.remove(session);
                 // todo - set user nickname from member token (security util)
-                readMessage.setMessage("님이 퇴장했습니다.");
                 sendToEachSocket(
-                        roomSessions, new TextMessage(objectMapper.writeValueAsString(message)));
+                        roomSessions, new TextMessage(readMessage.getSender() + "님이 퇴장했습니다."));
             }
         } else if (Arrays.asList(rankMessageTypes).contains(readMessageType)) {
             System.out.println(readMessageType);
