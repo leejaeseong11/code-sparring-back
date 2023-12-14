@@ -15,6 +15,5 @@ public class RankGameDTO {
     private String member1Name;
     private String member2Name;
     private Long quizNo;
-    private String rankTier;
     private Integer gameResult; // 0, 1, 2
 }

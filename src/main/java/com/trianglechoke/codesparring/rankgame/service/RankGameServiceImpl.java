@@ -4,7 +4,9 @@ import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.dto.PageGroup;
+import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.rankgame.dao.RankGameRepository;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 @Service
@@ -136,11 +139,14 @@ public class RankGameServiceImpl implements RankGameService {
     }
 
     /* Update : 랭크게임 문제 업데이트 */
-    public void modifyGameQuiz(RankGameDTO rankGameDTO) throws MyException {
-        Optional<RankGame> optRg = repository.findById(rankGameDTO.getRankNo());
+    public Long modifyGameQuiz(Long rankNo) throws MyException {
+        Optional<RankGame> optRg = repository.findById(rankNo);
         RankGame entity = optRg.get();
-        entity.modifyGameQuiz(rankGameDTO.getQuizNo());
+        String tier = entity.getMember1().getMemberTier();
+        Long quizNo = matchingRandomQuiz(tier);
+        entity.modifyGameQuiz(quizNo);
         repository.save(entity);
+        return quizNo;
     }
 
     /* Update : 랭크게임 결과 업데이트 */
@@ -203,5 +209,22 @@ public class RankGameServiceImpl implements RankGameService {
             modifyCnt(rankGame.getMember1().getMemberNo(), -1);
             modifyCnt(rankGame.getMember2().getMemberNo(), 1);
         }
+    }
+
+    @Autowired private QuizRepository quizRepository;
+
+    /* method : 문제 랜덤 매칭 */
+    private Long matchingRandomQuiz(String quizTier) throws MyException {
+        Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
+        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
+        Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
+        List<Quiz> quizList = quizRepository.findAll(example);
+
+        Random random = new Random();
+        int size = quizList.size();
+        int index = random.nextInt(size);
+        Long quizNo = quizList.get(index).getQuizNo();
+
+        return quizNo;
     }
 }
