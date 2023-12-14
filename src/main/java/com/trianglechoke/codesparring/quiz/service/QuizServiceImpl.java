@@ -14,6 +14,7 @@ import com.trianglechoke.codesparring.report.entity.Report;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -26,7 +27,7 @@ import java.util.Optional;
 public class QuizServiceImpl implements QuizService {
     @Autowired private QuizRepository repository;
 
-    /* Read : 전체 목록 조회 - default */
+    /* Read : 전체 목록 페이징 조회 - default */
     public PageGroup<QuizDTO> findQuizList(Integer currentPage) throws MyException {
         if (currentPage < 1) currentPage = 1;
         int cntPerPage = 10;
@@ -64,30 +65,52 @@ public class QuizServiceImpl implements QuizService {
         return pg;
     }
 
+    /* Read : 전체 목록 조회 - default */
+    public List<QuizDTO> findQuizList() throws MyException {
+        Sort sort = Sort.by(
+                Sort.Order.desc("quizSubmitCnt").nullsLast(),
+                Sort.Order.desc("quizSuccessCnt").nullsLast()
+        );
+        List<Quiz> quizList=repository.findAll(sort);
+        List<QuizDTO> quizDTOList=new ArrayList<>();
+        for(Quiz quiz: quizList) {
+            QuizDTO dto=QuizDTO.builder()
+                    .quizTitle(quiz.getQuizTitle())
+                    .quizNo(quiz.getQuizNo())
+                    .quizTier(quiz.getQuizTier())
+                    .quizSubmitCnt(quiz.getQuizSubmitCnt())
+                    .build();
+            if (quiz.getQuizSubmitCnt() == 0) {
+                dto.setQuizCorrectPercent("-");
+            } else if (quiz.getQuizSuccessCnt() == 0) {
+                dto.setQuizCorrectPercent("0.00%");
+            } else {
+                double tmp =
+                        (double) quiz.getQuizSuccessCnt() / (double) quiz.getQuizSubmitCnt() * 100;
+                BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+                dto.setQuizCorrectPercent(result + "%");
+            }
+            quizDTOList.add(dto);
+        }
+        return quizDTOList;
+    }
+
     /* Read : 전체 목록 조회 - 정답률순 */
-    public PageGroup<QuizDTO> findOrderByCorrect(Integer currentPage, String order)
+    public List<QuizDTO> findOrderByCorrect(String order)
             throws MyException {
-        if (currentPage < 1) currentPage = 1;
-        int cntPerPage = 10;
-
-        int start;
-        int end;
-        end = currentPage * cntPerPage;
-        start = (currentPage - 1) * cntPerPage + 1;
-
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = new ArrayList<>();
-        if (order.equals("asc")) quizList = repository.findOrderByCorrect(start, end);
-        else if (order.equals("desc")) quizList = repository.findOrderByCorrectDesc(start, end);
+        if (order.equals("asc")) quizList = repository.findOrderByCorrect();
+        else if (order.equals("desc")) quizList = repository.findOrderByCorrectDesc();
         Long quizCnt = repository.count();
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
-                            .quizNo(Long.valueOf(String.valueOf(objArr[1])))
-                            .quizTitle(String.valueOf(objArr[2]))
-                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[3])))
-                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
-                            .quizTier(String.valueOf(objArr[5]))
+                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
+                            .quizTitle(String.valueOf(objArr[1]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[2])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[3])))
+                            .quizTier(String.valueOf(objArr[4]))
                             .build();
             if (dto.getQuizSubmitCnt() == 0) {
                 dto.setQuizCorrectPercent("-");
@@ -101,11 +124,10 @@ public class QuizServiceImpl implements QuizService {
             }
             quizDTOList.add(dto);
         }
-        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
-        return pg;
+        return quizDTOList;
     }
 
-    /* Read : 티어 별 목록 조회 - default */
+    /* Read : 티어 별 목록 페이징 조회 - default */
     public PageGroup<QuizDTO> findByQuizTier(String quizTier, Integer currentPage)
             throws MyException {
         if (currentPage < 1) currentPage = 1;
@@ -147,34 +169,56 @@ public class QuizServiceImpl implements QuizService {
         return pg;
     }
 
-    /* Read : 티어 별 목록 조회 - 정답률순 */
-    public PageGroup<QuizDTO> findByTierOrderByCorrect(
-            String quizTier, Integer currentPage, String order) throws MyException {
-        if (currentPage < 1) currentPage = 1;
-        int cntPerPage = 10;
-
-        int start;
-        int end;
-        end = currentPage * cntPerPage;
-        start = (currentPage - 1) * cntPerPage + 1;
-
-        List<QuizDTO> quizDTOList = new ArrayList<>();
-        List<Object[]> quizList = new ArrayList<>();
-        if (order.equals("asc"))
-            quizList = repository.findByTierOrderByCorrect(quizTier, start, end);
-        else if (order.equals("desc"))
-            quizList = repository.findByTierOrderByCorrectDesc(quizTier, start, end);
+    /* Read : 티어 별 목록 조회 - default */
+    public List<QuizDTO> findByQuizTier(String quizTier) throws MyException {
         Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
         ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
         Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
-        Long quizCnt = repository.count(example);
+        Sort sort = Sort.by(
+                Sort.Order.desc("quizSubmitCnt").nullsLast(),
+                Sort.Order.desc("quizSuccessCnt").nullsLast()
+        );
+        List<Quiz> list=repository.findAll(example, sort);
+        List<QuizDTO> dtoList=new ArrayList<>();
+        for(Quiz quiz:list) {
+            QuizDTO dto=
+                    QuizDTO.builder()
+                            .quizTitle(quiz.getQuizTitle())
+                            .quizNo(quiz.getQuizNo())
+                            .quizTier(quiz.getQuizTier())
+                            .quizSubmitCnt(quiz.getQuizSubmitCnt())
+                            .build();
+            if (quiz.getQuizSubmitCnt() == 0) {
+                dto.setQuizCorrectPercent("-");
+            } else if (quiz.getQuizSuccessCnt() == 0) {
+                dto.setQuizCorrectPercent("0.00%");
+            } else {
+                double tmp =
+                        (double) quiz.getQuizSuccessCnt() / (double) quiz.getQuizSubmitCnt() * 100;
+                BigDecimal result = new BigDecimal(tmp).setScale(2, RoundingMode.HALF_UP);
+                dto.setQuizCorrectPercent(result + "%");
+            }
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
+    /* Read : 티어 별 목록 조회 - 정답률순 */
+    public List<QuizDTO> findByTierOrderByCorrect(
+            String quizTier, String order) throws MyException {
+        List<QuizDTO> quizDTOList = new ArrayList<>();
+        List<Object[]> quizList = new ArrayList<>();
+        if (order.equals("asc"))
+            quizList = repository.findByTierOrderByCorrect(quizTier);
+        else if (order.equals("desc"))
+            quizList = repository.findByTierOrderByCorrectDesc(quizTier);
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()
-                            .quizNo(Long.valueOf(String.valueOf(objArr[1])))
-                            .quizTitle(String.valueOf(objArr[2]))
-                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[3])))
-                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[4])))
+                            .quizNo(Long.valueOf(String.valueOf(objArr[0])))
+                            .quizTitle(String.valueOf(objArr[1]))
+                            .quizSubmitCnt(Integer.valueOf(String.valueOf(objArr[2])))
+                            .quizSuccessCnt(Integer.valueOf(String.valueOf(objArr[3])))
                             .quizTier(quizTier)
                             .build();
             if (dto.getQuizSubmitCnt() == 0) {
@@ -189,8 +233,7 @@ public class QuizServiceImpl implements QuizService {
             }
             quizDTOList.add(dto);
         }
-        PageGroup<QuizDTO> pg = new PageGroup<>(quizDTOList, currentPage, quizCnt);
-        return pg;
+        return quizDTOList;
     }
 
     /* Read : 문제 상세 조회 */

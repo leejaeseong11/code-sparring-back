@@ -19,7 +19,7 @@ public class QuizAdminController {
     @Autowired private QuizServiceImpl service;
     @Autowired private TestcaseServiceImpl serviceTc;
 
-    /* 문제 전체 목록 조회하기 : default */
+    /* 문제 전체 목록 페이징 조회하기 : default */
     @GetMapping("/list/{currentPage}")
     public PageGroup<QuizDTO> quizList(@PathVariable Integer currentPage) {
         try {
