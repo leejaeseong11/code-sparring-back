@@ -36,7 +36,7 @@ public class RankGameController {
     @GetMapping("/{rankNo}")
     public RankGameDTO rank(@PathVariable Long rankNo) {
         try {
-            RankGameDTO dto=service.findByRankNo(rankNo);
+            RankGameDTO dto = service.findByRankNo(rankNo);
             return dto;
         } catch (MyException e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);

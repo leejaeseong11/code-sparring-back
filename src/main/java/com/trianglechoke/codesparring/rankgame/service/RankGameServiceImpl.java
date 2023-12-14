@@ -137,8 +137,8 @@ public class RankGameServiceImpl implements RankGameService {
 
     /* Update : 랭크게임 문제 업데이트 */
     public void modifyGameQuiz(RankGameDTO rankGameDTO) throws MyException {
-        Optional<RankGame> optRg=repository.findById(rankGameDTO.getRankNo());
-        RankGame entity=optRg.get();
+        Optional<RankGame> optRg = repository.findById(rankGameDTO.getRankNo());
+        RankGame entity = optRg.get();
         entity.modifyGameQuiz(rankGameDTO.getQuizNo());
         repository.save(entity);
     }

@@ -2,7 +2,6 @@ package com.trianglechoke.codesparring.rankgame.entity;
 
 import com.trianglechoke.codesparring.member.entity.Member;
 
-import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -46,7 +45,7 @@ public class RankGame {
     private Member member2;
 
     // 문제 번호
-    @Column(name="quiz_no")
+    @Column(name = "quiz_no")
     private Long quizNo;
 
     // 랭크 게임 결과 (0은 draw, 1은 회원1 win, 2는 회원2 win)
@@ -55,7 +54,7 @@ public class RankGame {
 
     // 게임 문제 업데이트 메소드
     public void modifyGameQuiz(Long quizNo) {
-        this.quizNo=quizNo;
+        this.quizNo = quizNo;
     }
 
     // 게임 결과 업데이트 메소드

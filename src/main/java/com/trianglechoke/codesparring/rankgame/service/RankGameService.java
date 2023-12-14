@@ -19,7 +19,8 @@ public interface RankGameService {
 
     /**
      * 랭크 번호에 해당하는 랭크 정보를 조회한다.
-     * @param rankNo  랭크 번호
+     *
+     * @param rankNo 랭크 번호
      * @return 랭크 정보
      * @throws MyException
      */
@@ -35,6 +36,7 @@ public interface RankGameService {
 
     /**
      * 랭크 게임 문제를 업데이트한다.
+     *
      * @param rankGameDTO 랭크 객체
      * @throws MyException
      */
