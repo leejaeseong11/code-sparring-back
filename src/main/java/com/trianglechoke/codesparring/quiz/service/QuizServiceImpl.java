@@ -229,6 +229,7 @@ public class QuizServiceImpl implements QuizService {
                             .reportNo(r.getReportNo())
                             .memberName(r.getMember().getMemberName())
                             .reportComment(r.getReportComment())
+                            .reportDate(r.getReportDate())
                             .build();
             reportDTOList.add(dto);
         }

@@ -18,4 +18,8 @@ public class MyRankDTO {
     String myTier; // 회원 티어
     Long myPoint; // 회원 현재 포인트
     Long nextPoint; // 다음 랭크가 되기위한 포인트
+
+    Long win;
+    Long lose;
+    Long draw;
 }
