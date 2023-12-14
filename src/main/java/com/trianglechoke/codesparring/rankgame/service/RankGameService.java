@@ -37,10 +37,10 @@ public interface RankGameService {
     /**
      * 랭크 게임 문제를 업데이트한다.
      *
-     * @param rankGameDTO 랭크 객체
+     * @param rankNo 랭크 번호
      * @throws MyException
      */
-    public void modifyGameQuiz(RankGameDTO rankGameDTO) throws MyException;
+    public Long modifyGameQuiz(Long rankNo) throws MyException;
 
     /**
      * 랭크 게임 결과를 업데이트한다.
