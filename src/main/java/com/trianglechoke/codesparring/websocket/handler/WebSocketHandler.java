@@ -25,11 +25,14 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper;
     private final RoomService roomService;
     private final Map<Long, Set<WebSocketSession>> roomSessionMap = new HashMap<>();
+    private final Map<Long, WebSocketSession> memberSessionMap = new HashMap<>();
+    private final Map<Long, String> memberTierMap = new HashMap<>();
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message)
             throws Exception {
         String payload = message.getPayload();
+        System.out.println(payload);
         Message readMessage = objectMapper.readValue(payload, Message.class);
         MessageType readMessageType = readMessage.getType();
 
@@ -38,6 +41,13 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 new MessageType[] {
                     MessageType.ROOM_ENTER, MessageType.ROOM_TALK, MessageType.ROOM_QUIT,
                 };
+
+        // rank payload type
+        MessageType[] rankMessageTypes =
+                new MessageType[] {
+                    MessageType.RANK_ENTER, MessageType.RANK_MATCHING, MessageType.RANK_QUIT,
+                };
+
         if (Arrays.asList(roomMessageTypes).contains(readMessageType)) {
             Long roomNo = readMessage.getRoomNo();
             if (!roomSessionMap.containsKey(roomNo)) {
@@ -60,6 +70,35 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 readMessage.setMessage("님이 퇴장했습니다.");
                 sendToEachSocket(
                         roomSessions, new TextMessage(objectMapper.writeValueAsString(message)));
+            }
+        } else if (Arrays.asList(rankMessageTypes).contains(readMessageType)) {
+            System.out.println(readMessageType);
+            Long memberNo = readMessage.getMemberNo();
+
+            if (readMessageType.equals(MessageType.RANK_ENTER)) {
+            } else if (readMessageType.equals(MessageType.RANK_MATCHING)) {
+                memberSessionMap.put(memberNo, session);
+                memberTierMap.put(memberNo, readMessage.getMemberTier());
+                Set<WebSocketSession> memberSessions = new HashSet<>();
+                for (Map.Entry<Long, String> elem : memberTierMap.entrySet()) {
+                    Long no = elem.getKey();
+                    String tier = elem.getValue();
+                    System.out.println(memberTierMap.entrySet());
+                    if (no.equals(memberNo)) continue;
+                    System.out.println(no + tier);
+                    if (tier.equals(readMessage.getMemberTier())) {
+                        readMessage.setMessage(memberNo + "/" + no);
+                        memberSessions.add(memberSessionMap.get(no));
+                        memberSessions.add(memberSessionMap.get(memberNo));
+                        System.out.println("matching success");
+                        sendToEachSocket(
+                                memberSessions,
+                                new TextMessage(objectMapper.writeValueAsString(readMessage)));
+                        break;
+                    }
+                }
+            } else if (readMessageType.equals(MessageType.RANK_QUIT)) {
+
             }
         }
     }
