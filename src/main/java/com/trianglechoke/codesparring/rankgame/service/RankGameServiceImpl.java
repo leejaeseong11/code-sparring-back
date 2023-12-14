@@ -30,7 +30,7 @@ public class RankGameServiceImpl implements RankGameService {
     public PageGroup<MyRankDTO> findAllByMemberNo(Long memberNo, Integer currentPage)
             throws MyException {
         if (currentPage < 1) currentPage = 1;
-        Integer cntPerPage = 10;
+        Integer cntPerPage = 9;
 
         Integer start;
         Integer end;
@@ -55,6 +55,24 @@ public class RankGameServiceImpl implements RankGameService {
         Long point = 0L;
         Long nextPoint = 0L;
         String memberName = "";
+        Long win=0L, lose=0L, draw=0L;
+
+        if(Long.valueOf(String.valueOf(list.get(0)[2]))==memberNo) {
+            tier = String.valueOf(list.get(0)[4]);
+            point = Long.valueOf(String.valueOf(list.get(0)[9]));
+            memberName = String.valueOf(list.get(0)[3]);
+            win=Long.valueOf(String.valueOf(list.get(0)[11]));
+            lose=Long.valueOf(String.valueOf(list.get(0)[12]));
+            draw=Long.valueOf(String.valueOf(list.get(0)[13]));
+        } else {
+            tier = String.valueOf(list.get(0)[7]);
+            point = Long.valueOf(String.valueOf(list.get(0)[10]));
+            memberName = String.valueOf(list.get(0)[6]);
+            win=Long.valueOf(String.valueOf(list.get(0)[14]));
+            lose=Long.valueOf(String.valueOf(list.get(0)[15]));
+            draw=Long.valueOf(String.valueOf(list.get(0)[16]));
+        }
+
         for (Object[] objArr : list) {
             if (objArr[6] == null) continue;
             Long result = Long.valueOf(String.valueOf(objArr[8]));
@@ -65,18 +83,12 @@ public class RankGameServiceImpl implements RankGameService {
             if (memberNo == member1No) {
                 dto.setOpposingNo(member2No);
                 dto.setOpposingName(String.valueOf(objArr[6]));
-                tier = String.valueOf(objArr[4]);
-                point = Long.valueOf(String.valueOf(objArr[9]));
-                memberName = String.valueOf(objArr[3]);
                 if (result == 0) dto.setGameResult("DRAW");
                 else if (result == 1) dto.setGameResult("WIN");
                 else if (result == 2) dto.setGameResult("LOSE");
             } else {
                 dto.setOpposingNo(member1No);
                 dto.setOpposingName(String.valueOf(objArr[3]));
-                tier = String.valueOf(objArr[7]);
-                point = Long.valueOf(String.valueOf(objArr[10]));
-                memberName = String.valueOf(objArr[6]);
                 if (result == 0) dto.setGameResult("DRAW");
                 else if (result == 1) dto.setGameResult("LOSE");
                 else if (result == 2) dto.setGameResult("WIN");
@@ -90,6 +102,9 @@ public class RankGameServiceImpl implements RankGameService {
         rankGameDTOList.get(0).setMyPoint(point);
         rankGameDTOList.get(0).setNextPoint(nextPoint);
         rankGameDTOList.get(0).setMemberName(memberName);
+        rankGameDTOList.get(0).setWin(win);
+        rankGameDTOList.get(0).setLose(lose);
+        rankGameDTOList.get(0).setDraw(draw);
         PageGroup<MyRankDTO> pg = new PageGroup<>(rankGameDTOList, currentPage, cnt);
         return pg;
     }
