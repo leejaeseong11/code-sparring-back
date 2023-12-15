@@ -67,19 +67,20 @@ public class QuizServiceImpl implements QuizService {
 
     /* Read : 전체 목록 조회 - default */
     public List<QuizDTO> findQuizList() throws MyException {
-        Sort sort = Sort.by(
-                Sort.Order.desc("quizSubmitCnt").nullsLast(),
-                Sort.Order.desc("quizSuccessCnt").nullsLast()
-        );
-        List<Quiz> quizList=repository.findAll(sort);
-        List<QuizDTO> quizDTOList=new ArrayList<>();
-        for(Quiz quiz: quizList) {
-            QuizDTO dto=QuizDTO.builder()
-                    .quizTitle(quiz.getQuizTitle())
-                    .quizNo(quiz.getQuizNo())
-                    .quizTier(quiz.getQuizTier())
-                    .quizSubmitCnt(quiz.getQuizSubmitCnt())
-                    .build();
+        Sort sort =
+                Sort.by(
+                        Sort.Order.desc("quizSubmitCnt").nullsLast(),
+                        Sort.Order.desc("quizSuccessCnt").nullsLast());
+        List<Quiz> quizList = repository.findAll(sort);
+        List<QuizDTO> quizDTOList = new ArrayList<>();
+        for (Quiz quiz : quizList) {
+            QuizDTO dto =
+                    QuizDTO.builder()
+                            .quizTitle(quiz.getQuizTitle())
+                            .quizNo(quiz.getQuizNo())
+                            .quizTier(quiz.getQuizTier())
+                            .quizSubmitCnt(quiz.getQuizSubmitCnt())
+                            .build();
             if (quiz.getQuizSubmitCnt() == 0) {
                 dto.setQuizCorrectPercent("-");
             } else if (quiz.getQuizSuccessCnt() == 0) {
@@ -96,8 +97,7 @@ public class QuizServiceImpl implements QuizService {
     }
 
     /* Read : 전체 목록 조회 - 정답률순 */
-    public List<QuizDTO> findOrderByCorrect(String order)
-            throws MyException {
+    public List<QuizDTO> findOrderByCorrect(String order) throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = new ArrayList<>();
         if (order.equals("asc")) quizList = repository.findOrderByCorrect();
@@ -174,14 +174,14 @@ public class QuizServiceImpl implements QuizService {
         Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
         ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
         Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
-        Sort sort = Sort.by(
-                Sort.Order.desc("quizSubmitCnt").nullsLast(),
-                Sort.Order.desc("quizSuccessCnt").nullsLast()
-        );
-        List<Quiz> list=repository.findAll(example, sort);
-        List<QuizDTO> dtoList=new ArrayList<>();
-        for(Quiz quiz:list) {
-            QuizDTO dto=
+        Sort sort =
+                Sort.by(
+                        Sort.Order.desc("quizSubmitCnt").nullsLast(),
+                        Sort.Order.desc("quizSuccessCnt").nullsLast());
+        List<Quiz> list = repository.findAll(example, sort);
+        List<QuizDTO> dtoList = new ArrayList<>();
+        for (Quiz quiz : list) {
+            QuizDTO dto =
                     QuizDTO.builder()
                             .quizTitle(quiz.getQuizTitle())
                             .quizNo(quiz.getQuizNo())
@@ -204,14 +204,12 @@ public class QuizServiceImpl implements QuizService {
     }
 
     /* Read : 티어 별 목록 조회 - 정답률순 */
-    public List<QuizDTO> findByTierOrderByCorrect(
-            String quizTier, String order) throws MyException {
+    public List<QuizDTO> findByTierOrderByCorrect(String quizTier, String order)
+            throws MyException {
         List<QuizDTO> quizDTOList = new ArrayList<>();
         List<Object[]> quizList = new ArrayList<>();
-        if (order.equals("asc"))
-            quizList = repository.findByTierOrderByCorrect(quizTier);
-        else if (order.equals("desc"))
-            quizList = repository.findByTierOrderByCorrectDesc(quizTier);
+        if (order.equals("asc")) quizList = repository.findByTierOrderByCorrect(quizTier);
+        else if (order.equals("desc")) quizList = repository.findByTierOrderByCorrectDesc(quizTier);
         for (Object[] objArr : quizList) {
             QuizDTO dto =
                     QuizDTO.builder()

@@ -18,6 +18,7 @@ interface QuizService {
 
     /**
      * default (제출 횟수 순) 정렬된 전체 문제 목록을 조회한다.
+     *
      * @return 전체 문제 목록
      * @throws MyException
      */
@@ -25,12 +26,12 @@ interface QuizService {
 
     /**
      * 정답률순으로 정렬된 전체 문제 목록을 조회한다.
+     *
      * @param order asc/desc
      * @return 전체 문제 목록
      * @throws MyException
      */
-    public List<QuizDTO> findOrderByCorrect(String order)
-            throws MyException;
+    public List<QuizDTO> findOrderByCorrect(String order) throws MyException;
 
     /**
      * default (제출 횟수 순) 정렬된 tier 에 해당하는 문제 목록을 start 부터 end 까지 조회한다.
@@ -51,8 +52,7 @@ interface QuizService {
      * @return 티어 별 문제 목록
      * @throws MyException
      */
-    public List<QuizDTO> findByTierOrderByCorrect(
-            String quizTier, String order) throws MyException;
+    public List<QuizDTO> findByTierOrderByCorrect(String quizTier, String order) throws MyException;
 
     /**
      * quizNo 에 해당하는 문제의 상세 정보를 조회한다.

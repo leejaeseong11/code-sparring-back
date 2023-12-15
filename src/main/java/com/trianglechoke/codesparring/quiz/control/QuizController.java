@@ -1,7 +1,6 @@
 package com.trianglechoke.codesparring.quiz.control;
 
 import com.trianglechoke.codesparring.exception.*;
-import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.service.QuizServiceImpl;
@@ -48,8 +47,7 @@ public class QuizController {
 
     /* 티어 별 문제 목록 조회하기 : default */
     @GetMapping("/tier/{quizTier}")
-    public List<QuizDTO> quizListByQuizTier(
-            @PathVariable String quizTier) {
+    public List<QuizDTO> quizListByQuizTier(@PathVariable String quizTier) {
         try {
             List<QuizDTO> list = service.findByQuizTier(quizTier);
             if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
@@ -62,11 +60,9 @@ public class QuizController {
     /* 티어 별 문제 목록 조회하기 : 정답률 */
     @GetMapping("/tier/{quizTier}/{order}")
     public List<QuizDTO> quizListByQuizTier(
-            @PathVariable String quizTier,
-            @PathVariable String order) {
+            @PathVariable String quizTier, @PathVariable String order) {
         try {
-            List<QuizDTO> list =
-                    service.findByTierOrderByCorrect(quizTier, order);
+            List<QuizDTO> list = service.findByTierOrderByCorrect(quizTier, order);
             if (list.size() <= 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
         } catch (MyException e) {

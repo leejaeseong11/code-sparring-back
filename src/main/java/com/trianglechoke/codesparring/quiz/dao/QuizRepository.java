@@ -28,8 +28,8 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
             value =
                     "SELECT quiz_no, quiz_title, quiz_submit_cnt, quiz_success_cnt,"
                             + " quiz_tier\n"
-                            + "\t\tFROM quiz WHERE quiz_submit_cnt<>0\n" +
-                            "ORDER BY CASE \n"
+                            + "\t\tFROM quiz WHERE quiz_submit_cnt<>0\n"
+                            + "ORDER BY CASE \n"
                             + "        WHEN quiz_success_cnt = 0 THEN NULL\n"
                             + "        ELSE quiz_submit_cnt / quiz_success_cnt\n"
                             + "    END",
@@ -88,6 +88,5 @@ public interface QuizRepository extends JpaRepository<Quiz, Long> {
                             + "        ELSE quiz_submit_cnt / quiz_success_cnt\n"
                             + "    END desc",
             nativeQuery = true)
-    public List<Object[]> findByTierOrderByCorrectDesc(
-            @Param("quizTier") String quizTier);
+    public List<Object[]> findByTierOrderByCorrectDesc(@Param("quizTier") String quizTier);
 }
