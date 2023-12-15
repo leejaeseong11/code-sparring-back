@@ -13,18 +13,18 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/mypage")
+@RequestMapping("/mycode")
 public class MyCodeController {
     private final CodeService service;
 
-    @GetMapping("/mycode/{memberNo}")
+    @GetMapping("/{memberNo}")
     public ResponseEntity<?> myCode(@PathVariable Long memberNo) {
         List<MemberCodeDTO> list = service.findByMemberNo(memberNo);
         System.out.println(list);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @GetMapping("/mycode/{memberNo}/{quizNo}")
+    @GetMapping("/{memberNo}/{quizNo}")
     public ResponseEntity<?> myCodeInfo(@PathVariable Long memberNo, @PathVariable Long quizNo) {
         String msg = service.findByMemberCodeInfo(memberNo, quizNo);
         return new ResponseEntity<>(msg, HttpStatus.OK);
