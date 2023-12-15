@@ -13,9 +13,9 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -44,10 +44,20 @@ public class CodeServiceImpl implements CodeService {
     // MemberCode 회원번호, 문제번호, 정답여부 insert
     @Override
     public void writeMemberCode(Long memberNo, Long quizNo, Integer correct, String codeUrl) {
+        //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime quizDt = LocalDateTime.now();
+        System.out.println(quizDt);
+
         MemberCodeEmbedded embedded =
                 MemberCodeEmbedded.builder().memberNo(memberNo).quizNo(quizNo).build();
+
         MemberCode memberCode =
-                MemberCode.builder().id(embedded).quizCorrect(correct).quizUrl(codeUrl).build();
+                MemberCode.builder()
+                        .id(embedded)
+                        .quizCorrect(correct)
+                        .quizUrl(codeUrl)
+                        .quizDt(quizDt)
+                        .build();
         codeRepository.save(memberCode);
         modifyQuizSubmit(quizNo, correct);
     }
@@ -67,14 +77,17 @@ public class CodeServiceImpl implements CodeService {
 
         List<MemberCodeDTO> mcDTOlist = new ArrayList<>();
         List<Object[]> list = codeRepository.findByMemberNo(memberNo);
-
+        System.out.println(list);
         for (Object[] objArr : list) {
+            Timestamp timestamp = (Timestamp) objArr[4];
+            LocalDateTime quizDt = timestamp.toLocalDateTime();
             MemberCodeDTO dto =
                     MemberCodeDTO.builder()
                             .memberNo(memberNo)
                             .quizNo((Long) objArr[2])
                             .quizCorrect((Integer) objArr[0])
                             .quizUrl((String) objArr[3])
+                            .quizDt(quizDt)
                             .build();
             mcDTOlist.add(dto);
         }
