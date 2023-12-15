@@ -1,5 +1,6 @@
 package com.trianglechoke.codesparring.room.control;
 
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.room.dto.RoomMemberDTO;
 import com.trianglechoke.codesparring.room.service.RoomMemberService;
 
@@ -21,5 +22,10 @@ public class RoomMemberController {
     @DeleteMapping("/{memberNo}")
     public void remove(@PathVariable Long memberNo) {
         service.removeMember(memberNo);
+    }
+
+    @GetMapping
+    public Boolean isHost() {
+        return service.isRoomMemberHost(SecurityUtil.getCurrentMemberNo());
     }
 }

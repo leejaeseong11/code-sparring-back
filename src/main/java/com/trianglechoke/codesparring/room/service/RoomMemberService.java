@@ -8,4 +8,7 @@ public interface RoomMemberService {
 
     /* 대기방에 회원 삭제 */
     void removeMember(Long memberNo);
+
+    /* 로그인한 회원이 방장인지 확인 */
+    Boolean isRoomMemberHost(Long memberNo);
 }
