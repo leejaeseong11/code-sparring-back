@@ -1,7 +1,6 @@
 package com.trianglechoke.codesparring.quiz.control;
 
 import com.trianglechoke.codesparring.exception.*;
-import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.service.QuizServiceImpl;
@@ -14,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/quiz")
 public class QuizController {
@@ -21,11 +22,11 @@ public class QuizController {
     @Autowired private TestcaseServiceImpl serviceTc;
 
     /* 문제 전체 목록 조회하기 : default */
-    @GetMapping("/list/{currentPage}")
-    public PageGroup<QuizDTO> quizList(@PathVariable Integer currentPage) {
+    @GetMapping("/list")
+    public List<QuizDTO> quizList() {
         try {
-            PageGroup<QuizDTO> list = service.findQuizList(currentPage);
-            if (list.getList().size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            List<QuizDTO> list = service.findQuizList();
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
         } catch (MyException e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
@@ -33,43 +34,38 @@ public class QuizController {
     }
 
     /* 문제 전체 목록 조회하기 : 정답률 */
-    @GetMapping("/list/{currentPage}/{order}")
-    public PageGroup<QuizDTO> quizListOrderByCorrect(
-            @PathVariable Integer currentPage, @PathVariable String order) {
+    @GetMapping("/list/{order}")
+    public List<QuizDTO> quizListOrderByCorrect(@PathVariable String order) {
         try {
-            PageGroup<QuizDTO> list = service.findOrderByCorrect(currentPage, order);
-            if (list.getList().size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            List<QuizDTO> list = service.findOrderByCorrect(order);
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
-        } catch (Exception e) {
+        } catch (MyException e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
         }
     }
 
     /* 티어 별 문제 목록 조회하기 : default */
-    @GetMapping("/tier/{quizTier}/{currentPage}")
-    public PageGroup<QuizDTO> quizListByQuizTier(
-            @PathVariable String quizTier, @PathVariable Integer currentPage) {
+    @GetMapping("/tier/{quizTier}")
+    public List<QuizDTO> quizListByQuizTier(@PathVariable String quizTier) {
         try {
-            PageGroup<QuizDTO> list = service.findByQuizTier(quizTier, currentPage);
-            if (list.getList().size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            List<QuizDTO> list = service.findByQuizTier(quizTier);
+            if (list.size() == 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
-        } catch (Exception e) {
+        } catch (MyException e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
         }
     }
 
     /* 티어 별 문제 목록 조회하기 : 정답률 */
-    @GetMapping("/tier/{quizTier}/{currentPage}/{order}")
-    public PageGroup<QuizDTO> quizListByQuizTier(
-            @PathVariable String quizTier,
-            @PathVariable Integer currentPage,
-            @PathVariable String order) {
+    @GetMapping("/tier/{quizTier}/{order}")
+    public List<QuizDTO> quizListByQuizTier(
+            @PathVariable String quizTier, @PathVariable String order) {
         try {
-            PageGroup<QuizDTO> list =
-                    service.findByTierOrderByCorrect(quizTier, currentPage, order);
-            if (list.getList().size() <= 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
+            List<QuizDTO> list = service.findByTierOrderByCorrect(quizTier, order);
+            if (list.size() <= 0) throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
             else return list;
-        } catch (Exception e) {
+        } catch (MyException e) {
             throw new MyException(ErrorCode.QUIZ_LIST_NOT_FOUND);
         }
     }
@@ -79,7 +75,7 @@ public class QuizController {
     public QuizDTO quiz(@PathVariable Long quizNo) {
         try {
             return service.findByQuizNo(quizNo);
-        } catch (Exception e) {
+        } catch (MyException e) {
             throw new MyException(ErrorCode.QUIZ_NOT_FOUND);
         }
     }
@@ -96,7 +92,7 @@ public class QuizController {
             }
             String msg = "문제 출제 성공";
             return new ResponseEntity<>(msg, HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (MyException e) {
             throw new MyException(ErrorCode.QUIZ_NOT_SAVED);
         }
     }

@@ -4,6 +4,8 @@ import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 
+import java.util.List;
+
 interface QuizService {
     /**
      * default (제출 횟수 순) 정렬된 전체 문제 목록을 start 부터 end 까지 조회한다.
@@ -15,15 +17,21 @@ interface QuizService {
     public PageGroup<QuizDTO> findQuizList(Integer currentPage) throws MyException;
 
     /**
-     * 정답률순으로 정렬된 전체 문제 목록을 start 부터 end 까지 조회한다.
+     * default (제출 횟수 순) 정렬된 전체 문제 목록을 조회한다.
      *
-     * @param currentPage 현재 페이지
+     * @return 전체 문제 목록
+     * @throws MyException
+     */
+    public List<QuizDTO> findQuizList() throws MyException;
+
+    /**
+     * 정답률순으로 정렬된 전체 문제 목록을 조회한다.
+     *
      * @param order asc/desc
      * @return 전체 문제 목록
      * @throws MyException
      */
-    public PageGroup<QuizDTO> findOrderByCorrect(Integer currentPage, String order)
-            throws MyException;
+    public List<QuizDTO> findOrderByCorrect(String order) throws MyException;
 
     /**
      * default (제출 횟수 순) 정렬된 tier 에 해당하는 문제 목록을 start 부터 end 까지 조회한다.
@@ -40,13 +48,11 @@ interface QuizService {
      * 정답률순으로 정렬된 tier 에 해당하는 문제 목록을 start 부터 end 까지 조회한다.
      *
      * @param quizTier 문제 티어
-     * @param currentPage 현재 페이지
      * @param order asc/desc
      * @return 티어 별 문제 목록
      * @throws MyException
      */
-    public PageGroup<QuizDTO> findByTierOrderByCorrect(
-            String quizTier, Integer currentPage, String order) throws MyException;
+    public List<QuizDTO> findByTierOrderByCorrect(String quizTier, String order) throws MyException;
 
     /**
      * quizNo 에 해당하는 문제의 상세 정보를 조회한다.
