@@ -14,11 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 
 @Service
 @RequiredArgsConstructor
@@ -47,15 +44,20 @@ public class CodeServiceImpl implements CodeService {
     // MemberCode 회원번호, 문제번호, 정답여부 insert
     @Override
     public void writeMemberCode(Long memberNo, Long quizNo, Integer correct, String codeUrl) {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime quizDt = LocalDateTime.now();
         System.out.println(quizDt);
 
         MemberCodeEmbedded embedded =
-                        MemberCodeEmbedded.builder().memberNo(memberNo).quizNo(quizNo).build();
+                MemberCodeEmbedded.builder().memberNo(memberNo).quizNo(quizNo).build();
 
         MemberCode memberCode =
-                MemberCode.builder().id(embedded).quizCorrect(correct).quizUrl(codeUrl).quizDt(quizDt).build();
+                MemberCode.builder()
+                        .id(embedded)
+                        .quizCorrect(correct)
+                        .quizUrl(codeUrl)
+                        .quizDt(quizDt)
+                        .build();
         codeRepository.save(memberCode);
         modifyQuizSubmit(quizNo, correct);
     }

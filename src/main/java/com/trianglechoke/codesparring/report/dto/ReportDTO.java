@@ -18,7 +18,7 @@ public class ReportDTO {
     private Long quizNo;
     private String reportContent;
 
-    @JsonFormat(pattern = "yy-MM-dd", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "yy/MM/dd", timezone = "Asia/Seoul")
     private Date reportDate;
 
     private String reportComment;

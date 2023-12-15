@@ -23,7 +23,6 @@ public class CorsConfig {
         config.addAllowedOriginPattern(frontURL); // 모든 ip에 응답 허용
         config.addAllowedHeader("*"); // 모든 HTTP HEADER에 허용
         config.addAllowedMethod("*"); // 모든 HTTP METHOD에 허용
-        config.addExposedHeader("Set-Cookie");
 
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
