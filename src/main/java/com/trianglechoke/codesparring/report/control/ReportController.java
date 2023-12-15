@@ -1,9 +1,8 @@
 package com.trianglechoke.codesparring.report.control;
 
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
-import com.trianglechoke.codesparring.report.service.ReportService;
-
 import com.trianglechoke.codesparring.report.service.ReportServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +40,7 @@ public class ReportController {
     @GetMapping("/admin/report/commentNull")
     public Page<ReportDTO> findAllByReportCommentIsNullOrderByReportDateDesc(
             @PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC)
-            Pageable pageable) {
+                    Pageable pageable) {
         return reportServiceImpl.findAllByReportCommentIsNullOrderByReportDateDesc(pageable);
     }
 

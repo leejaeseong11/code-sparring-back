@@ -56,21 +56,21 @@ public class ReportServiceImpl implements ReportService {
         return new PageImpl<>(selectedReportList, pageable, reportList.getTotalElements());
     }
 
-//    @Transactional
-//    public Long addReport(ReportDTO reportDTO) {
-//        Member m = Member.builder().memberName(reportDTO.getMemberName()).build();
-//        Quiz q = Quiz.builder().quizNo(reportDTO.getQuizNo()).build();
-//        return reportRepository
-//                .save(
-//                        Report.builder()
-//                                .quiz(q)
-//                                .member(m)
-//                                .reportType(reportDTO.getReportType())
-//                                .reportDate(reportDTO.getReportDate())
-//                                .reportContent(reportDTO.getReportContent())
-//                                .build())
-//                .getReportNo();
-//    }
+    //    @Transactional
+    //    public Long addReport(ReportDTO reportDTO) {
+    //        Member m = Member.builder().memberName(reportDTO.getMemberName()).build();
+    //        Quiz q = Quiz.builder().quizNo(reportDTO.getQuizNo()).build();
+    //        return reportRepository
+    //                .save(
+    //                        Report.builder()
+    //                                .quiz(q)
+    //                                .member(m)
+    //                                .reportType(reportDTO.getReportType())
+    //                                .reportDate(reportDTO.getReportDate())
+    //                                .reportContent(reportDTO.getReportContent())
+    //                                .build())
+    //                .getReportNo();
+    //    }
 
     @Transactional
     public Long addReport(ReportDTO reportDTO) {
