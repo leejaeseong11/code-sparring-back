@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.report.service;
 
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.report.dao.ReportRepository;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
@@ -55,9 +56,25 @@ public class ReportServiceImpl implements ReportService {
         return new PageImpl<>(selectedReportList, pageable, reportList.getTotalElements());
     }
 
+//    @Transactional
+//    public Long addReport(ReportDTO reportDTO) {
+//        Member m = Member.builder().memberName(reportDTO.getMemberName()).build();
+//        Quiz q = Quiz.builder().quizNo(reportDTO.getQuizNo()).build();
+//        return reportRepository
+//                .save(
+//                        Report.builder()
+//                                .quiz(q)
+//                                .member(m)
+//                                .reportType(reportDTO.getReportType())
+//                                .reportDate(reportDTO.getReportDate())
+//                                .reportContent(reportDTO.getReportContent())
+//                                .build())
+//                .getReportNo();
+//    }
+
     @Transactional
     public Long addReport(ReportDTO reportDTO) {
-        Member m = Member.builder().memberName(reportDTO.getMemberName()).build();
+        Member m = Member.builder().memberName(SecurityUtil.getCurrentMemberName()).build();
         Quiz q = Quiz.builder().quizNo(reportDTO.getQuizNo()).build();
         return reportRepository
                 .save(
