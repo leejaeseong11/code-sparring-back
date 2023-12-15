@@ -14,7 +14,6 @@ import com.trianglechoke.codesparring.member.jwt.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -80,7 +79,9 @@ public class AuthServiceImpl implements AuthService {
                         .key(authentication.getName())
                         .value(tokenDTO.getRefreshToken())
                         .build();
-        System.out.println("--------------------------------authentication.getName()::::::" + authentication.getName());
+        System.out.println(
+                "--------------------------------authentication.getName()::::::"
+                        + authentication.getName());
         refreshTokenRepository.save(refreshToken);
         // 5. 토큰 발급
         return tokenDTO;
@@ -113,12 +114,9 @@ public class AuthServiceImpl implements AuthService {
         return tokenDto;
     }
 
-    public String findRefreshTokenByMemberNo(Long refreshTokenKey){
+    public String findRefreshTokenByMemberNo(Long refreshTokenKey) {
         Optional<RefreshToken> refreshToken =
-                refreshTokenRepository
-                        .findByKey(String.valueOf(refreshTokenKey));
+                refreshTokenRepository.findByKey(String.valueOf(refreshTokenKey));
         return refreshToken.get().getValue();
-
     }
-
 }

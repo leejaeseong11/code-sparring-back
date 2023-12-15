@@ -37,10 +37,13 @@ public class JwtFilter extends OncePerRequestFilter {
             // 2. validateToken 으로 토큰 유효성 검사
             // 정상 토큰이면 해당 토큰으로 Authentication 을 가져와서 SecurityContext 에 저장
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-                System.out.println("2---------------------------------------------------jwtCheck:::" + jwt);
+                System.out.println(
+                        "2---------------------------------------------------jwtCheck:::" + jwt);
                 Authentication authentication = tokenProvider.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-                System.out.println("3.authentication------------------------------------------" + authentication);
+                System.out.println(
+                        "3.authentication------------------------------------------"
+                                + authentication);
             } else {
                 // 로그인이 아니면
                 System.out.println(request.getRequestURI());
@@ -51,7 +54,8 @@ public class JwtFilter extends OncePerRequestFilter {
                     System.out.println("Exception 들어옴");
                     response.setContentType("application/json");
                     response.setCharacterEncoding("UTF-8");
-                    ResponseStatusException responseStatusException = new ResponseStatusException(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
+                    ResponseStatusException responseStatusException =
+                            new ResponseStatusException(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
                 }
             }
         }

@@ -21,13 +21,13 @@ public class ReportController {
         return reportService.findReportByReportNo(reportNo);
     }
 
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @GetMapping("/admin/report/all")
-//    public Page<ReportDTO> findAll(
-//            @PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC)
-//                    Pageable pageable) {
-//        return reportService.findReportList(pageable);
-//    }
+    //    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //    @GetMapping("/admin/report/all")
+    //    public Page<ReportDTO> findAll(
+    //            @PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC)
+    //                    Pageable pageable) {
+    //        return reportService.findReportList(pageable);
+    //    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/report/all")
@@ -35,6 +35,7 @@ public class ReportController {
             @PageableDefault(size = 10) Pageable pageable) {
         return reportService.findAllByOrderByReportDateDesc(pageable);
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/report/commentNull")
     public Page<ReportDTO> findAllByReportCommentIsNullOrderByReportDateDesc(

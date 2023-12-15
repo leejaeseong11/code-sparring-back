@@ -5,11 +5,9 @@ import com.trianglechoke.codesparring.member.service.MemberServiceImpl;
 import com.trianglechoke.codesparring.member.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 

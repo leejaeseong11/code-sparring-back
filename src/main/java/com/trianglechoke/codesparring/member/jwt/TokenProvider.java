@@ -129,8 +129,12 @@ public class TokenProvider {
         }
     }
 
-    public boolean validateTokenError(String token) throws ExpiredJwtException, SecurityException,MalformedJwtException,
-            UnsupportedJwtException, IllegalArgumentException{
+    public boolean validateTokenError(String token)
+            throws ExpiredJwtException,
+                    SecurityException,
+                    MalformedJwtException,
+                    UnsupportedJwtException,
+                    IllegalArgumentException {
         Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
         return true;
     }
