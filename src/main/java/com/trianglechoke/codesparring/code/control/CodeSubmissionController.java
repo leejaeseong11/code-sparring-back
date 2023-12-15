@@ -97,8 +97,12 @@ public class CodeSubmissionController {
         if (answerCount == list.size()) correct = 1;
         service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct, fileUrl);
 
-        String msg = String.valueOf(responseResult);
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        String result = String.valueOf(responseResult);
+
+        Map<String, String> result2 = new HashMap<>();
+        result2.put("result", result);
+        result2.put("gameResult", String.valueOf(correct));
+        return new ResponseEntity<>(result2, HttpStatus.OK);
     }
 
     @PostMapping("/rankMode")
