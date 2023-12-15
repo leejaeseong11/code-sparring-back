@@ -34,6 +34,19 @@ public class RoomMemberServiceTest {
     @InjectMocks RoomMemberServiceImpl service;
 
     @Test
+    @DisplayName("방장 여부 확인")
+    void isRoomMemberHost() {
+        Member testMember = Member.builder().memberNo(1L).build();
+        RoomMember roomMember =
+                RoomMember.builder().id(new RoomMemberKey(1L, testMember)).hostStatus(0).build();
+        when(repository.isRoomMemberHost(any())).thenReturn(Optional.of(roomMember));
+
+        Boolean isHost = service.isRoomMemberHost(1L);
+
+        assertThat(isHost).isEqualTo(true);
+    }
+
+    @Test
     @DisplayName("방회원 추가")
     void addRoomMember() {
         Room testRoom = Room.builder().roomNo(1L).roomStatus(1).build();
