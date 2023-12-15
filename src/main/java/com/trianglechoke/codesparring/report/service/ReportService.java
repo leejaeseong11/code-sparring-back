@@ -13,14 +13,17 @@ public interface ReportService {
     Page<ReportDTO> findReportList(Pageable pageable);
 
     /* 문제 신고 목록 최신 날짜순 조회 */
-    Page<ReportDTO> findByOrderByReportDateDesc(Pageable pageable);
+    Page<ReportDTO> findAllByOrderByReportDateDesc(Pageable pageable);
 
     /* 문제 신고 최신 날짜순, 조치 내역 없는 목록 조회 */
-    Page<ReportDTO> findByReportCommentIsNullOrderByReportDateDesc(Pageable pageable);
+    Page<ReportDTO> findAllByReportCommentIsNullOrderByReportDateDesc(Pageable pageable);
 
     /* 문제 신고 생성 */
     Long addReport(ReportDTO reportDTO);
 
     /* 신고 조치 내용 생성 */
     void modifyReportComment(Long reportNo, String comment);
+
+    /* 문제 신고 삭제*/
+    void removeReport(Long reportNo);
 }

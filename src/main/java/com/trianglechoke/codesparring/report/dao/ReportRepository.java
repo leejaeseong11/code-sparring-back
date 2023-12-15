@@ -12,9 +12,9 @@ import org.springframework.data.repository.query.Param;
 public interface ReportRepository extends JpaRepository<Report, Long> {
     Page<Report> findAll(Pageable pageable);
 
-    Page<Report> findByOrderByReportDateDesc(Pageable pageable);
+    Page<Report> findAllByOrderByReportDateDesc(Pageable pageable);
 
-    Page<Report> findByReportCommentIsNullOrderByReportDateDesc(Pageable pageable);
+    Page<Report> findAllByReportCommentIsNullOrderByReportDateDesc(Pageable pageable);
 
     @Modifying
     @Query(

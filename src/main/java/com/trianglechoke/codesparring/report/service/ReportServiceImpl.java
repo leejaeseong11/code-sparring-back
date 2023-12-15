@@ -71,16 +71,16 @@ public class ReportServiceImpl implements ReportService {
                 .getReportNo();
     }
 
-    @Override
+    @Transactional
     public void modifyReportComment(Long reportNo, String comment) {
         reportRepository.updateReportComment(reportNo, comment);
     }
 
     @Transactional
-    public Page<ReportDTO> findByOrderByReportDateDesc(Pageable pageable) {
+    public Page<ReportDTO> findAllByOrderByReportDateDesc(Pageable pageable) {
         List<ReportDTO> selectedReportList = new ArrayList<>();
         Page<Report> reportList;
-        reportList = reportRepository.findByOrderByReportDateDesc(pageable);
+        reportList = reportRepository.findAllByOrderByReportDateDesc(pageable);
         for (Report report : reportList) {
             selectedReportList.add(
                     ReportDTO.builder()
@@ -96,10 +96,10 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Transactional
-    public Page<ReportDTO> findByReportCommentIsNullOrderByReportDateDesc(Pageable pageable) {
+    public Page<ReportDTO> findAllByReportCommentIsNullOrderByReportDateDesc(Pageable pageable) {
         List<ReportDTO> selectedReportList = new ArrayList<>();
         Page<Report> reportList;
-        reportList = reportRepository.findByReportCommentIsNullOrderByReportDateDesc(pageable);
+        reportList = reportRepository.findAllByReportCommentIsNullOrderByReportDateDesc(pageable);
         for (Report report : reportList) {
             selectedReportList.add(
                     ReportDTO.builder()
@@ -112,5 +112,10 @@ public class ReportServiceImpl implements ReportService {
                             .build());
         }
         return new PageImpl<>(selectedReportList, pageable, reportList.getTotalElements());
+    }
+
+    @Transactional
+    public void removeReport(Long reportNo) {
+        reportRepository.deleteById(reportNo);
     }
 }
