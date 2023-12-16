@@ -48,7 +48,10 @@ public enum ErrorCode {
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
     DUPLICATE_MEMBER(CONFLICT, "이미 가입된 회원입니다."),
     DUPLICATE_ID(CONFLICT, "중복된 아이디입니다."),
-    DUPLICATE_NAME(CONFLICT, "중복된 닉네임입니다.");
+    DUPLICATE_NAME(CONFLICT, "중복된 닉네임입니다."),
+
+    RANK_MATCH_FAIL(BAD_REQUEST, "랭크 매칭에 실패하였습니다."),
+    RANK_MATCH_LOADING(NOT_FOUND, "랭크 매칭을 기다리고 있습니다.");
 
     private final HttpStatus httpStatus;
     private final String detail;
