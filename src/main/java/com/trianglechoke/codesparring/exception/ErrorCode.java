@@ -39,6 +39,7 @@ public enum ErrorCode {
     RANK_GAME_NOT_FOUND(NOT_FOUND, "랭크 전적을 찾을 수 없습니다."),
     ROOM_NOT_FOUND(NOT_FOUND, "해당 방 정보를 찾을 수 없습니다."),
     MEMBER_NOT_IN_ROOM(NOT_FOUND, "회원이 참여 중인 방이 없습니다."),
+    REPORT_NOT_FOUND(NOT_FOUND, "해당 신고내역을 찾을 수 없습니다."),
 
     /* 304 NOT_MODIFIED : 클라이언트가 가지고 있는 Resource 가 수정되지 않았음 */
     QUIZ_NOT_MODIFIED(NOT_MODIFIED, "해당 문제를 수정할 수 없습니다."),

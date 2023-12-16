@@ -1,5 +1,6 @@
 package com.trianglechoke.codesparring.report.service;
 
+import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.member.util.SecurityUtil;
@@ -22,16 +23,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.trianglechoke.codesparring.exception.ErrorCode.REPORT_NOT_FOUND;
+
+
 @Service
 public class ReportServiceImpl implements ReportService {
-    @Autowired private ReportRepository reportRepository;
-    @Autowired private MemberRepository memberRepository;
-    @Autowired private QuizRepository quizRepository;
+    @Autowired
+    private ReportRepository reportRepository;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private QuizRepository quizRepository;
 
     @Transactional
     public ReportDTO findReportByReportNo(Long reportNo) {
-        Optional<Report> OptReport = reportRepository.findById(reportNo);
-        Report reportEntity = OptReport.get();
+        Optional<Report> optReport = reportRepository.findById(reportNo);
+        if (optReport.isEmpty()) {
+            throw new MyException(REPORT_NOT_FOUND);
+        }
+        Report reportEntity = optReport.get();
+
         return ReportDTO.builder()
                 .reportNo(reportEntity.getReportNo())
                 .reportDate(reportEntity.getReportDate())
@@ -39,7 +50,9 @@ public class ReportServiceImpl implements ReportService {
                 .reportContent(reportEntity.getReportContent())
                 .quizNo(reportEntity.getQuiz().getQuizNo())
                 .memberName(reportEntity.getMember().getMemberName())
+                .reportComment(reportEntity.getReportComment())
                 .build();
+
     }
 
     @Transactional
@@ -81,8 +94,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Transactional
-    public void modifyReportComment(Long reportNo, String comment) {
-        reportRepository.updateReportComment(reportNo, comment);
+    public void modifyReportComment(Long reportNo, String reportComment) {
+        reportRepository.updateReportComment(reportNo, reportComment);
     }
 
     @Transactional
