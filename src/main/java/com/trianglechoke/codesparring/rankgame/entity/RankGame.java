@@ -10,7 +10,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+
+import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -41,8 +44,21 @@ public class RankGame {
     // [FK] 회원2 번호
     @ManyToOne
     @JoinColumn(name = "member2_no")
-    @NotNull
     private Member member2;
+
+    // 생성일
+    @Column(name="regdate")
+    @ColumnDefault("SYSDATE")
+    private Date regdate;
+
+    // 티어
+    @Column(name="tier")
+    private String tier;
+
+    // 준비 수
+    @Column(name="ready_cnt")
+    @ColumnDefault("0")
+    private Integer readyCnt;
 
     // 문제 번호
     @Column(name = "quiz_no")
@@ -51,6 +67,15 @@ public class RankGame {
     // 랭크 게임 결과 (0은 draw, 1은 회원1 win, 2는 회원2 win)
     @Column(name = "game_result", columnDefinition = "NUMBER(1)")
     private Integer gameResult;
+
+    // member2 참여
+    public void addMember2(Member m2) {
+        this.member2=m2;
+    }
+
+    public void ready() {
+        this.readyCnt++;
+    }
 
     // 게임 문제 업데이트 메소드
     public void modifyGameQuiz(Long quizNo) {

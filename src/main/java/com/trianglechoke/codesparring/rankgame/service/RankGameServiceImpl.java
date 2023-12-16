@@ -130,25 +130,6 @@ public class RankGameServiceImpl implements RankGameService {
         return dto;
     }
 
-    /* Create : 랭크게임 정보 저장 */
-    public void addRankGame(RankGameDTO rankGameDTO) throws MyException {
-        if (rankGameDTO.getMember1No() == rankGameDTO.getMember2No()) {
-            throw new MyException(ErrorCode.RANK_NOT_SAVED);
-        }
-        repository.saveRankGame(rankGameDTO.getMember1No(), rankGameDTO.getMember2No());
-    }
-
-    /* Update : 랭크게임 문제 업데이트 */
-    public Long modifyGameQuiz(Long rankNo) throws MyException {
-        Optional<RankGame> optRg = repository.findById(rankNo);
-        RankGame entity = optRg.get();
-        String tier = entity.getMember1().getMemberTier();
-        Long quizNo = matchingRandomQuiz(tier);
-        entity.modifyGameQuiz(quizNo);
-        repository.save(entity);
-        return quizNo;
-    }
-
     /* Update : 랭크게임 결과 업데이트 */
     public void modifyGameResult(RankGameDTO rankGameDTO) throws MyException {
         Integer gr = rankGameDTO.getGameResult();
@@ -209,22 +190,5 @@ public class RankGameServiceImpl implements RankGameService {
             modifyCnt(rankGame.getMember1().getMemberNo(), -1);
             modifyCnt(rankGame.getMember2().getMemberNo(), 1);
         }
-    }
-
-    @Autowired private QuizRepository quizRepository;
-
-    /* method : 문제 랜덤 매칭 */
-    private Long matchingRandomQuiz(String quizTier) throws MyException {
-        Quiz exampleQuiz = Quiz.builder().quizTier(quizTier).build();
-        ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
-        Example<Quiz> example = Example.of(exampleQuiz, exampleMatcher);
-        List<Quiz> quizList = quizRepository.findAll(example);
-
-        Random random = new Random();
-        int size = quizList.size();
-        int index = random.nextInt(size);
-        Long quizNo = quizList.get(index).getQuizNo();
-
-        return quizNo;
     }
 }
