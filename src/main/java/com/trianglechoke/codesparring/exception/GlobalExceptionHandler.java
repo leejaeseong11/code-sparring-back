@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.*;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -206,5 +207,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             errors.add(error.getDefaultMessage());
         }
         return errors;
+    }
+
+    /** 접근 권한 예외 발생 시 */
+    @ExceptionHandler(value = AccessDeniedException.class)
+    protected ResponseEntity<Object> handleAccessDeniedException(
+            AccessDeniedException ex,
+            WebRequest request) {
+        log.error("Access Denied: {}", ex.getMessage());
+        ErrorResponse response = new ErrorResponse(HttpStatus.FORBIDDEN, ex.getLocalizedMessage(), "Access Denied");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 }
