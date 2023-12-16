@@ -3,6 +3,7 @@ package com.trianglechoke.codesparring.code.service;
 import com.trianglechoke.codesparring.code.dao.CodeRepository;
 import com.trianglechoke.codesparring.code.dto.CodeTestcaseDTO;
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.membercode.dto.MemberCodeDTO;
 import com.trianglechoke.codesparring.membercode.entity.MemberCode;
 import com.trianglechoke.codesparring.membercode.entity.MemberCodeEmbedded;
@@ -43,13 +44,16 @@ public class CodeServiceImpl implements CodeService {
 
     // MemberCode 회원번호, 문제번호, 정답여부 insert
     @Override
-    public void writeMemberCode(Long memberNo, Long quizNo, Integer correct, String codeUrl) {
+    public void writeMemberCode(Long quizNo, Integer correct, String codeUrl) {
         //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime quizDt = LocalDateTime.now();
         System.out.println(quizDt);
 
         MemberCodeEmbedded embedded =
-                MemberCodeEmbedded.builder().memberNo(memberNo).quizNo(quizNo).build();
+                MemberCodeEmbedded.builder()
+                        .memberNo(SecurityUtil.getCurrentMemberNo())
+                        .quizNo(quizNo)
+                        .build();
 
         MemberCode memberCode =
                 MemberCode.builder()
