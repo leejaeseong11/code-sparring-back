@@ -43,7 +43,6 @@ public class RankGameController {
         }
     }
 
-
     /* 랭크 게임 결과 업데이트하기 */
     @PutMapping("/{rankNo}")
     @Transactional

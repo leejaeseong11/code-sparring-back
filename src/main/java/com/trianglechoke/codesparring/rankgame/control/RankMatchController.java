@@ -4,8 +4,8 @@ import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.service.RankMatchServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +19,13 @@ public class RankMatchController {
     @GetMapping("/match/{memberNo}/{tier}")
     public RankGameDTO match(@PathVariable Long memberNo, @PathVariable String tier) {
         try {
-            Long rankNo=service.findByRankTier(tier);
-            if(rankNo==0L) {
+            Long rankNo = service.findByRankTier(tier);
+            if (rankNo == 0L) {
                 service.saveRankGame(memberNo);
                 throw new MyException(ErrorCode.RANK_MATCH_LOADING);
             } else {
                 service.matchingMember(rankNo, memberNo);
-                RankGameDTO rank=service.findByRankNo(rankNo);
+                RankGameDTO rank = service.findByRankNo(rankNo);
                 return rank;
             }
         } catch (MyException e) {
@@ -39,18 +39,18 @@ public class RankMatchController {
         // 1. 조회하기 SELECT member1==memberNo
         // cnt 확인 (memberNo==m1) 은 cnt==1 확인, (memberNo==m2) 는 cnt==2 확인
         try {
-            RankGameDTO rankGameDTO=service.findByRankNo(rankNo);
-            Integer cnt=rankGameDTO.getReadyCnt();
-            Long m1=rankGameDTO.getMember1No();
-            Long m2=rankGameDTO.getMember2No();
-            if(memberNo==m1) {
-                if(cnt==0) throw new MyException(ErrorCode.RANK_MATCH_LOADING);
-                else if(cnt==1) return rankGameDTO;
+            RankGameDTO rankGameDTO = service.findByRankNo(rankNo);
+            Integer cnt = rankGameDTO.getReadyCnt();
+            Long m1 = rankGameDTO.getMember1No();
+            Long m2 = rankGameDTO.getMember2No();
+            if (memberNo == m1) {
+                if (cnt == 0) throw new MyException(ErrorCode.RANK_MATCH_LOADING);
+                else if (cnt == 1) return rankGameDTO;
                 else throw new MyException(ErrorCode.RANK_MATCH_FAIL);
-            } else if(memberNo==m2) {
-                if(cnt==0) throw new MyException(ErrorCode.RANK_MATCH_LOADING);
-                else if(cnt==1) throw new MyException(ErrorCode.RANK_MATCH_LOADING);
-                else if(cnt==2) return rankGameDTO;
+            } else if (memberNo == m2) {
+                if (cnt == 0) throw new MyException(ErrorCode.RANK_MATCH_LOADING);
+                else if (cnt == 1) throw new MyException(ErrorCode.RANK_MATCH_LOADING);
+                else if (cnt == 2) return rankGameDTO;
                 else throw new MyException(ErrorCode.RANK_MATCH_FAIL);
             } else {
                 throw new MyException(ErrorCode.RANK_MATCH_FAIL);

@@ -47,16 +47,16 @@ public class RankGame {
     private Member member2;
 
     // 생성일
-    @Column(name="regdate")
+    @Column(name = "regdate")
     @ColumnDefault("SYSDATE")
     private Date regdate;
 
     // 티어
-    @Column(name="tier")
+    @Column(name = "tier")
     private String tier;
 
     // 준비 수
-    @Column(name="ready_cnt")
+    @Column(name = "ready_cnt")
     @ColumnDefault("0")
     private Integer readyCnt;
 
@@ -70,7 +70,7 @@ public class RankGame {
 
     // member2 참여
     public void addMember2(Member m2) {
-        this.member2=m2;
+        this.member2 = m2;
     }
 
     public void ready() {

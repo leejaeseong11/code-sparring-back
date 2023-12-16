@@ -8,6 +8,7 @@ import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.rankgame.dao.RankGameRepository;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.entity.RankGame;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -41,42 +42,37 @@ public class RankMatchServiceImpl implements RankMatchService {
 
     /* SELECT 티어 */
     public Long findByRankTier(String tier) throws MyException {
-        RankGame exampleRankGame = RankGame.builder()
-                .tier(tier)
-                .member2(null)
-                .build();
+        RankGame exampleRankGame = RankGame.builder().tier(tier).member2(null).build();
         ExampleMatcher exampleMatcher = ExampleMatcher.matchingAll();
         Example<RankGame> example = Example.of(exampleRankGame, exampleMatcher);
         Sort sort = Sort.by(Sort.Order.asc("regdate"));
-        List<RankGame> rankGameList=repository.findAll(example, sort);
-        if(rankGameList.size()==0) return 0L;
+        List<RankGame> rankGameList = repository.findAll(example, sort);
+        if (rankGameList.size() == 0) return 0L;
         else return rankGameList.get(0).getRankNo();
     }
 
     /* INSERT */
     public void saveRankGame(Long memberNo) throws MyException {
-        Optional<Member> optMember=memberRepository.findById(memberNo);
-        Member member=optMember.get();
-        RankGame rankGame= RankGame.builder()
-                .member1(member)
-                .tier(member.getMemberTier()).build();
+        Optional<Member> optMember = memberRepository.findById(memberNo);
+        Member member = optMember.get();
+        RankGame rankGame = RankGame.builder().member1(member).tier(member.getMemberTier()).build();
         repository.save(rankGame);
     }
 
     /* UPDATE 멤버2 */
     public void matchingMember(Long rankNo, Long memberNo) throws MyException {
-        Optional<Member> optMember=memberRepository.findById(memberNo);
-        Member member=optMember.get();
-        Optional<RankGame> optRankGame=repository.findById(rankNo);
-        RankGame rankGame=optRankGame.get();
+        Optional<Member> optMember = memberRepository.findById(memberNo);
+        Member member = optMember.get();
+        Optional<RankGame> optRankGame = repository.findById(rankNo);
+        RankGame rankGame = optRankGame.get();
         rankGame.addMember2(member);
         repository.save(rankGame);
     }
 
     /* UPDATE 준비 */
     public void memberReady(Long rankNo) throws MyException {
-        Optional<RankGame> optRankGame=repository.findById(rankNo);
-        RankGame rankGame=optRankGame.get();
+        Optional<RankGame> optRankGame = repository.findById(rankNo);
+        RankGame rankGame = optRankGame.get();
         rankGame.ready();
         repository.save(rankGame);
     }
