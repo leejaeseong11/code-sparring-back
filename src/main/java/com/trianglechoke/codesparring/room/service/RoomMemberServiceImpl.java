@@ -40,6 +40,7 @@ public class RoomMemberServiceImpl implements RoomMemberService {
         }
     }
 
+    @Override
     @Transactional
     public Long addRoomMember(String roomPwd, RoomMemberDTO roomMemberDTO) {
         Optional<Room> selectedRoom = roomRepository.findById(roomMemberDTO.getRoomNo());
@@ -72,6 +73,7 @@ public class RoomMemberServiceImpl implements RoomMemberService {
         }
     }
 
+    @Override
     @Transactional
     public void removeMember(Long memberNo) {
         Member selectedMember = findMember(memberNo);
@@ -80,5 +82,10 @@ public class RoomMemberServiceImpl implements RoomMemberService {
         } else {
             throw new MyException(MEMBER_NOT_IN_ROOM);
         }
+    }
+
+    @Override
+    public Boolean isRoomMemberHost(Long memberNo) {
+        return repository.isRoomMemberHost(memberNo).isPresent();
     }
 }
