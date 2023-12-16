@@ -67,7 +67,7 @@ public class ReportServiceImpl implements ReportService {
         Member m = currentMember.get();
         Optional<Quiz> selectedQuiz = quizRepository.findById(reportDTO.getQuizNo());
         Quiz q = selectedQuiz.get();
-        
+
         return reportRepository
                 .save(
                         Report.builder()
