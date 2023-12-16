@@ -212,10 +212,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /** 접근 권한 예외 발생 시 */
     @ExceptionHandler(value = AccessDeniedException.class)
     protected ResponseEntity<Object> handleAccessDeniedException(
-            AccessDeniedException ex,
-            WebRequest request) {
+            AccessDeniedException ex, WebRequest request) {
         log.error("Access Denied: {}", ex.getMessage());
-        ErrorResponse response = new ErrorResponse(HttpStatus.FORBIDDEN, ex.getLocalizedMessage(), "Access Denied");
+        ErrorResponse response =
+                new ErrorResponse(HttpStatus.FORBIDDEN, ex.getLocalizedMessage(), "Access Denied");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 }
