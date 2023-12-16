@@ -43,31 +43,6 @@ public class RankGameController {
         }
     }
 
-    /* 랭크 게임 정보 추가하기 */
-    @PostMapping()
-    @Transactional
-    public ResponseEntity<?> add(@RequestBody RankGameDTO rankGameDTO) {
-        try {
-            service.addRankGame(rankGameDTO);
-
-            String msg = "랭크 정보 추가 성공";
-            return new ResponseEntity<>(msg, HttpStatus.OK);
-        } catch (MyException e) {
-            throw new MyException(ErrorCode.RANK_NOT_SAVED);
-        }
-    }
-
-    /* 랭크 게임 문제 랜덤 매칭하기 */
-    @PutMapping("/quiz/{rankNo}")
-    public Long matchingQuiz(@PathVariable Long rankNo) {
-        try {
-            Long quizNo = service.modifyGameQuiz(rankNo);
-            return quizNo;
-        } catch (MyException e) {
-            throw new MyException(ErrorCode.RANK_GAME_NOT_MODIFIED);
-        }
-    }
-
     /* 랭크 게임 결과 업데이트하기 */
     @PutMapping("/{rankNo}")
     @Transactional
