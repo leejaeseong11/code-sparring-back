@@ -1,5 +1,7 @@
 package com.trianglechoke.codesparring.report.service;
 
+import static com.trianglechoke.codesparring.exception.ErrorCode.REPORT_NOT_FOUND;
+
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Member;
@@ -10,7 +12,6 @@ import com.trianglechoke.codesparring.report.dao.ReportRepository;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
 import com.trianglechoke.codesparring.report.entity.Report;
 
-import com.trianglechoke.codesparring.room.entity.Room;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.trianglechoke.codesparring.exception.ErrorCode.REPORT_NOT_FOUND;
-
-
 @Service
 public class ReportServiceImpl implements ReportService {
-    @Autowired
-    private ReportRepository reportRepository;
-    @Autowired
-    private MemberRepository memberRepository;
-    @Autowired
-    private QuizRepository quizRepository;
+    @Autowired private ReportRepository reportRepository;
+    @Autowired private MemberRepository memberRepository;
+    @Autowired private QuizRepository quizRepository;
 
     @Transactional
     public ReportDTO findReportByReportNo(Long reportNo) {
@@ -52,7 +47,6 @@ public class ReportServiceImpl implements ReportService {
                 .memberName(reportEntity.getMember().getMemberName())
                 .reportComment(reportEntity.getReportComment())
                 .build();
-
     }
 
     @Transactional
@@ -76,7 +70,8 @@ public class ReportServiceImpl implements ReportService {
 
     @Transactional
     public Long addReport(ReportDTO reportDTO) {
-        Optional<Member> currentMember = memberRepository.findByMemberName(SecurityUtil.getCurrentMemberName());
+        Optional<Member> currentMember =
+                memberRepository.findByMemberName(SecurityUtil.getCurrentMemberName());
         Member m = currentMember.get();
         Optional<Quiz> selectedQuiz = quizRepository.findById(reportDTO.getQuizNo());
         Quiz q = selectedQuiz.get();

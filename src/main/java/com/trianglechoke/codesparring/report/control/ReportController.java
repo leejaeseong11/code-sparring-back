@@ -45,7 +45,8 @@ public class ReportController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/admin/report/{reportNo}")
-    public void updateComment(@PathVariable Long reportNo, @RequestBody Map<String, String> requestData) {
+    public void updateComment(
+            @PathVariable Long reportNo, @RequestBody Map<String, String> requestData) {
         String reportComment = requestData.get("reportComment");
         reportServiceImpl.modifyReportComment(reportNo, reportComment);
     }
