@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.code.control;
 
 import com.trianglechoke.codesparring.code.service.CodeService;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.membercode.dto.MemberCodeDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,13 @@ public class MyCodeController {
     public ResponseEntity<?> myCodeInfo(@PathVariable Long memberNo, @PathVariable Long quizNo) {
         String msg = service.findByMemberCodeInfo(memberNo, quizNo);
         return new ResponseEntity<>(msg, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/memberNo")
+    public String myMemberNo(){
+        System.out.println("-------------" + SecurityUtil.getCurrentMemberNo());
+        return String.valueOf(SecurityUtil.getCurrentMemberNo());
+
     }
 }
