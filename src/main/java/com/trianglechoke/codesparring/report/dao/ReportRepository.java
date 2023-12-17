@@ -20,8 +20,9 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     @Query(
             value =
                     "UPDATE report\n"
-                            + "SET report_comment = :comment\n"
+                            + "SET report_comment = :reportComment\n"
                             + "WHERE report_no = :reportNo",
             nativeQuery = true)
-    void updateReportComment(@Param("reportNo") Long reportNo, @Param("comment") String comment);
+    void updateReportComment(
+            @Param("reportNo") Long reportNo, @Param("reportComment") String reportComment);
 }
