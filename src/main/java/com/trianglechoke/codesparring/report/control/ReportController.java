@@ -11,6 +11,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 public class ReportController {
     @Autowired private ReportServiceImpl reportServiceImpl;
@@ -20,14 +22,6 @@ public class ReportController {
     public ReportDTO findReportByReportNo(@PathVariable Long reportNo) {
         return reportServiceImpl.findReportByReportNo(reportNo);
     }
-
-    //    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    //    @GetMapping("/admin/report/all")
-    //    public Page<ReportDTO> findAll(
-    //            @PageableDefault(size = 10, sort = "reportDate", direction = Sort.Direction.DESC)
-    //                    Pageable pageable) {
-    //        return reportService.findReportList(pageable);
-    //    }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/report/all")
@@ -51,8 +45,10 @@ public class ReportController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/admin/report/{reportNo}")
-    public void updateComment(@PathVariable Long reportNo, String comment) {
-        reportServiceImpl.modifyReportComment(reportNo, comment);
+    public void updateComment(
+            @PathVariable Long reportNo, @RequestBody Map<String, String> requestData) {
+        String reportComment = requestData.get("reportComment");
+        reportServiceImpl.modifyReportComment(reportNo, reportComment);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
