@@ -10,6 +10,7 @@ public class Message {
         ROOM_ENTER, // 방 입장
         ROOM_TALK, // 방 채팅
         ROOM_QUIT, // 방 퇴장
+        ROOM_OUT, // 강퇴
         RANK_ENTER,
         RANK_MATCHING,
         RANK_QUIT

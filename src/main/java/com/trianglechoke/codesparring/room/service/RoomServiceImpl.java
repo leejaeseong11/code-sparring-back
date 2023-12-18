@@ -30,6 +30,7 @@ public class RoomServiceImpl implements RoomService {
     @Autowired private QuizRepository quizRepository;
 
     @Transactional
+    @Override
     public RoomDTO findRoomByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
 
@@ -73,6 +74,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
+    @Override
     public Page<RoomDTO> findRoomList(Long searchNo, Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
         Page<Room> roomList;
@@ -128,6 +130,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
+    @Override
     public Long addRoom(RoomDTO roomDTO) {
         Optional<Quiz> selectedQuiz = quizRepository.findById(roomDTO.getQuizNo());
         if (selectedQuiz.isEmpty()) {
@@ -147,6 +150,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
+    @Override
     public void modifyRoomStatusByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
         if (room.isPresent()) {
@@ -157,9 +161,10 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
+    @Override
     public void removeRoomByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
-
+        System.out.println("???????roomNo" + roomNo);
         if (room.isPresent()) {
             repository.deleteById(roomNo);
         } else {
