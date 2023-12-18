@@ -21,7 +21,9 @@ public enum ErrorCode {
     WRONG_ROOM_PASSWORD(BAD_REQUEST, "방 암호를 잘못 입력했습니다."),
     SESSION_ERROR(BAD_REQUEST, "세션이 만료되었습니다."),
 
+    FAIL_WITHDRAW(BAD_REQUEST, "회원탈퇴에 실패하였습니다."),
     MISMATCH_PASSWORD(BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
+
 
     /* 401 UNAUTHORIZED : 사용자 인증실패 */
     TOKEN_MISMATCH(UNAUTHORIZED, "회원 정보가 일치하지 않습니다."),

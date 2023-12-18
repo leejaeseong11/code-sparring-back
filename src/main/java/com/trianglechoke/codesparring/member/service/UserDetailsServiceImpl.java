@@ -1,5 +1,6 @@
 package com.trianglechoke.codesparring.member.service;
 
+import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Authority;
 import com.trianglechoke.codesparring.member.entity.Member;
@@ -17,27 +18,30 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final MemberRepository memberRepository;
-
     @Override
     @Transactional
     public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {
-        return memberRepository
-                .findByMemberId(username)
-                .map(
-                        member ->
-                                new UserDetailsImpl(
-                                        member.getMemberNo(),
-                                        member.getMemberPwd(),
-                                        member.getMemberName(),
-                                        getAuthorities(member.getAuthority())))
-                .orElseThrow(
-                        () -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+        try {
+            Optional<Member> optMember = memberRepository.findByMemberId(username);
+            if (optMember.isEmpty() || optMember.get().getMemberStatus() == 0) {
+                throw new UsernameNotFoundException("존재하지 않는 회원입니다.");
+            }
+            Member member = optMember.get();
+            return new UserDetailsImpl(
+                    member.getMemberNo(),
+                    member.getMemberPwd(),
+                    member.getMemberName(),
+                    getAuthorities(member.getAuthority()));
+        } catch (Exception e) {
+            throw new UsernameNotFoundException(username + "사용자 정보를 가져오는 중에 오류가 발생했습니다.", e);
+        }
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(Authority authority) {

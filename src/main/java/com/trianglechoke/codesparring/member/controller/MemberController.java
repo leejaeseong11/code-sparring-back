@@ -1,5 +1,6 @@
 package com.trianglechoke.codesparring.member.controller;
 
+import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.dto.MemberDTO;
 import com.trianglechoke.codesparring.member.service.MemberServiceImpl;
 import com.trianglechoke.codesparring.member.util.SecurityUtil;
@@ -12,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
+import static com.trianglechoke.codesparring.exception.ErrorCode.FAIL_WITHDRAW;
+import static com.trianglechoke.codesparring.exception.ErrorCode.MISMATCH_PASSWORD;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,7 +52,7 @@ public class MemberController {
             memberServiceImpl.deleteMember(memberDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new MyException(MISMATCH_PASSWORD);
         }
     }
 
