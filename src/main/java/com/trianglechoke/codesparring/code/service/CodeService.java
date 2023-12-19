@@ -19,11 +19,10 @@ public interface CodeService {
     /**
      * MemberCode엔티티에 회원번호, 문제번호, 정답여부 insert
      *
-     * @param memberNo 회원번호
      * @param quizNo 문제번호
      * @param correct 정답여부
      */
-    void writeMemberCode(Long memberNo, Long quizNo, Integer correct, String codeUrl);
+    void writeMemberCode(Long quizNo, Integer correct, String codeUrl);
 
     /**
      * Quiz엔티티의 문제제출횟수, 문제정답횟수 수정

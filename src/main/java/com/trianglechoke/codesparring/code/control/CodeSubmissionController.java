@@ -7,6 +7,7 @@ import com.trianglechoke.codesparring.code.service.AwsS3Service;
 import com.trianglechoke.codesparring.code.service.CodeService;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -57,11 +58,14 @@ public class CodeSubmissionController {
         File f = new File(filePath, fileName + ".java");
 
         // 사용자 번호에 해당하는 폴더 생성
-        String bucketPath = "/" + dto.getMemberNo();
+        String bucketPath = "/" + SecurityUtil.getCurrentMemberNo();
         // S3서버에 제출한 코드 파일 저장(.txt)
         String fileUrl =
                 awsS3Service.uploadImage(
-                        file, bucketPath, dto.getMemberNo().toString(), dto.getQuizNo().toString());
+                        file,
+                        bucketPath,
+                        SecurityUtil.getCurrentMemberNo().toString(),
+                        dto.getQuizNo().toString());
 
         try {
             file.transferTo(f);
@@ -95,10 +99,14 @@ public class CodeSubmissionController {
 
         Integer correct = 0;
         if (answerCount == list.size()) correct = 1;
-        service.writeMemberCode(dto.getMemberNo(), dto.getQuizNo(), correct, fileUrl);
+        service.writeMemberCode(dto.getQuizNo(), correct, fileUrl);
 
-        String msg = String.valueOf(responseResult);
-        return new ResponseEntity<>(msg, HttpStatus.OK);
+        String result = String.valueOf(responseResult);
+
+        Map<String, String> result2 = new HashMap<>();
+        result2.put("result", result);
+        result2.put("gameResult", String.valueOf(correct));
+        return new ResponseEntity<>(result2, HttpStatus.OK);
     }
 
     @PostMapping("/rankMode")
