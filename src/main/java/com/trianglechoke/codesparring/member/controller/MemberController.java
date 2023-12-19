@@ -66,4 +66,9 @@ public class MemberController {
         memberServiceImpl.updateMemberExp(memberNo, roomSize);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/memberNo")
+    public String myMemberNo() {
+        return String.valueOf(SecurityUtil.getCurrentMemberNo());
+    }
 }
