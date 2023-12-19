@@ -34,10 +34,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     public void signup(MemberDTO memberDTO) {
-        if(checkDuplicateId(memberDTO.getMemberId())) {
+        if (checkDuplicateId(memberDTO.getMemberId())) {
             throw new MyException(DUPLICATE_ID);
         }
-        if(checkDuplicateName(memberDTO.getMemberName())) {
+        if (checkDuplicateName(memberDTO.getMemberName())) {
             throw new MyException(DUPLICATE_NAME);
         }
         Member member = memberDTO.toMember(passwordEncoder);

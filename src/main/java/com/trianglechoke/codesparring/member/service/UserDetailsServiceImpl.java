@@ -1,6 +1,5 @@
 package com.trianglechoke.codesparring.member.service;
 
-import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Authority;
 import com.trianglechoke.codesparring.member.entity.Member;
@@ -25,6 +24,7 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final MemberRepository memberRepository;
+
     @Override
     @Transactional
     public UserDetailsImpl loadUserByUsername(String username) throws UsernameNotFoundException {

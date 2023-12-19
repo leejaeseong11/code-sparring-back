@@ -24,7 +24,6 @@ public enum ErrorCode {
     FAIL_WITHDRAW(BAD_REQUEST, "회원탈퇴에 실패하였습니다."),
     MISMATCH_PASSWORD(BAD_REQUEST, "비밀번호가 일치하지 않습니다."),
 
-
     /* 401 UNAUTHORIZED : 사용자 인증실패 */
     TOKEN_MISMATCH(UNAUTHORIZED, "회원 정보가 일치하지 않습니다."),
     UNAVAILABLE_REFRESH_TOKEN(UNAUTHORIZED, "유효하지 않은 접근입니다."),
