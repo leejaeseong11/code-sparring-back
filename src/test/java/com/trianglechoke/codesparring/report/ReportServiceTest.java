@@ -4,7 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.member.entity.UserDetailsImpl;
+import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.report.dao.ReportRepository;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
@@ -17,10 +20,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,7 +40,10 @@ public class ReportServiceTest {
     List<Report> reportList = new ArrayList<>();
 
     @Mock ReportRepository reportRepository;
+    @Mock MemberRepository memberRepository;
+    @Mock QuizRepository quizRepository;
     @InjectMocks ReportServiceImpl reportService;
+    @InjectMocks UserDetailsImpl userDetailsImpl;
 
     @BeforeEach
     void init() {
@@ -128,6 +138,15 @@ public class ReportServiceTest {
                         .member(Member.builder().build())
                         .build();
         when(reportRepository.save(any())).thenReturn(testReport);
+        Authentication authentication = Mockito.mock(Authentication.class);
+        when(authentication.getName()).thenReturn("TestName");
+        when(authentication.getPrincipal()).thenReturn(userDetailsImpl);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+        when(memberRepository.findByMemberName(any()))
+                .thenReturn(Optional.of(Member.builder().build()));
+        when(quizRepository.findById(any())).thenReturn(Optional.of(Quiz.builder().build()));
 
         Long addReportNo =
                 reportService.addReport(

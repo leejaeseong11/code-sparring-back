@@ -1,6 +1,5 @@
 package com.trianglechoke.codesparring.room.control;
 
-import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.room.dto.RoomMemberDTO;
 import com.trianglechoke.codesparring.room.service.RoomMemberService;
 
@@ -11,6 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/room-member")
 public class RoomMemberController {
     @Autowired private RoomMemberService service;
+
+    @GetMapping("/{memberNo}")
+    public boolean findMember(@PathVariable Long memberNo) {
+        return service.isMemberInRoom(memberNo);
+    }
 
     @PostMapping
     public Long add(
@@ -24,8 +28,8 @@ public class RoomMemberController {
         service.removeMember(memberNo);
     }
 
-    @GetMapping
-    public Boolean isHost() {
-        return service.isRoomMemberHost(SecurityUtil.getCurrentMemberNo());
+    @GetMapping("/isHost/{memberNo}")
+    public Boolean isHost(@PathVariable Long memberNo) {
+        return service.isRoomMemberHost(memberNo);
     }
 }
