@@ -19,7 +19,6 @@ public interface CodeService {
     /**
      * MemberCode엔티티에 회원번호, 문제번호, 정답여부 insert
      *
-     *
      * @param quizNo 문제번호
      * @param correct 정답여부
      */

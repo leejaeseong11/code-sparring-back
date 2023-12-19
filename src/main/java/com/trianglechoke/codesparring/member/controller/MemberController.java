@@ -61,8 +61,7 @@ public class MemberController {
     }
 
     @GetMapping("/memberNo")
-    public String myMemberNo(){
+    public String myMemberNo() {
         return String.valueOf(SecurityUtil.getCurrentMemberNo());
-
     }
 }

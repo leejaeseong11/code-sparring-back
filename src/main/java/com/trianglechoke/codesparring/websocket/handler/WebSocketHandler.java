@@ -54,8 +54,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     MessageType.RANK_ENTER, MessageType.RANK_MATCHING, MessageType.RANK_QUIT,
                 };
         MessageType[] codeMessageTypes =
-                new MessageType[]{
-                        MessageType.CODE_ENTER, MessageType.CODE_STATUS, MessageType.CODE_QUIT,
+                new MessageType[] {
+                    MessageType.CODE_ENTER, MessageType.CODE_STATUS, MessageType.CODE_QUIT,
                 };
 
         if (Arrays.asList(roomMessageTypes).contains(readMessageType)) {
@@ -107,7 +107,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
             } else if (readMessageType.equals(MessageType.RANK_QUIT)) {
 
             }
-        } else if(Arrays.asList(codeMessageTypes).contains(readMessageType)){
+        } else if (Arrays.asList(codeMessageTypes).contains(readMessageType)) {
             Long codeRoomNo = readMessage.getCodeRoomNo();
             if (!codeSessionMap.containsKey(codeRoomNo)) {
                 codeSessionMap.put(codeRoomNo, new HashSet<>());
@@ -123,7 +123,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
             } else if (readMessageType.equals(MessageType.CODE_STATUS)) {
                 sendToEachSocket(
                         codeSessions,
-                        new TextMessage(readMessage.getCodeSender() + ": " + readMessage.getCodeStatus()));
+                        new TextMessage(
+                                readMessage.getCodeSender() + ": " + readMessage.getCodeStatus()));
             } else if (readMessageType.equals(MessageType.CODE_QUIT)) {
                 codeSessions.remove(session);
                 // todo - set user nickname from member token (security util)

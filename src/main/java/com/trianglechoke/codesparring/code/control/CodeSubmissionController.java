@@ -7,8 +7,8 @@ import com.trianglechoke.codesparring.code.service.AwsS3Service;
 import com.trianglechoke.codesparring.code.service.CodeService;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
-
 import com.trianglechoke.codesparring.member.util.SecurityUtil;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -62,7 +62,10 @@ public class CodeSubmissionController {
         // S3서버에 제출한 코드 파일 저장(.txt)
         String fileUrl =
                 awsS3Service.uploadImage(
-                        file, bucketPath, SecurityUtil.getCurrentMemberNo().toString(), dto.getQuizNo().toString());
+                        file,
+                        bucketPath,
+                        SecurityUtil.getCurrentMemberNo().toString(),
+                        dto.getQuizNo().toString());
 
         try {
             file.transferTo(f);

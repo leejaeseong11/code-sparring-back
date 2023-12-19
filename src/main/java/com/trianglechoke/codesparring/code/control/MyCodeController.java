@@ -1,7 +1,6 @@
 package com.trianglechoke.codesparring.code.control;
 
 import com.trianglechoke.codesparring.code.service.CodeService;
-import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.membercode.dto.MemberCodeDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +29,4 @@ public class MyCodeController {
         String msg = service.findByMemberCodeInfo(memberNo, quizNo);
         return new ResponseEntity<>(msg, HttpStatus.OK);
     }
-
-
 }
