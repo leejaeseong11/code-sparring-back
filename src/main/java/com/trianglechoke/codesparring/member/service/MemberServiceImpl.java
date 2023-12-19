@@ -7,6 +7,8 @@ import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.dto.MemberDTO;
 import com.trianglechoke.codesparring.member.entity.Member;
 
+import com.trianglechoke.codesparring.rankgame.entity.RankGame;
+import com.trianglechoke.codesparring.room.entity.Room;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -115,5 +117,15 @@ public class MemberServiceImpl implements MemberService {
             memberResponseDTOList.add(dto);
         }
         return memberResponseDTOList;
+    }
+    @Transactional
+    @Override
+    public void updateMemberExp(Long memberNo, int roomSize) {
+        Optional<Member> optionalMember = memberRepository.findById(memberNo);
+        if (optionalMember.isPresent()) {
+            memberRepository.updateMemberExp(memberNo, roomSize);
+        } else {
+            throw new MyException(MEMBER_NOT_FOUND);
+        }
     }
 }

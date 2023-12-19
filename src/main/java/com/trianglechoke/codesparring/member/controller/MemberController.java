@@ -9,6 +9,7 @@ import com.trianglechoke.codesparring.member.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -58,5 +59,11 @@ public class MemberController {
     @GetMapping("/ranking")
     public ResponseEntity<?> rankedMember() {
         return ResponseEntity.ok(memberServiceImpl.rankedMember());
+    }
+
+    @PutMapping("/exp")
+    public ResponseEntity<?> updateMemberExp(@RequestParam Long memberNo, @RequestParam int roomSize) {
+        memberServiceImpl.updateMemberExp(memberNo, roomSize);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
