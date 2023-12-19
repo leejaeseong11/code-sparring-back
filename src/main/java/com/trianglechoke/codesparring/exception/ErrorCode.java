@@ -34,6 +34,8 @@ public enum ErrorCode {
 
     /* 404 NOT_FOUND : Resource 를 찾을 수 없음 */
     MEMBER_NOT_FOUND(NOT_FOUND, "존재하지 않는 회원입니다."),
+    MEMBER_RANK_NOT_FOUND(NOT_FOUND, "랭킹 목록을 찾을 수 없습니다."),
+
     FILE_NOT_FOUND(NOT_FOUND, "파일을 찾을 수 없습니다."),
     QUIZ_LIST_NOT_FOUND(NOT_FOUND, "문제 목록을 찾을 수 없습니다."),
     QUIZ_NOT_FOUND(NOT_FOUND, "해당 문제를 찾을 수 없습니다."),
@@ -42,6 +44,7 @@ public enum ErrorCode {
     ROOM_NOT_FOUND(NOT_FOUND, "해당 방 정보를 찾을 수 없습니다."),
     MEMBER_NOT_IN_ROOM(NOT_FOUND, "회원이 참여 중인 방이 없습니다."),
     REPORT_NOT_FOUND(NOT_FOUND, "해당 신고내역을 찾을 수 없습니다."),
+    REPORT_LIST_NOT_FOUND(NOT_FOUND, "해당 신고내역을 찾을 수 없습니다."),
 
     /* 304 NOT_MODIFIED : 클라이언트가 가지고 있는 Resource 가 수정되지 않았음 */
     QUIZ_NOT_MODIFIED(NOT_MODIFIED, "해당 문제를 수정할 수 없습니다."),
@@ -49,7 +52,6 @@ public enum ErrorCode {
     RANK_GAME_NOT_MODIFIED(NOT_MODIFIED, "랭크게임 결과를 업데이트할 수 없습니다."),
 
     /* 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재 */
-    DUPLICATE_MEMBER(CONFLICT, "이미 가입된 회원입니다."),
     DUPLICATE_ID(CONFLICT, "중복된 아이디입니다."),
     DUPLICATE_NAME(CONFLICT, "중복된 닉네임입니다."),
 

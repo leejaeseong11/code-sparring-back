@@ -1,5 +1,6 @@
 package com.trianglechoke.codesparring.report.service;
 
+import static com.trianglechoke.codesparring.exception.ErrorCode.REPORT_LIST_NOT_FOUND;
 import static com.trianglechoke.codesparring.exception.ErrorCode.REPORT_NOT_FOUND;
 
 import com.trianglechoke.codesparring.exception.MyException;
@@ -54,6 +55,9 @@ public class ReportServiceImpl implements ReportService {
         List<ReportDTO> selectedReportList = new ArrayList<>();
         Page<Report> reportList;
         reportList = reportRepository.findAll(pageable);
+        if (reportList.isEmpty()) {
+            throw new MyException(REPORT_LIST_NOT_FOUND);
+        }
         for (Report report : reportList) {
             selectedReportList.add(
                     ReportDTO.builder()
@@ -98,6 +102,9 @@ public class ReportServiceImpl implements ReportService {
         List<ReportDTO> selectedReportList = new ArrayList<>();
         Page<Report> reportList;
         reportList = reportRepository.findAllByOrderByReportDateDesc(pageable);
+        if (reportList.isEmpty()) {
+            throw new MyException(REPORT_LIST_NOT_FOUND);
+        }
         for (Report report : reportList) {
             selectedReportList.add(
                     ReportDTO.builder()
@@ -117,6 +124,9 @@ public class ReportServiceImpl implements ReportService {
         List<ReportDTO> selectedReportList = new ArrayList<>();
         Page<Report> reportList;
         reportList = reportRepository.findAllByReportCommentIsNullOrderByReportDateDesc(pageable);
+        if (reportList.isEmpty()) {
+            throw new MyException(REPORT_LIST_NOT_FOUND);
+        }
         for (Report report : reportList) {
             selectedReportList.add(
                     ReportDTO.builder()
