@@ -5,6 +5,7 @@ import static com.trianglechoke.codesparring.exception.ErrorCode.ROOM_NOT_FOUND;
 
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.room.dao.RoomRepository;
@@ -136,17 +137,29 @@ public class RoomServiceImpl implements RoomService {
         if (selectedQuiz.isEmpty()) {
             throw new MyException(QUIZ_NOT_FOUND);
         }
-        return repository
-                .save(
-                        Room.builder()
-                                .quiz(selectedQuiz.get())
-                                .roomPwd(roomDTO.getRoomPwd())
-                                .codeShare(roomDTO.getCodeShare())
-                                .roomTitle(roomDTO.getRoomTitle())
-                                .roomDt(roomDTO.getRoomDt())
-                                .roomStatus(1)
-                                .build())
-                .getRoomNo();
+        Room insertedRoom;
+        if (roomDTO.getRoomTitle() != null) {
+            insertedRoom =
+                    Room.builder()
+                            .quiz(selectedQuiz.get())
+                            .roomPwd(roomDTO.getRoomPwd())
+                            .codeShare(roomDTO.getCodeShare())
+                            .roomTitle(roomDTO.getRoomTitle())
+                            .roomDt(roomDTO.getRoomDt())
+                            .roomStatus(1)
+                            .build();
+        } else {
+            insertedRoom =
+                    Room.builder()
+                            .quiz(selectedQuiz.get())
+                            .roomPwd(roomDTO.getRoomPwd())
+                            .codeShare(roomDTO.getCodeShare())
+                            .roomTitle(SecurityUtil.getCurrentMemberName() + "의 방")
+                            .roomDt(roomDTO.getRoomDt())
+                            .roomStatus(1)
+                            .build();
+        }
+        return repository.save(insertedRoom).getRoomNo();
     }
 
     @Transactional
