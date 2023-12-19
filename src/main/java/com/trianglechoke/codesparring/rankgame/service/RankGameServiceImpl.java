@@ -6,6 +6,7 @@ import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Member;
 import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.rankgame.dao.RankGameRepository;
+import com.trianglechoke.codesparring.rankgame.dao.RankRoomRepository;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.entity.RankGame;
@@ -127,6 +128,8 @@ public class RankGameServiceImpl implements RankGameService {
         return dto;
     }
 
+    @Autowired private RankRoomRepository roomRepository;
+
     /* Update : 랭크게임 결과 업데이트 */
     public void modifyGameResult(RankGameDTO rankGameDTO) throws MyException {
         Integer gr = rankGameDTO.getGameResult();
@@ -142,6 +145,8 @@ public class RankGameServiceImpl implements RankGameService {
             modifyCnt(rankGameEntity.getMember1().getMemberNo(), 0);
             modifyCnt(rankGameEntity.getMember2().getMemberNo(), 0);
         } else calculateRankPoint(rankGameDTO);
+
+        roomRepository.deleteById(rankGameEntity.getRankNo());
     }
 
     @Autowired private MemberRepository memberRepository;

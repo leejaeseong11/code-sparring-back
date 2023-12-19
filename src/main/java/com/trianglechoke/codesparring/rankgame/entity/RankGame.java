@@ -46,19 +46,9 @@ public class RankGame {
     @JoinColumn(name = "member2_no")
     private Member member2;
 
-    // 생성일
-    @Column(name = "regdate")
-    @ColumnDefault("SYSDATE")
-    private Date regdate;
-
-    // 티어
-    @Column(name = "tier")
-    private String tier;
-
-    // 준비 수
-    @Column(name = "ready_cnt")
-    @ColumnDefault("0")
-    private Integer readyCnt;
+    // 방 번호
+    @Column(name="room_no")
+    private Long roomNo;
 
     // 문제 번호
     @Column(name = "quiz_no")
@@ -71,10 +61,6 @@ public class RankGame {
     // member2 참여
     public void addMember2(Member m2) {
         this.member2 = m2;
-    }
-
-    public void ready() {
-        this.readyCnt++;
     }
 
     // 게임 문제 업데이트 메소드
