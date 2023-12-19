@@ -4,6 +4,8 @@ import static com.trianglechoke.codesparring.exception.ErrorCode.SESSION_ERROR;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
+import com.trianglechoke.codesparring.rankgame.service.RankGameService;
 import com.trianglechoke.codesparring.room.dto.RoomDTO;
 import com.trianglechoke.codesparring.room.service.RoomService;
 import com.trianglechoke.codesparring.websocket.domain.Message;
@@ -24,9 +26,12 @@ import java.util.*;
 public class WebSocketHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper;
     private final RoomService roomService;
+    private final RankGameService rankGameService;
     private final Map<Long, Set<WebSocketSession>> roomSessionMap = new HashMap<>();
     private final Map<Long, WebSocketSession> memberSessionMap = new HashMap<>();
     private final Map<Long, String> memberTierMap = new HashMap<>();
+
+    private final Map<Long, Set<WebSocketSession>> codeSessionMap = new HashMap<>();
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message)
@@ -47,6 +52,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
         MessageType[] rankMessageTypes =
                 new MessageType[] {
                     MessageType.RANK_ENTER, MessageType.RANK_MATCHING, MessageType.RANK_QUIT,
+                };
+        MessageType[] codeMessageTypes =
+                new MessageType[] {
+                    MessageType.CODE_ENTER, MessageType.CODE_STATUS, MessageType.CODE_QUIT,
                 };
 
         if (Arrays.asList(roomMessageTypes).contains(readMessageType)) {
@@ -97,6 +106,30 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 }
             } else if (readMessageType.equals(MessageType.RANK_QUIT)) {
 
+            }
+        } else if (Arrays.asList(codeMessageTypes).contains(readMessageType)) {
+            Long codeRoomNo = readMessage.getCodeRoomNo();
+            if (!codeSessionMap.containsKey(codeRoomNo)) {
+                codeSessionMap.put(codeRoomNo, new HashSet<>());
+            }
+            Set<WebSocketSession> codeSessions = codeSessionMap.get(codeRoomNo);
+            RankGameDTO rank = rankGameService.findByRankNo(codeRoomNo);
+
+            if (readMessageType.equals(MessageType.CODE_ENTER)) {
+                codeSessions.add(session);
+                // todo - set user nickname from member token (security util)
+                sendToEachSocket(
+                        codeSessions, new TextMessage(readMessage.getCodeSender() + "님이 입장했습니다."));
+            } else if (readMessageType.equals(MessageType.CODE_STATUS)) {
+                sendToEachSocket(
+                        codeSessions,
+                        new TextMessage(
+                                readMessage.getCodeSender() + ": " + readMessage.getCodeStatus()));
+            } else if (readMessageType.equals(MessageType.CODE_QUIT)) {
+                codeSessions.remove(session);
+                // todo - set user nickname from member token (security util)
+                sendToEachSocket(
+                        codeSessions, new TextMessage(readMessage.getSender() + "님이 퇴장했습니다."));
             }
         }
     }

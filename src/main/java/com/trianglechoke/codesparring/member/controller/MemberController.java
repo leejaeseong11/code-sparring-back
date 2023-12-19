@@ -59,4 +59,9 @@ public class MemberController {
     public ResponseEntity<?> rankedMember() {
         return ResponseEntity.ok(memberServiceImpl.rankedMember());
     }
+
+    @GetMapping("/memberNo")
+    public String myMemberNo() {
+        return String.valueOf(SecurityUtil.getCurrentMemberNo());
+    }
 }

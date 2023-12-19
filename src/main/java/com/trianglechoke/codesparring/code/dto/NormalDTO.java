@@ -7,6 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class NormalDTO {
-    private Long memberNo;
+    //    private Long memberNo;
     private Long quizNo;
 }
