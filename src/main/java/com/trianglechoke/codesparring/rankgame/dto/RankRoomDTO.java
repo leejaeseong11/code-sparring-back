@@ -18,4 +18,5 @@ public class RankRoomDTO {
     private String tier;
     private Integer readyCnt;
     private Long quizNo;
+    private Long rankNo;
 }

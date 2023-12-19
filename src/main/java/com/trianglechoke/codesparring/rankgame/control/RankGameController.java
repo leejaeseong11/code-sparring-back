@@ -21,7 +21,7 @@ public class RankGameController {
     @Autowired private RankGameServiceImpl service;
 
     /* 회원의 랭크 게임 전적 목록 조회하기 */
-    @GetMapping("/{currentPage}")
+    @GetMapping("/page/{currentPage}")
     public PageGroup<MyRankDTO> list(@PathVariable Integer currentPage) {
         try {
             Long memberNo= SecurityUtil.getCurrentMemberNo();

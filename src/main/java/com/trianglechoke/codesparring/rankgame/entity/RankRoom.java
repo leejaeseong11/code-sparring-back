@@ -59,6 +59,9 @@ public class RankRoom {
     @Column(name = "quiz_no")
     private Long quizNo;
 
+    @Column(name="rank_no")
+    private Long rankNo;
+
     public void addMember2(Long member2No) {
         this.member2No=member2No;
     }
@@ -69,5 +72,9 @@ public class RankRoom {
 
     public void modifyGameQuiz(Long quizNo) {
         this.quizNo=quizNo;
+    }
+
+    public void addRankNo(Long rankNo) {
+        this.rankNo=rankNo;
     }
 }

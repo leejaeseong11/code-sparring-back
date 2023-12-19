@@ -41,6 +41,7 @@ public class RankRoomServiceImpl implements RankRoomService {
                         .member2No(rankRoom.getMember2No())
                         .readyCnt(rankRoom.getReadyCnt())
                         .quizNo(rankRoom.getQuizNo())
+                        .rankNo(rankRoom.getRankNo())
                         .build();
         return rankRoomDTO;
     }
@@ -90,7 +91,7 @@ public class RankRoomServiceImpl implements RankRoomService {
         String tier = entity.getMember1().getMemberTier();
         Long quizNo = matchingRandomQuiz(tier);
         entity.modifyGameQuiz(quizNo);
-        repository.save(entity);
+
         Optional<Member> optMember = memberRepository.findById(entity.getMember2No());
         Member member2 = optMember.get();
 
@@ -99,6 +100,11 @@ public class RankRoomServiceImpl implements RankRoomService {
                 .member2(member2)
                 .quizNo(quizNo).roomNo(roomNo).build();
         gameRepository.save(gameEntity);
+
+        entity.addRankNo(gameEntity.getRankNo());
+        repository.save(entity);
+
+        log.error("rn: {}", entity.getRankNo());
     }
 
     /* DELETE */
