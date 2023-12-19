@@ -177,7 +177,6 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void removeRoomByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
-        System.out.println("???????roomNo" + roomNo);
         if (room.isPresent()) {
             repository.deleteById(roomNo);
         } else {

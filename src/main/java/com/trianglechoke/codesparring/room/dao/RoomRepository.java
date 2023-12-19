@@ -29,4 +29,7 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             value = "UPDATE room\n" + "SET room_status = 0\n" + "WHERE room_no = :roomNo",
             nativeQuery = true)
     void updateRoom(@Param("roomNo") Long roomNo);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    void deleteById(Long id);
 }
