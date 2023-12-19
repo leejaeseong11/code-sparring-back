@@ -32,10 +32,4 @@ public class MyCodeController {
     }
 
 
-    @GetMapping("/memberNo")
-    public String myMemberNo(){
-        System.out.println("-------------" + SecurityUtil.getCurrentMemberNo());
-        return String.valueOf(SecurityUtil.getCurrentMemberNo());
-
-    }
 }
