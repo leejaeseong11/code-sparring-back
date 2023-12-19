@@ -34,8 +34,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     public void signup(MemberDTO memberDTO) {
-        checkDuplicateId(memberDTO.getMemberId());
-        checkDuplicateName(memberDTO.getMemberName());
+        if (checkDuplicateId(memberDTO.getMemberId())) {
+            throw new MyException(DUPLICATE_ID);
+        }
+        if (checkDuplicateName(memberDTO.getMemberName())) {
+            throw new MyException(DUPLICATE_NAME);
+        }
         Member member = memberDTO.toMember(passwordEncoder);
         memberRepository.save(member);
     }
@@ -45,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<Member> existingMember = memberRepository.findByMemberId(memberId);
         // 이미 존재하면서 상태가 활성화된 경우에만 중복으로 처리
         if (existingMember.isPresent() && existingMember.get().getMemberStatus() == 1) {
-            throw new MyException(DUPLICATE_ID);
+            return true;
         }
         return false; // 중복된 아이디 아님
     }
@@ -55,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<Member> existingMember = memberRepository.findByMemberName(memberName);
         // 이미 존재하면서 상태가 활성화된 경우에만 중복으로 처리
         if (existingMember.isPresent() && existingMember.get().getMemberStatus() == 1) {
-            throw new MyException(DUPLICATE_NAME);
+            return true;
         }
         return false; // 중복된 아이디 아님
     }

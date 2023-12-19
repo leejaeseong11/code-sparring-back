@@ -1,5 +1,8 @@
 package com.trianglechoke.codesparring.member.service;
 
+import static com.trianglechoke.codesparring.exception.ErrorCode.*;
+
+import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.dto.MemberDTO;
 import com.trianglechoke.codesparring.member.entity.Member;
@@ -20,9 +23,13 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthServiceImpl authServiceImpl;
 
     public MemberDTO findMemberInfoByMemberNo(Long memberNo) {
         Optional<Member> optionalMember = memberRepository.findById(memberNo);
+        if (optionalMember.isEmpty()) {
+            throw new MyException(MEMBER_NOT_FOUND);
+        }
         Member member = optionalMember.get();
         MemberDTO memberDTO =
                 MemberDTO.builder()
@@ -38,6 +45,7 @@ public class MemberServiceImpl implements MemberService {
                         .winCnt(member.getWinCnt())
                         .loseCnt(member.getLoseCnt())
                         .drawCnt(member.getDrawCnt())
+                        .authority(member.getAuthority())
                         .build();
         return memberDTO;
     }
@@ -45,6 +53,9 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void modifyMemberInfo(MemberDTO memberDTO) {
         Optional<Member> optionalMember = memberRepository.findById(memberDTO.getMemberNo());
+        if (optionalMember.isEmpty()) {
+            throw new MyException(MEMBER_NOT_FOUND);
+        }
         Member member = optionalMember.get();
 
         if (memberDTO.getMemberPwd() != null) {
@@ -53,6 +64,9 @@ public class MemberServiceImpl implements MemberService {
         }
 
         if (memberDTO.getMemberName() != null) {
+            if (authServiceImpl.checkDuplicateName(memberDTO.getMemberName())) {
+                throw new MyException(DUPLICATE_NAME);
+            }
             member.modifyMemberName(memberDTO.getMemberName());
         }
 
@@ -63,16 +77,19 @@ public class MemberServiceImpl implements MemberService {
         if (memberDTO.getMemberProfileImg() != null) {
             member.modifyMemberProfileImg(memberDTO.getMemberProfileImg());
         }
-
         memberRepository.save(member);
     }
 
     @Transactional
     public void deleteMember(MemberDTO memberDTO) {
         Optional<Member> optionalMember = memberRepository.findById(memberDTO.getMemberNo());
-        Member member = optionalMember.get();
-        member.removeMember(0);
-        memberRepository.save(member);
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+            member.removeMember(0);
+            memberRepository.save(member);
+        } else {
+            throw new MyException(FAIL_WITHDRAW);
+        }
     }
 
     public String findMemberPwd(Long memberNo, MemberDTO memberDTO) {
@@ -84,7 +101,9 @@ public class MemberServiceImpl implements MemberService {
     public List<MemberDTO> rankedMember() {
         List<MemberDTO> memberResponseDTOList = new ArrayList<>();
         List<Object[]> rankedList = memberRepository.findRankedMember();
-
+        if (rankedList.isEmpty()) {
+            throw new MyException(MEMBER_RANK_NOT_FOUND);
+        }
         for (Object[] objArr : rankedList) {
             MemberDTO dto =
                     MemberDTO.builder()

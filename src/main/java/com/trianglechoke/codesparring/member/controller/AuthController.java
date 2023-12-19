@@ -27,13 +27,13 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/chkDupId")
+    @GetMapping("/chkDupId")
     public ResponseEntity<Boolean> chkDupId(@RequestParam String memberId) {
         authServiceImpl.checkDuplicateId(memberId);
         return ResponseEntity.ok(authServiceImpl.checkDuplicateId(memberId));
     }
 
-    @PostMapping("/chkDupName")
+    @GetMapping("/chkDupName")
     public ResponseEntity<Boolean> chkDupName(@RequestParam String memberName) {
         authServiceImpl.checkDuplicateName(memberName);
         return ResponseEntity.ok(authServiceImpl.checkDuplicateName(memberName));
