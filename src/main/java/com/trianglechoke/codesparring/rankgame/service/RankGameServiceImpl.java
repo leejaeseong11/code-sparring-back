@@ -110,7 +110,7 @@ public class RankGameServiceImpl implements RankGameService {
             else if (tier.equals("GOLD")) nextPoint = 15000L;
 
             if (rankGameDTOList.size() == 0) {
-                MyRankDTO tmpDto=new MyRankDTO();
+                MyRankDTO tmpDto = new MyRankDTO();
                 rankGameDTOList.add(tmpDto);
             }
 
