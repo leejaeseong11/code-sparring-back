@@ -24,6 +24,6 @@ public interface ReportService {
     /** 신고 조치 내용 생성 */
     void modifyReportComment(Long reportNo, String reportComment);
 
-    /** 문제 신고 삭제*/
+    /** 문제 신고 삭제 */
     void removeReport(Long reportNo);
 }

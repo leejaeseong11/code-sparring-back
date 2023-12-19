@@ -17,9 +17,9 @@ public interface MemberService {
     /** 회원의 비밀번호 불러오기(검증용) */
     String findMemberPwd(Long memberNo, MemberDTO memberDTO);
 
-    /** 랭킹 5위 목록 조회*/
+    /** 랭킹 5위 목록 조회 */
     List<MemberDTO> rankedMember();
 
-    /** 회원 경험치 추가*/
+    /** 회원 경험치 추가 */
     void updateMemberExp(Long memberNo, int roomSize);
 }
