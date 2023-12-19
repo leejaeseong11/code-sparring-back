@@ -28,6 +28,7 @@ public class MemberDTO {
     private Long drawCnt;
     private Long winCnt;
     private Integer rank;
+    private Authority authority;
 
     public Member toMember(PasswordEncoder passwordEncoder) {
         if (memberPwd == null) {

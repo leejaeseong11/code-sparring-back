@@ -26,7 +26,8 @@ public class RoomMemberServiceImpl implements RoomMemberService {
     @Autowired private RoomRepository roomRepository;
 
     @Transactional
-    private boolean isMemberInRoom(Long memberNo) {
+    @Override
+    public boolean isMemberInRoom(Long memberNo) {
         return repository.findByIdMemberMemberNo(memberNo).isPresent();
     }
 
@@ -86,6 +87,7 @@ public class RoomMemberServiceImpl implements RoomMemberService {
 
     @Override
     public Boolean isRoomMemberHost(Long memberNo) {
+        System.out.println(repository.isRoomMemberHost(memberNo));
         return repository.isRoomMemberHost(memberNo).isPresent();
     }
 }
