@@ -44,17 +44,17 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query(
             value =
                     "UPDATE Member m\n"
-                        + "SET m.member_exp = CASE\n"
-                        + "                   WHEN m.member_exp + :roomSize >= 100 THEN"
-                        + " m.member_exp + :roomSize - 100\n"
-                        + "                   ELSE m.member_exp + :roomSize\n"
-                        + "                END,\n"
-                        + "    m.member_level = CASE\n"
-                        + "                     WHEN m.member_exp + :roomSize >= 100 THEN"
-                        + " m.member_level + 1\n"
-                        + "                     ELSE m.member_level\n"
-                        + "                  END\n"
-                        + "WHERE m.member_no = :memberNo\n",
+                            + "SET m.member_exp = CASE\n"
+                            + "                   WHEN m.member_exp + :roomSize >= 100 THEN"
+                            + " m.member_exp + :roomSize - 100\n"
+                            + "                   ELSE m.member_exp + :roomSize\n"
+                            + "                END,\n"
+                            + "    m.member_level = CASE\n"
+                            + "                     WHEN m.member_exp + :roomSize >= 100 THEN"
+                            + " m.member_level + 1\n"
+                            + "                     ELSE m.member_level\n"
+                            + "                  END\n"
+                            + "WHERE m.member_no = :memberNo\n",
             nativeQuery = true)
     void updateMemberExp(@Param("memberNo") Long memberNo, @Param("roomSize") int roomSize);
 }
