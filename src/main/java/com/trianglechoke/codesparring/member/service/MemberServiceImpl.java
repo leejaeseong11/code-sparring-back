@@ -38,6 +38,7 @@ public class MemberServiceImpl implements MemberService {
                         .winCnt(member.getWinCnt())
                         .loseCnt(member.getLoseCnt())
                         .drawCnt(member.getDrawCnt())
+                        .authority(member.getAuthority())
                         .build();
         return memberDTO;
     }
