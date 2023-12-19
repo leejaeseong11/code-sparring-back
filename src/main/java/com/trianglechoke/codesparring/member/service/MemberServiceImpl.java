@@ -116,4 +116,15 @@ public class MemberServiceImpl implements MemberService {
         }
         return memberResponseDTOList;
     }
+
+    @Transactional
+    @Override
+    public void updateMemberExp(Long memberNo, int roomSize) {
+        Optional<Member> optionalMember = memberRepository.findById(memberNo);
+        if (optionalMember.isPresent()) {
+            memberRepository.updateMemberExp(memberNo, roomSize);
+        } else {
+            throw new MyException(MEMBER_NOT_FOUND);
+        }
+    }
 }

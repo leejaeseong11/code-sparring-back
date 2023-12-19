@@ -60,6 +60,13 @@ public class MemberController {
         return ResponseEntity.ok(memberServiceImpl.rankedMember());
     }
 
+    @PutMapping("/exp")
+    public ResponseEntity<?> updateMemberExp(
+            @RequestParam Long memberNo, @RequestParam int roomSize) {
+        memberServiceImpl.updateMemberExp(memberNo, roomSize);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @GetMapping("/memberNo")
     public String myMemberNo() {
         return String.valueOf(SecurityUtil.getCurrentMemberNo());
