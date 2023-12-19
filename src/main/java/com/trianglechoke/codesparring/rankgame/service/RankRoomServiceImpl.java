@@ -85,7 +85,7 @@ public class RankRoomServiceImpl implements RankRoomService {
     }
 
     /* UPDATE 문제 */
-    public void modifyGameQuiz(Long roomNo) throws MyException {
+    public Long modifyGameQuiz(Long roomNo) throws MyException {
         Optional<RankRoom> optRankRoom = repository.findById(roomNo);
         RankRoom entity = optRankRoom.get();
         String tier = entity.getMember1().getMemberTier();
@@ -100,11 +100,10 @@ public class RankRoomServiceImpl implements RankRoomService {
                 .member2(member2)
                 .quizNo(quizNo).roomNo(roomNo).build();
         gameRepository.save(gameEntity);
-
         entity.addRankNo(gameEntity.getRankNo());
         repository.save(entity);
 
-        log.error("rn: {}", entity.getRankNo());
+        return gameEntity.getRankNo();
     }
 
     /* DELETE */

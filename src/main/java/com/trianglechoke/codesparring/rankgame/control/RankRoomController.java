@@ -73,13 +73,11 @@ public class RankRoomController {
     }
 
     /* random quiz */
-    @PutMapping("/quiz/{roomNo}")
+    @GetMapping("/quiz/{roomNo}")
     @Transactional
-    public RankRoomDTO matchingQuiz(@PathVariable Long roomNo) {
+    public Long matchingQuiz(@PathVariable Long roomNo) {
         try {
-            service.modifyGameQuiz(roomNo);
-            RankRoomDTO dto= service.findByRoomNo(roomNo);
-            return dto;
+            return service.modifyGameQuiz(roomNo);
         } catch (MyException e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_MODIFIED);
         }

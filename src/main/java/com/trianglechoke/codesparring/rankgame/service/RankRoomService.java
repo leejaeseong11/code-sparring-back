@@ -56,7 +56,7 @@ public interface RankRoomService {
      * @param roomNo 랭크방 번호
      * @throws MyException
      */
-    public void modifyGameQuiz(Long roomNo) throws MyException;
+    public Long modifyGameQuiz(Long roomNo) throws MyException;
 
     /**
      * 랭크를 삭제한다
