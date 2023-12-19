@@ -76,7 +76,7 @@ public class RankGameServiceImpl implements RankGameService {
 
         for (Object[] objArr : list) {
             if (objArr[6] == null) continue;
-            if(objArr[8]==null) continue;
+            if (objArr[8] == null) continue;
             Long result = Long.valueOf(String.valueOf(objArr[8]));
             Long member1No = Long.valueOf(String.valueOf(objArr[2]));
             Long member2No = Long.valueOf(String.valueOf(objArr[5]));

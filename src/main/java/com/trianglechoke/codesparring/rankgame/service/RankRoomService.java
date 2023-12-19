@@ -1,7 +1,6 @@
 package com.trianglechoke.codesparring.rankgame.service;
 
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankRoomDTO;
 import com.trianglechoke.codesparring.rankgame.entity.RankRoom;
 

@@ -3,12 +3,12 @@ package com.trianglechoke.codesparring.rankgame.control;
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.util.SecurityUtil;
-import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
-
 import com.trianglechoke.codesparring.rankgame.dto.RankRoomDTO;
 import com.trianglechoke.codesparring.rankgame.entity.RankRoom;
 import com.trianglechoke.codesparring.rankgame.service.RankRoomServiceImpl;
+
 import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/rankroom")
 public class RankRoomController {
-    @Autowired
-    RankRoomServiceImpl service;
+    @Autowired RankRoomServiceImpl service;
 
     /* player match */
     @GetMapping("/match/{tier}")
@@ -51,7 +50,7 @@ public class RankRoomController {
     @GetMapping("/check/{roomNo}")
     public RankRoomDTO check(@PathVariable Long roomNo) {
         try {
-            Long memberNo=SecurityUtil.getCurrentMemberNo();
+            Long memberNo = SecurityUtil.getCurrentMemberNo();
             RankRoomDTO rankRoomDTO = service.findByRoomNo(roomNo);
             Integer cnt = rankRoomDTO.getReadyCnt();
             return rankRoomDTO;

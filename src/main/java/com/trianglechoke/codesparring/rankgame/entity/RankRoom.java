@@ -1,12 +1,14 @@
 package com.trianglechoke.codesparring.rankgame.entity;
 
 import com.trianglechoke.codesparring.member.entity.Member;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -59,11 +61,11 @@ public class RankRoom {
     @Column(name = "quiz_no")
     private Long quizNo;
 
-    @Column(name="rank_no")
+    @Column(name = "rank_no")
     private Long rankNo;
 
     public void addMember2(Long member2No) {
-        this.member2No=member2No;
+        this.member2No = member2No;
     }
 
     public void ready() {
@@ -71,10 +73,10 @@ public class RankRoom {
     }
 
     public void modifyGameQuiz(Long quizNo) {
-        this.quizNo=quizNo;
+        this.quizNo = quizNo;
     }
 
     public void addRankNo(Long rankNo) {
-        this.rankNo=rankNo;
+        this.rankNo = rankNo;
     }
 }

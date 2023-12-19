@@ -7,12 +7,12 @@ import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.rankgame.dao.RankGameRepository;
 import com.trianglechoke.codesparring.rankgame.dao.RankRoomRepository;
-import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankRoomDTO;
 import com.trianglechoke.codesparring.rankgame.entity.RankGame;
-
 import com.trianglechoke.codesparring.rankgame.entity.RankRoom;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -95,10 +95,13 @@ public class RankRoomServiceImpl implements RankRoomService {
         Optional<Member> optMember = memberRepository.findById(entity.getMember2No());
         Member member2 = optMember.get();
 
-        RankGame gameEntity=RankGame.builder()
-                .member1(entity.getMember1())
-                .member2(member2)
-                .quizNo(quizNo).roomNo(roomNo).build();
+        RankGame gameEntity =
+                RankGame.builder()
+                        .member1(entity.getMember1())
+                        .member2(member2)
+                        .quizNo(quizNo)
+                        .roomNo(roomNo)
+                        .build();
         gameRepository.save(gameEntity);
         entity.addRankNo(gameEntity.getRankNo());
         repository.save(entity);

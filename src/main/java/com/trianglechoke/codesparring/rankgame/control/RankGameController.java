@@ -24,7 +24,7 @@ public class RankGameController {
     @GetMapping("/page/{currentPage}")
     public PageGroup<MyRankDTO> list(@PathVariable Integer currentPage) {
         try {
-            Long memberNo= SecurityUtil.getCurrentMemberNo();
+            Long memberNo = SecurityUtil.getCurrentMemberNo();
             PageGroup<MyRankDTO> list = service.findAllByMemberNo(memberNo, currentPage);
             if (list.getList().size() == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
             else return list;

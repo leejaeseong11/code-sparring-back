@@ -10,10 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-
-import java.util.Date;
 
 @Getter
 @NoArgsConstructor
@@ -47,7 +44,7 @@ public class RankGame {
     private Member member2;
 
     // 방 번호
-    @Column(name="room_no")
+    @Column(name = "room_no")
     private Long roomNo;
 
     // 문제 번호
