@@ -24,7 +24,6 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
             @Param("roomNo") Long roomNo, Pageable pageable);
 
     @Modifying
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query(
             value = "UPDATE room\n" + "SET room_status = 0\n" + "WHERE room_no = :roomNo",
             nativeQuery = true)

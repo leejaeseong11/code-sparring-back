@@ -176,8 +176,16 @@ public class CodeSubmissionController {
         String expectedOutput = " " + output; // 예상 출력값
         String result = "";
         // -------------------------------컴파일 시작-------------------------------
-        String cmd = "cmd.exe";
-        String arg = "/c";
+        String osName = System.getProperty("os.name").toLowerCase();
+        String cmd;
+        String arg;
+        if (osName.contains("win")) {
+            cmd = "cmd.exe";
+            arg = "/c";
+        } else {
+            cmd = "sh";
+            arg = "-c";
+        }
         ProcessBuilder pb =
                 new ProcessBuilder(cmd, arg, "javac " + f.getAbsolutePath() + " -encoding UTF8");
 
@@ -215,8 +223,6 @@ public class CodeSubmissionController {
             fileName = fileName.substring(0, lastDotIndex);
         }
 
-        cmd = "cmd.exe";
-        arg = "/c";
         pb = new ProcessBuilder(cmd, arg, "java -cp " + filePATH + " " + fileName);
 
         try {
