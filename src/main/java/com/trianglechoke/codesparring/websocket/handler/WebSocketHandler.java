@@ -4,7 +4,6 @@ import static com.trianglechoke.codesparring.exception.ErrorCode.SESSION_ERROR;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.service.RankGameService;
 import com.trianglechoke.codesparring.room.service.RoomService;
 import com.trianglechoke.codesparring.websocket.domain.Message;
@@ -81,7 +80,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 codeSessionMap.put(codeRoomNo, new HashSet<>());
             }
             Set<WebSocketSession> codeSessions = codeSessionMap.get(codeRoomNo);
-            RankGameDTO rank = rankGameService.findByRankNo(codeRoomNo);
 
             if (readMessageType.equals(MessageType.CODE_ENTER)) {
                 codeSessions.add(session);
