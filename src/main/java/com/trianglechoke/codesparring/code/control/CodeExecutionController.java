@@ -141,7 +141,6 @@ public class CodeExecutionController {
             OutputStream os = p.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
 
-
             writer.write(input);
             writer.flush();
             writer.close();
