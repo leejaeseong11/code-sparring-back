@@ -81,7 +81,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 codeSessionMap.put(codeRoomNo, new HashSet<>());
             }
             Set<WebSocketSession> codeSessions = codeSessionMap.get(codeRoomNo);
-            RankGameDTO rank = rankGameService.findByRankNo(codeRoomNo);
 
             if (readMessageType.equals(MessageType.CODE_ENTER)) {
                 codeSessions.add(session);
