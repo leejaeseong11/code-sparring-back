@@ -4,7 +4,6 @@ import static com.trianglechoke.codesparring.exception.ErrorCode.SESSION_ERROR;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.service.RankGameService;
 import com.trianglechoke.codesparring.room.service.RoomService;
 import com.trianglechoke.codesparring.websocket.domain.Message;
