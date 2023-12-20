@@ -80,8 +80,6 @@ public class RoomMemberServiceImpl implements RoomMemberService {
         Member selectedMember = findMember(memberNo);
         if (this.isMemberInRoom(selectedMember.getMemberNo())) {
             repository.deleteByIdMemberMemberNo(memberNo);
-        } else {
-            throw new MyException(MEMBER_NOT_IN_ROOM);
         }
     }
 

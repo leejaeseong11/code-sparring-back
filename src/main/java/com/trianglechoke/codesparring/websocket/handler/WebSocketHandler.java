@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
 import com.trianglechoke.codesparring.rankgame.service.RankGameService;
-import com.trianglechoke.codesparring.room.dto.RoomDTO;
 import com.trianglechoke.codesparring.room.service.RoomService;
 import com.trianglechoke.codesparring.websocket.domain.Message;
 import com.trianglechoke.codesparring.websocket.domain.Message.MessageType;
@@ -48,11 +47,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
                     MessageType.ROOM_OUT
                 };
 
-        // rank payload type
-        MessageType[] rankMessageTypes =
-                new MessageType[] {
-                    MessageType.RANK_ENTER, MessageType.RANK_MATCHING, MessageType.RANK_QUIT,
-                };
         MessageType[] codeMessageTypes =
                 new MessageType[] {
                     MessageType.CODE_ENTER, MessageType.CODE_STATUS, MessageType.CODE_QUIT,
@@ -64,7 +58,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 roomSessionMap.put(roomNo, new HashSet<>());
             }
             Set<WebSocketSession> roomSessions = roomSessionMap.get(roomNo);
-            RoomDTO room = roomService.findRoomByRoomNo(roomNo);
 
             if (readMessageType.equals(MessageType.ROOM_ENTER)) {
                 roomSessions.add(session);
@@ -82,31 +75,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 sendToEachSocket(
                         roomSessions, new TextMessage(readMessage.getSender() + "님이 강제 퇴장되었습니다."));
             }
-        } else if (Arrays.asList(rankMessageTypes).contains(readMessageType)) {
-            Long memberNo = readMessage.getMemberNo();
-
-            if (readMessageType.equals(MessageType.RANK_ENTER)) {
-            } else if (readMessageType.equals(MessageType.RANK_MATCHING)) {
-                memberSessionMap.put(memberNo, session);
-                memberTierMap.put(memberNo, readMessage.getMemberTier());
-                Set<WebSocketSession> memberSessions = new HashSet<>();
-                for (Map.Entry<Long, String> elem : memberTierMap.entrySet()) {
-                    Long no = elem.getKey();
-                    String tier = elem.getValue();
-                    if (no.equals(memberNo)) continue;
-                    if (tier.equals(readMessage.getMemberTier())) {
-                        readMessage.setMessage(memberNo + "/" + no);
-                        memberSessions.add(memberSessionMap.get(no));
-                        memberSessions.add(memberSessionMap.get(memberNo));
-                        sendToEachSocket(
-                                memberSessions,
-                                new TextMessage(objectMapper.writeValueAsString(readMessage)));
-                        break;
-                    }
-                }
-            } else if (readMessageType.equals(MessageType.RANK_QUIT)) {
-
-            }
         } else if (Arrays.asList(codeMessageTypes).contains(readMessageType)) {
             Long codeRoomNo = readMessage.getCodeRoomNo();
             if (!codeSessionMap.containsKey(codeRoomNo)) {
@@ -117,7 +85,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
             if (readMessageType.equals(MessageType.CODE_ENTER)) {
                 codeSessions.add(session);
-                // todo - set user nickname from member token (security util)
                 sendToEachSocket(
                         codeSessions, new TextMessage(readMessage.getCodeSender() + "님이 입장했습니다."));
             } else if (readMessageType.equals(MessageType.CODE_STATUS)) {
@@ -127,7 +94,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
                                 readMessage.getCodeSender() + ": " + readMessage.getCodeStatus()));
             } else if (readMessageType.equals(MessageType.CODE_QUIT)) {
                 codeSessions.remove(session);
-                // todo - set user nickname from member token (security util)
                 sendToEachSocket(
                         codeSessions, new TextMessage(readMessage.getSender() + "님이 퇴장했습니다."));
             }

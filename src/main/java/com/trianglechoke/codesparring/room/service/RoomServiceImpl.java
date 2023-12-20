@@ -179,8 +179,6 @@ public class RoomServiceImpl implements RoomService {
         Optional<Room> room = repository.findById(roomNo);
         if (room.isPresent()) {
             repository.deleteById(roomNo);
-        } else {
-            throw new MyException(ROOM_NOT_FOUND);
         }
     }
 }

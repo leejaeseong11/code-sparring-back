@@ -206,12 +206,4 @@ public class RoomServiceTest {
 
         verify(repository, times(1)).deleteById(1L);
     }
-
-    @Test
-    @DisplayName("대기방 삭제 - 삭제할 방이 없을 경우")
-    void deleteRoomException() {
-        when(repository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> service.removeRoomByRoomNo(1L)).isInstanceOf(MyException.class);
-    }
 }
