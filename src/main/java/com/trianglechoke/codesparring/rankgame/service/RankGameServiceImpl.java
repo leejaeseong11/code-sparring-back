@@ -57,7 +57,7 @@ public class RankGameServiceImpl implements RankGameService {
         cnt += repository.count(example2);
         List<MyRankDTO> rankGameDTOList = new ArrayList<>();
 
-        if(cnt==0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
+        if (cnt == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
 
         List<Object[]> list = repository.findListByMemberNo(memberNo, start, end);
         String tier = "";
