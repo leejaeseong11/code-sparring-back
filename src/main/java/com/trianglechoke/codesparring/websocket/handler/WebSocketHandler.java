@@ -4,7 +4,8 @@ import static com.trianglechoke.codesparring.exception.ErrorCode.SESSION_ERROR;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trianglechoke.codesparring.exception.MyException;
-import com.trianglechoke.codesparring.room.dto.RoomDTO;
+import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
+import com.trianglechoke.codesparring.rankgame.service.RankGameService;
 import com.trianglechoke.codesparring.room.service.RoomService;
 import com.trianglechoke.codesparring.websocket.domain.Message;
 import com.trianglechoke.codesparring.websocket.domain.Message.MessageType;
@@ -24,9 +25,12 @@ import java.util.*;
 public class WebSocketHandler extends TextWebSocketHandler {
     private final ObjectMapper objectMapper;
     private final RoomService roomService;
+    private final RankGameService rankGameService;
     private final Map<Long, Set<WebSocketSession>> roomSessionMap = new HashMap<>();
     private final Map<Long, WebSocketSession> memberSessionMap = new HashMap<>();
     private final Map<Long, String> memberTierMap = new HashMap<>();
+
+    private final Map<Long, Set<WebSocketSession>> codeSessionMap = new HashMap<>();
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message)
@@ -34,17 +38,18 @@ public class WebSocketHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         Message readMessage = objectMapper.readValue(payload, Message.class);
         MessageType readMessageType = readMessage.getType();
-
         // room payload type
         MessageType[] roomMessageTypes =
                 new MessageType[] {
-                    MessageType.ROOM_ENTER, MessageType.ROOM_TALK, MessageType.ROOM_QUIT,
+                    MessageType.ROOM_ENTER,
+                    MessageType.ROOM_TALK,
+                    MessageType.ROOM_QUIT,
+                    MessageType.ROOM_OUT
                 };
 
-        // rank payload type
-        MessageType[] rankMessageTypes =
+        MessageType[] codeMessageTypes =
                 new MessageType[] {
-                    MessageType.RANK_ENTER, MessageType.RANK_MATCHING, MessageType.RANK_QUIT,
+                    MessageType.CODE_ENTER, MessageType.CODE_STATUS, MessageType.CODE_QUIT,
                 };
 
         if (Arrays.asList(roomMessageTypes).contains(readMessageType)) {
@@ -53,11 +58,9 @@ public class WebSocketHandler extends TextWebSocketHandler {
                 roomSessionMap.put(roomNo, new HashSet<>());
             }
             Set<WebSocketSession> roomSessions = roomSessionMap.get(roomNo);
-            RoomDTO room = roomService.findRoomByRoomNo(roomNo);
 
             if (readMessageType.equals(MessageType.ROOM_ENTER)) {
                 roomSessions.add(session);
-                // todo - set user nickname from member token (security util)
                 sendToEachSocket(
                         roomSessions, new TextMessage(readMessage.getSender() + "님이 입장했습니다."));
             } else if (readMessageType.equals(MessageType.ROOM_TALK)) {
@@ -66,38 +69,33 @@ public class WebSocketHandler extends TextWebSocketHandler {
                         new TextMessage(readMessage.getSender() + ": " + readMessage.getMessage()));
             } else if (readMessageType.equals(MessageType.ROOM_QUIT)) {
                 roomSessions.remove(session);
-                // todo - set user nickname from member token (security util)
                 sendToEachSocket(
                         roomSessions, new TextMessage(readMessage.getSender() + "님이 퇴장했습니다."));
+            } else if (readMessageType.equals(MessageType.ROOM_OUT)) {
+                sendToEachSocket(
+                        roomSessions, new TextMessage(readMessage.getSender() + "님이 강제 퇴장되었습니다."));
             }
-        } else if (Arrays.asList(rankMessageTypes).contains(readMessageType)) {
-            System.out.println(readMessageType);
-            Long memberNo = readMessage.getMemberNo();
+        } else if (Arrays.asList(codeMessageTypes).contains(readMessageType)) {
+            Long codeRoomNo = readMessage.getCodeRoomNo();
+            if (!codeSessionMap.containsKey(codeRoomNo)) {
+                codeSessionMap.put(codeRoomNo, new HashSet<>());
+            }
+            Set<WebSocketSession> codeSessions = codeSessionMap.get(codeRoomNo);
+            RankGameDTO rank = rankGameService.findByRankNo(codeRoomNo);
 
-            if (readMessageType.equals(MessageType.RANK_ENTER)) {
-            } else if (readMessageType.equals(MessageType.RANK_MATCHING)) {
-                memberSessionMap.put(memberNo, session);
-                memberTierMap.put(memberNo, readMessage.getMemberTier());
-                Set<WebSocketSession> memberSessions = new HashSet<>();
-                for (Map.Entry<Long, String> elem : memberTierMap.entrySet()) {
-                    Long no = elem.getKey();
-                    String tier = elem.getValue();
-                    System.out.println(memberTierMap.entrySet());
-                    if (no.equals(memberNo)) continue;
-                    System.out.println(no + tier);
-                    if (tier.equals(readMessage.getMemberTier())) {
-                        readMessage.setMessage(memberNo + "/" + no);
-                        memberSessions.add(memberSessionMap.get(no));
-                        memberSessions.add(memberSessionMap.get(memberNo));
-                        System.out.println("matching success");
-                        sendToEachSocket(
-                                memberSessions,
-                                new TextMessage(objectMapper.writeValueAsString(readMessage)));
-                        break;
-                    }
-                }
-            } else if (readMessageType.equals(MessageType.RANK_QUIT)) {
-
+            if (readMessageType.equals(MessageType.CODE_ENTER)) {
+                codeSessions.add(session);
+                sendToEachSocket(
+                        codeSessions, new TextMessage(readMessage.getCodeSender() + "님이 입장했습니다."));
+            } else if (readMessageType.equals(MessageType.CODE_STATUS)) {
+                sendToEachSocket(
+                        codeSessions,
+                        new TextMessage(
+                                readMessage.getCodeSender() + ": " + readMessage.getCodeStatus()));
+            } else if (readMessageType.equals(MessageType.CODE_QUIT)) {
+                codeSessions.remove(session);
+                sendToEachSocket(
+                        codeSessions, new TextMessage(readMessage.getSender() + "님이 퇴장했습니다."));
             }
         }
     }

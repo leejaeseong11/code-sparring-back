@@ -7,16 +7,17 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
-
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
 
@@ -30,14 +31,34 @@ public class JwtFilter extends OncePerRequestFilter {
             throws IOException, ServletException {
         // 1. Request Header 에서 토큰을 꺼냄
         String jwt = resolveToken(request);
+        System.out.println("1---------------------------------------------------jwtCheck:::" + jwt);
 
-        // 2. validateToken 으로 토큰 유효성 검사
-        // 정상 토큰이면 해당 토큰으로 Authentication 을 가져와서 SecurityContext 에 저장
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (!request.getRequestURI().contains("/auth/")) {
+            // 2. validateToken 으로 토큰 유효성 검사
+            // 정상 토큰이면 해당 토큰으로 Authentication 을 가져와서 SecurityContext 에 저장
+            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+                System.out.println(
+                        "2---------------------------------------------------jwtCheck:::" + jwt);
+                Authentication authentication = tokenProvider.getAuthentication(jwt);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                System.out.println(
+                        "3.authentication------------------------------------------"
+                                + authentication);
+            } else {
+                // 로그인이 아니면
+                System.out.println(request.getRequestURI());
+                System.out.println("함수 들어옴");
+                try {
+                    tokenProvider.validateTokenError(jwt);
+                } catch (Exception e) {
+                    System.out.println("Exception 들어옴");
+                    response.setContentType("application/json");
+                    response.setCharacterEncoding("UTF-8");
+                    ResponseStatusException responseStatusException =
+                            new ResponseStatusException(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
+                }
+            }
         }
-
         filterChain.doFilter(request, response);
     }
 

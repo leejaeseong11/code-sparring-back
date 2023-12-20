@@ -34,6 +34,19 @@ public class RoomMemberServiceTest {
     @InjectMocks RoomMemberServiceImpl service;
 
     @Test
+    @DisplayName("방장 여부 확인")
+    void isRoomMemberHost() {
+        Member testMember = Member.builder().memberNo(1L).build();
+        RoomMember roomMember =
+                RoomMember.builder().id(new RoomMemberKey(1L, testMember)).hostStatus(0).build();
+        when(repository.isRoomMemberHost(any())).thenReturn(Optional.of(roomMember));
+
+        Boolean isHost = service.isRoomMemberHost(1L);
+
+        assertThat(isHost).isEqualTo(true);
+    }
+
+    @Test
     @DisplayName("방회원 추가")
     void addRoomMember() {
         Room testRoom = Room.builder().roomNo(1L).roomStatus(1).build();
@@ -165,15 +178,5 @@ public class RoomMemberServiceTest {
         service.removeMember(1L);
 
         verify(repository, times(1)).deleteByIdMemberMemberNo(1L);
-    }
-
-    @Test
-    @DisplayName("방회원 삭제 - 회원이 방에 없는 경우")
-    void removeMemberException() {
-        Member testMember = Member.builder().memberNo(1L).build();
-        when(memberRepository.findById(any())).thenReturn(Optional.of(testMember));
-        when(repository.findByIdMemberMemberNo(any())).thenReturn(Optional.<RoomMember>empty());
-
-        assertThatThrownBy(() -> service.removeMember(1L)).isInstanceOf(MyException.class);
     }
 }

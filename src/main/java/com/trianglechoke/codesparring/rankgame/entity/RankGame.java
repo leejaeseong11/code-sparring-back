@@ -41,8 +41,11 @@ public class RankGame {
     // [FK] 회원2 번호
     @ManyToOne
     @JoinColumn(name = "member2_no")
-    @NotNull
     private Member member2;
+
+    // 방 번호
+    @Column(name = "room_no")
+    private Long roomNo;
 
     // 문제 번호
     @Column(name = "quiz_no")
@@ -51,6 +54,11 @@ public class RankGame {
     // 랭크 게임 결과 (0은 draw, 1은 회원1 win, 2는 회원2 win)
     @Column(name = "game_result", columnDefinition = "NUMBER(1)")
     private Integer gameResult;
+
+    // member2 참여
+    public void addMember2(Member m2) {
+        this.member2 = m2;
+    }
 
     // 게임 문제 업데이트 메소드
     public void modifyGameQuiz(Long quizNo) {

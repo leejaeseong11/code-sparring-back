@@ -10,9 +10,14 @@ public class Message {
         ROOM_ENTER, // 방 입장
         ROOM_TALK, // 방 채팅
         ROOM_QUIT, // 방 퇴장
+        ROOM_OUT, // 강퇴
         RANK_ENTER,
         RANK_MATCHING,
-        RANK_QUIT
+        RANK_QUIT,
+
+        CODE_ENTER,
+        CODE_STATUS,
+        CODE_QUIT
     }
 
     /* 메시지 타입 */
@@ -28,7 +33,7 @@ public class Message {
     private String memberTier;
 
     /* 코드 공유 */
-    private Long codeRoomNo; // 방 번호
-    private String codeSender; // 코드 보낸 사람
-    private String code; // 코드
+    private Long codeRoomNo; // 코딩 방 번호
+    private String codeSender; // 보낸 사람
+    private String codeStatus; // 코드 실행/제출 상태
 }

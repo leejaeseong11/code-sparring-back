@@ -1,11 +1,13 @@
 package com.trianglechoke.codesparring.member.controller;
 
+import static com.trianglechoke.codesparring.exception.ErrorCode.MISMATCH_PASSWORD;
+
+import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.dto.MemberDTO;
 import com.trianglechoke.codesparring.member.service.MemberServiceImpl;
 import com.trianglechoke.codesparring.member.util.SecurityUtil;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -50,12 +51,24 @@ public class MemberController {
             memberServiceImpl.deleteMember(memberDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+            throw new MyException(MISMATCH_PASSWORD);
         }
     }
 
     @GetMapping("/ranking")
     public ResponseEntity<?> rankedMember() {
         return ResponseEntity.ok(memberServiceImpl.rankedMember());
+    }
+
+    @PutMapping("/exp")
+    public ResponseEntity<?> updateMemberExp(
+            @RequestParam Long memberNo, @RequestParam int roomSize) {
+        memberServiceImpl.updateMemberExp(memberNo, roomSize);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/memberNo")
+    public String myMemberNo() {
+        return String.valueOf(SecurityUtil.getCurrentMemberNo());
     }
 }

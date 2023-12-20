@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.*;
 public class RoomMemberController {
     @Autowired private RoomMemberService service;
 
+    @GetMapping("/{memberNo}")
+    public boolean findMember(@PathVariable Long memberNo) {
+        return service.isMemberInRoom(memberNo);
+    }
+
     @PostMapping
     public Long add(
             @RequestParam(name = "roomPwd", required = false) String roomPwd,
@@ -21,5 +26,10 @@ public class RoomMemberController {
     @DeleteMapping("/{memberNo}")
     public void remove(@PathVariable Long memberNo) {
         service.removeMember(memberNo);
+    }
+
+    @GetMapping("/isHost/{memberNo}")
+    public Boolean isHost(@PathVariable Long memberNo) {
+        return service.isRoomMemberHost(memberNo);
     }
 }

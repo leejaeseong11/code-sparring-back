@@ -141,8 +141,7 @@ public class CodeExecutionController {
             OutputStream os = p.getOutputStream();
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os));
 
-            writer.write(
-                    "1\n" + "8 100\n" + "70 60 55 43 57 60 44 50\n" + "58 40 47 90 45 52 80 40");
+            writer.write(input);
             writer.flush();
             writer.close();
 

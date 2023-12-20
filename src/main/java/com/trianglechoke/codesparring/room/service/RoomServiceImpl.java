@@ -5,6 +5,7 @@ import static com.trianglechoke.codesparring.exception.ErrorCode.ROOM_NOT_FOUND;
 
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.room.dao.RoomRepository;
@@ -30,6 +31,7 @@ public class RoomServiceImpl implements RoomService {
     @Autowired private QuizRepository quizRepository;
 
     @Transactional
+    @Override
     public RoomDTO findRoomByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
 
@@ -73,6 +75,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
+    @Override
     public Page<RoomDTO> findRoomList(Long searchNo, Pageable pageable) {
         List<RoomDTO> selectedRoomList = new ArrayList<>();
         Page<Room> roomList;
@@ -128,25 +131,39 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
+    @Override
     public Long addRoom(RoomDTO roomDTO) {
         Optional<Quiz> selectedQuiz = quizRepository.findById(roomDTO.getQuizNo());
         if (selectedQuiz.isEmpty()) {
             throw new MyException(QUIZ_NOT_FOUND);
         }
-        return repository
-                .save(
-                        Room.builder()
-                                .quiz(selectedQuiz.get())
-                                .roomPwd(roomDTO.getRoomPwd())
-                                .codeShare(roomDTO.getCodeShare())
-                                .roomTitle(roomDTO.getRoomTitle())
-                                .roomDt(roomDTO.getRoomDt())
-                                .roomStatus(1)
-                                .build())
-                .getRoomNo();
+        Room insertedRoom;
+        if (roomDTO.getRoomTitle() != null) {
+            insertedRoom =
+                    Room.builder()
+                            .quiz(selectedQuiz.get())
+                            .roomPwd(roomDTO.getRoomPwd())
+                            .codeShare(roomDTO.getCodeShare())
+                            .roomTitle(roomDTO.getRoomTitle())
+                            .roomDt(roomDTO.getRoomDt())
+                            .roomStatus(1)
+                            .build();
+        } else {
+            insertedRoom =
+                    Room.builder()
+                            .quiz(selectedQuiz.get())
+                            .roomPwd(roomDTO.getRoomPwd())
+                            .codeShare(roomDTO.getCodeShare())
+                            .roomTitle(SecurityUtil.getCurrentMemberName() + "의 방")
+                            .roomDt(roomDTO.getRoomDt())
+                            .roomStatus(1)
+                            .build();
+        }
+        return repository.save(insertedRoom).getRoomNo();
     }
 
     @Transactional
+    @Override
     public void modifyRoomStatusByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
         if (room.isPresent()) {
@@ -157,13 +174,11 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Transactional
+    @Override
     public void removeRoomByRoomNo(Long roomNo) {
         Optional<Room> room = repository.findById(roomNo);
-
         if (room.isPresent()) {
             repository.deleteById(roomNo);
-        } else {
-            throw new MyException(ROOM_NOT_FOUND);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.trianglechoke.codesparring.quiz.control;
 
 import com.trianglechoke.codesparring.exception.*;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.quiz.dto.QuizDTO;
 import com.trianglechoke.codesparring.quiz.dto.TestcaseDTO;
 import com.trianglechoke.codesparring.quiz.service.QuizServiceImpl;
@@ -81,10 +82,12 @@ public class QuizController {
     }
 
     /* 문제 추가하기 */
-    @PostMapping()
+    @PostMapping("/write")
     @Transactional
     public ResponseEntity<?> writeQuiz(@RequestBody QuizDTO quizDTO) {
         try {
+            Long memberNo = SecurityUtil.getCurrentMemberNo();
+            quizDTO.setMemberNo(memberNo);
             Long quizNo = service.addQuiz(quizDTO);
             for (TestcaseDTO tcDTO : quizDTO.getTestcaseDTOList()) {
                 tcDTO.setQuizNo(quizNo);

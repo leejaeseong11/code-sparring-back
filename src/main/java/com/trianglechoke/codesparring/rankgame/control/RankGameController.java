@@ -2,6 +2,7 @@ package com.trianglechoke.codesparring.rankgame.control;
 
 import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.rankgame.dto.MyRankDTO;
 import com.trianglechoke.codesparring.rankgame.dto.RankGameDTO;
@@ -20,10 +21,10 @@ public class RankGameController {
     @Autowired private RankGameServiceImpl service;
 
     /* 회원의 랭크 게임 전적 목록 조회하기 */
-    @GetMapping("/{memberNo}/{currentPage}")
-    public PageGroup<MyRankDTO> list(
-            @PathVariable Long memberNo, @PathVariable Integer currentPage) {
+    @GetMapping("/page/{currentPage}")
+    public PageGroup<MyRankDTO> list(@PathVariable Integer currentPage) {
         try {
+            Long memberNo = SecurityUtil.getCurrentMemberNo();
             PageGroup<MyRankDTO> list = service.findAllByMemberNo(memberNo, currentPage);
             if (list.getList().size() == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
             else return list;
@@ -40,31 +41,6 @@ public class RankGameController {
             return dto;
         } catch (MyException e) {
             throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
-        }
-    }
-
-    /* 랭크 게임 정보 추가하기 */
-    @PostMapping()
-    @Transactional
-    public ResponseEntity<?> add(@RequestBody RankGameDTO rankGameDTO) {
-        try {
-            service.addRankGame(rankGameDTO);
-
-            String msg = "랭크 정보 추가 성공";
-            return new ResponseEntity<>(msg, HttpStatus.OK);
-        } catch (MyException e) {
-            throw new MyException(ErrorCode.RANK_NOT_SAVED);
-        }
-    }
-
-    /* 랭크 게임 문제 랜덤 매칭하기 */
-    @PutMapping("/quiz/{rankNo}")
-    public Long matchingQuiz(@PathVariable Long rankNo) {
-        try {
-            Long quizNo = service.modifyGameQuiz(rankNo);
-            return quizNo;
-        } catch (MyException e) {
-            throw new MyException(ErrorCode.RANK_GAME_NOT_MODIFIED);
         }
     }
 

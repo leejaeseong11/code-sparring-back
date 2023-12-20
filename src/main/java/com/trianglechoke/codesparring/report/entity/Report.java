@@ -65,7 +65,6 @@ public class Report {
     // 신고된 날짜
     @Column(name = "report_date", columnDefinition = "DATE")
     @ColumnDefault(value = "SYSDATE")
-    @NotNull
     private Date reportDate;
 
     // 신고 코멘트

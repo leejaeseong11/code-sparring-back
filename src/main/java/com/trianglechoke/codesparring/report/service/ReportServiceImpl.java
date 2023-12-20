@@ -1,6 +1,13 @@
 package com.trianglechoke.codesparring.report.service;
 
+import static com.trianglechoke.codesparring.exception.ErrorCode.REPORT_LIST_NOT_FOUND;
+import static com.trianglechoke.codesparring.exception.ErrorCode.REPORT_NOT_FOUND;
+
+import com.trianglechoke.codesparring.exception.MyException;
+import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
+import com.trianglechoke.codesparring.quiz.dao.QuizRepository;
 import com.trianglechoke.codesparring.quiz.entity.Quiz;
 import com.trianglechoke.codesparring.report.dao.ReportRepository;
 import com.trianglechoke.codesparring.report.dto.ReportDTO;
@@ -21,11 +28,17 @@ import java.util.Optional;
 @Service
 public class ReportServiceImpl implements ReportService {
     @Autowired private ReportRepository reportRepository;
+    @Autowired private MemberRepository memberRepository;
+    @Autowired private QuizRepository quizRepository;
 
     @Transactional
     public ReportDTO findReportByReportNo(Long reportNo) {
-        Optional<Report> OptReport = reportRepository.findById(reportNo);
-        Report reportEntity = OptReport.get();
+        Optional<Report> optReport = reportRepository.findById(reportNo);
+        if (optReport.isEmpty()) {
+            throw new MyException(REPORT_NOT_FOUND);
+        }
+        Report reportEntity = optReport.get();
+
         return ReportDTO.builder()
                 .reportNo(reportEntity.getReportNo())
                 .reportDate(reportEntity.getReportDate())
@@ -33,6 +46,7 @@ public class ReportServiceImpl implements ReportService {
                 .reportContent(reportEntity.getReportContent())
                 .quizNo(reportEntity.getQuiz().getQuizNo())
                 .memberName(reportEntity.getMember().getMemberName())
+                .reportComment(reportEntity.getReportComment())
                 .build();
     }
 
@@ -41,6 +55,9 @@ public class ReportServiceImpl implements ReportService {
         List<ReportDTO> selectedReportList = new ArrayList<>();
         Page<Report> reportList;
         reportList = reportRepository.findAll(pageable);
+        if (reportList.isEmpty()) {
+            throw new MyException(REPORT_LIST_NOT_FOUND);
+        }
         for (Report report : reportList) {
             selectedReportList.add(
                     ReportDTO.builder()
@@ -57,8 +74,12 @@ public class ReportServiceImpl implements ReportService {
 
     @Transactional
     public Long addReport(ReportDTO reportDTO) {
-        Member m = Member.builder().memberName(reportDTO.getMemberName()).build();
-        Quiz q = Quiz.builder().quizNo(reportDTO.getQuizNo()).build();
+        Optional<Member> currentMember =
+                memberRepository.findByMemberName(SecurityUtil.getCurrentMemberName());
+        Member m = currentMember.get();
+        Optional<Quiz> selectedQuiz = quizRepository.findById(reportDTO.getQuizNo());
+        Quiz q = selectedQuiz.get();
+
         return reportRepository
                 .save(
                         Report.builder()
@@ -71,16 +92,19 @@ public class ReportServiceImpl implements ReportService {
                 .getReportNo();
     }
 
-    @Override
-    public void modifyReportComment(Long reportNo, String comment) {
-        reportRepository.updateReportComment(reportNo, comment);
+    @Transactional
+    public void modifyReportComment(Long reportNo, String reportComment) {
+        reportRepository.updateReportComment(reportNo, reportComment);
     }
 
     @Transactional
-    public Page<ReportDTO> findByOrderByReportDateDesc(Pageable pageable) {
+    public Page<ReportDTO> findAllByOrderByReportDateDesc(Pageable pageable) {
         List<ReportDTO> selectedReportList = new ArrayList<>();
         Page<Report> reportList;
-        reportList = reportRepository.findByOrderByReportDateDesc(pageable);
+        reportList = reportRepository.findAllByOrderByReportDateDesc(pageable);
+        if (reportList.isEmpty()) {
+            throw new MyException(REPORT_LIST_NOT_FOUND);
+        }
         for (Report report : reportList) {
             selectedReportList.add(
                     ReportDTO.builder()
@@ -96,10 +120,13 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Transactional
-    public Page<ReportDTO> findByReportCommentIsNullOrderByReportDateDesc(Pageable pageable) {
+    public Page<ReportDTO> findAllByReportCommentIsNullOrderByReportDateDesc(Pageable pageable) {
         List<ReportDTO> selectedReportList = new ArrayList<>();
         Page<Report> reportList;
-        reportList = reportRepository.findByReportCommentIsNullOrderByReportDateDesc(pageable);
+        reportList = reportRepository.findAllByReportCommentIsNullOrderByReportDateDesc(pageable);
+        if (reportList.isEmpty()) {
+            throw new MyException(REPORT_LIST_NOT_FOUND);
+        }
         for (Report report : reportList) {
             selectedReportList.add(
                     ReportDTO.builder()
@@ -112,5 +139,10 @@ public class ReportServiceImpl implements ReportService {
                             .build());
         }
         return new PageImpl<>(selectedReportList, pageable, reportList.getTotalElements());
+    }
+
+    @Transactional
+    public void removeReport(Long reportNo) {
+        reportRepository.deleteById(reportNo);
     }
 }

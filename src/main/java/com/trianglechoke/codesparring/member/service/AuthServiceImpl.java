@@ -14,7 +14,6 @@ import com.trianglechoke.codesparring.member.jwt.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -35,8 +34,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Transactional
     public void signup(MemberDTO memberDTO) {
-        checkDuplicateId(memberDTO.getMemberId());
-        checkDuplicateName(memberDTO.getMemberName());
+        if (checkDuplicateId(memberDTO.getMemberId())) {
+            throw new MyException(DUPLICATE_ID);
+        }
+        if (checkDuplicateName(memberDTO.getMemberName())) {
+            throw new MyException(DUPLICATE_NAME);
+        }
         Member member = memberDTO.toMember(passwordEncoder);
         memberRepository.save(member);
     }
@@ -46,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<Member> existingMember = memberRepository.findByMemberId(memberId);
         // 이미 존재하면서 상태가 활성화된 경우에만 중복으로 처리
         if (existingMember.isPresent() && existingMember.get().getMemberStatus() == 1) {
-            throw new MyException(DUPLICATE_ID);
+            return true;
         }
         return false; // 중복된 아이디 아님
     }
@@ -56,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
         Optional<Member> existingMember = memberRepository.findByMemberName(memberName);
         // 이미 존재하면서 상태가 활성화된 경우에만 중복으로 처리
         if (existingMember.isPresent() && existingMember.get().getMemberStatus() == 1) {
-            throw new MyException(DUPLICATE_NAME);
+            return true;
         }
         return false; // 중복된 아이디 아님
     }
@@ -80,7 +83,9 @@ public class AuthServiceImpl implements AuthService {
                         .key(authentication.getName())
                         .value(tokenDTO.getRefreshToken())
                         .build();
-
+        System.out.println(
+                "--------------------------------authentication.getName()::::::"
+                        + authentication.getName());
         refreshTokenRepository.save(refreshToken);
         // 5. 토큰 발급
         return tokenDTO;
@@ -113,13 +118,9 @@ public class AuthServiceImpl implements AuthService {
         return tokenDto;
     }
 
-    public ResponseCookie putTokenInCookie(final TokenDTO tokenDTO) {
-        return ResponseCookie.from("refreshToken", tokenDTO.getRefreshToken())
-                .maxAge(tokenDTO.getAccessTokenExpiresIn())
-                .path("/")
-                .sameSite("None")
-                .secure(true)
-                .httpOnly(true)
-                .build();
+    public String findRefreshTokenByMemberNo(Long refreshTokenKey) {
+        Optional<RefreshToken> refreshToken =
+                refreshTokenRepository.findByKey(String.valueOf(refreshTokenKey));
+        return refreshToken.get().getValue();
     }
 }
