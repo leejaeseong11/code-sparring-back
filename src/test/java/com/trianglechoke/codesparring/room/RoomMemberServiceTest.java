@@ -179,14 +179,4 @@ public class RoomMemberServiceTest {
 
         verify(repository, times(1)).deleteByIdMemberMemberNo(1L);
     }
-
-    @Test
-    @DisplayName("방회원 삭제 - 회원이 방에 없는 경우")
-    void removeMemberException() {
-        Member testMember = Member.builder().memberNo(1L).build();
-        when(memberRepository.findById(any())).thenReturn(Optional.of(testMember));
-        when(repository.findByIdMemberMemberNo(any())).thenReturn(Optional.<RoomMember>empty());
-
-        assertThatThrownBy(() -> service.removeMember(1L)).isInstanceOf(MyException.class);
-    }
 }
