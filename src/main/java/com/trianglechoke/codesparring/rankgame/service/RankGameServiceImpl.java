@@ -57,15 +57,16 @@ public class RankGameServiceImpl implements RankGameService {
         cnt += repository.count(example2);
         List<MyRankDTO> rankGameDTOList = new ArrayList<>();
 
-        if (cnt != 0) {
+        if (cnt == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
 
-            List<Object[]> list = repository.findListByMemberNo(memberNo, start, end);
-            String tier = "";
-            Long point = 0L;
-            Long nextPoint = 0L;
-            String memberName = "";
-            Long win = 0L, lose = 0L, draw = 0L;
+        List<Object[]> list = repository.findListByMemberNo(memberNo, start, end);
+        String tier = "";
+        Long point = 0L;
+        Long nextPoint = 0L;
+        String memberName = "";
+        Long win = 0L, lose = 0L, draw = 0L;
 
+        if (list.size() != 0) {
             if (Long.valueOf(String.valueOf(list.get(0)[2])) == memberNo) {
                 tier = String.valueOf(list.get(0)[4]);
                 point = Long.valueOf(String.valueOf(list.get(0)[9]));
@@ -81,47 +82,48 @@ public class RankGameServiceImpl implements RankGameService {
                 lose = Long.valueOf(String.valueOf(list.get(0)[15]));
                 draw = Long.valueOf(String.valueOf(list.get(0)[16]));
             }
-
-            for (Object[] objArr : list) {
-                if (objArr[8] == null) continue;
-                Long result = Long.valueOf(String.valueOf(objArr[8]));
-                Long member1No = Long.valueOf(String.valueOf(objArr[2]));
-                Long member2No = Long.valueOf(String.valueOf(objArr[5]));
-                MyRankDTO dto =
-                        MyRankDTO.builder().rankNo(Long.valueOf(String.valueOf(objArr[1]))).build();
-                if (memberNo == member1No) {
-                    dto.setOpposingNo(member2No);
-                    dto.setOpposingName(String.valueOf(objArr[6]));
-                    if (result == 0) dto.setGameResult("DRAW");
-                    else if (result == 1) dto.setGameResult("WIN");
-                    else if (result == 2) dto.setGameResult("LOSE");
-                } else {
-                    dto.setOpposingNo(member1No);
-                    dto.setOpposingName(String.valueOf(objArr[3]));
-                    if (result == 0) dto.setGameResult("DRAW");
-                    else if (result == 1) dto.setGameResult("LOSE");
-                    else if (result == 2) dto.setGameResult("WIN");
-                }
-                rankGameDTOList.add(dto);
-            }
-
-            if (tier.equals("BRONZE")) nextPoint = 1000L;
-            else if (tier.equals("SILVER")) nextPoint = 5000L;
-            else if (tier.equals("GOLD")) nextPoint = 15000L;
-
-            if (rankGameDTOList.size() == 0) {
-                MyRankDTO tmpDto = new MyRankDTO();
-                rankGameDTOList.add(tmpDto);
-            }
-
-            rankGameDTOList.get(0).setMyTier(tier);
-            rankGameDTOList.get(0).setMyPoint(point);
-            rankGameDTOList.get(0).setNextPoint(nextPoint);
-            rankGameDTOList.get(0).setMemberName(memberName);
-            rankGameDTOList.get(0).setWin(win);
-            rankGameDTOList.get(0).setLose(lose);
-            rankGameDTOList.get(0).setDraw(draw);
         }
+
+        for (Object[] objArr : list) {
+            if (objArr[8] == null) continue;
+            Long result = Long.valueOf(String.valueOf(objArr[8]));
+            Long member1No = Long.valueOf(String.valueOf(objArr[2]));
+            Long member2No = Long.valueOf(String.valueOf(objArr[5]));
+            MyRankDTO dto =
+                    MyRankDTO.builder().rankNo(Long.valueOf(String.valueOf(objArr[1]))).build();
+            if (memberNo == member1No) {
+                dto.setOpposingNo(member2No);
+                dto.setOpposingName(String.valueOf(objArr[6]));
+                if (result == 0) dto.setGameResult("DRAW");
+                else if (result == 1) dto.setGameResult("WIN");
+                else if (result == 2) dto.setGameResult("LOSE");
+            } else {
+                dto.setOpposingNo(member1No);
+                dto.setOpposingName(String.valueOf(objArr[3]));
+                if (result == 0) dto.setGameResult("DRAW");
+                else if (result == 1) dto.setGameResult("LOSE");
+                else if (result == 2) dto.setGameResult("WIN");
+            }
+            rankGameDTOList.add(dto);
+        }
+
+        if (tier.equals("BRONZE")) nextPoint = 1000L;
+        else if (tier.equals("SILVER")) nextPoint = 5000L;
+        else if (tier.equals("GOLD")) nextPoint = 15000L;
+
+        if (rankGameDTOList.size() == 0) {
+            MyRankDTO tmpDto = new MyRankDTO();
+            rankGameDTOList.add(tmpDto);
+        }
+
+        rankGameDTOList.get(0).setMyTier(tier);
+        rankGameDTOList.get(0).setMyPoint(point);
+        rankGameDTOList.get(0).setNextPoint(nextPoint);
+        rankGameDTOList.get(0).setMemberName(memberName);
+        rankGameDTOList.get(0).setWin(win);
+        rankGameDTOList.get(0).setLose(lose);
+        rankGameDTOList.get(0).setDraw(draw);
+
         PageGroup<MyRankDTO> pg = new PageGroup<>(rankGameDTOList, currentPage, cnt);
         return pg;
     }
