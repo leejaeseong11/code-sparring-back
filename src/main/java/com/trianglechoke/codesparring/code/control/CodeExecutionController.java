@@ -81,7 +81,9 @@ public class CodeExecutionController {
 
         // 파일삭제
         Files.delete(Path.of(filePath + fileName + ".java"));
-        Files.delete(Path.of(filePath + fileName + ".class"));
+        if (Files.exists(Path.of(filePath + fileName + ".class"))) {
+            Files.delete(Path.of(filePath + fileName + ".class"));
+        }
 
         String msg = String.valueOf(responseResult);
         return new ResponseEntity<>(msg, HttpStatus.OK);
@@ -106,7 +108,6 @@ public class CodeExecutionController {
         }
         ProcessBuilder pb =
                 new ProcessBuilder(cmd, arg, "javac " + f.getAbsolutePath() + " -encoding UTF8");
-
         try {
             Process p = pb.start();
             int exitCode = p.waitFor();
@@ -120,6 +121,33 @@ public class CodeExecutionController {
                 String line = sc.nextLine();
                 System.out.println(line);
                 compileBuilder.append(line).append(System.getProperty("line.separator"));
+            }
+            if (exitCode == 1) {
+                System.out.println("???" + p.getErrorStream());
+                InputStream error = p.getErrorStream();
+                Scanner scError = new Scanner(error);
+                responseResult
+                        .append("테스트 ")
+                        .append(numberCount += 1)
+                        .append(": 실패!")
+                        .append(System.getProperty("line.separator"))
+                        .append("       예상 출력값:")
+                        .append(System.getProperty("line.separator"))
+                        .append("       " + expectedOutput)
+                        .append(System.getProperty("line.separator"))
+                        .append("\n       실행 도중 에러가 발생했습니다:")
+                        .append(System.getProperty("line.separator"));
+                while (scError.hasNextLine()) {
+                    String line = scError.nextLine();
+                    line = line.replace(filePATH + "Main.java", "에러 라인");
+                    System.out.println(line);
+                    responseResult.append(line).append(System.getProperty("line.separator"));
+                }
+                responseResult
+                        .append(System.getProperty("line.separator"))
+                        .append("--------------------------------------")
+                        .append(System.getProperty("line.separator"));
+                return;
             }
             // 컴파일 실패된 경우
             if (!compileBuilder.toString().isEmpty()) {
