@@ -8,7 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 
 import lombok.*;
 
@@ -41,21 +40,16 @@ public class Member {
     @Column(name = "member_id", columnDefinition = "VARCHAR2(15)")
     @NotNull
     @NotBlank(message = "ID를 입력하세요!")
-    @Pattern(regexp = "^[a-z]{1}[a-z0-9]{4,15}+$", message = "영문 숫자 조합으로 4자 이상, 15자 이하로 입력해주세요")
     private String memberId;
 
     // 회원 비밀번호
     @Column(name = "member_pwd", columnDefinition = "VARCHAR2(100)")
     @NotNull
     @NotBlank(message = "비밀번호를 입력하세요!")
-    @Pattern(
-            regexp = "^.*(?=^.{8,20}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$",
-            message = "비밀번호는 특수문자 포함 8자 이상, 20자 이하로 입력해주세요")
     private String memberPwd;
 
     // 회원 닉네임
     @Column(name = "member_name", columnDefinition = "VARCHAR2(24)")
-    @Pattern(regexp = "^[a-z]{1}[a-z0-9]{1,8}+$", message = "1~8자만 사용 가능합니다")
     @NotNull
     @NotBlank(message = "닉네임을 입력하세요!")
     private String memberName;
