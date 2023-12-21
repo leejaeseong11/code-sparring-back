@@ -8,8 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import jakarta.validation.constraints.Pattern;
+
 import lombok.*;
 
 import org.hibernate.annotations.DynamicInsert;
@@ -48,7 +48,9 @@ public class Member {
     @Column(name = "member_pwd", columnDefinition = "VARCHAR2(100)")
     @NotNull
     @NotBlank(message = "비밀번호를 입력하세요!")
-    @Pattern(regexp= "^.*(?=^.{8,20}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$", message = "비밀번호는 특수문자 포함 8자 이상, 20자 이하로 입력해주세요")
+    @Pattern(
+            regexp = "^.*(?=^.{8,20}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$",
+            message = "비밀번호는 특수문자 포함 8자 이상, 20자 이하로 입력해주세요")
     private String memberPwd;
 
     // 회원 닉네임
