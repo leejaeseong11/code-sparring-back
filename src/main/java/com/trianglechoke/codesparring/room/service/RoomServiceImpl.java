@@ -168,6 +168,7 @@ public class RoomServiceImpl implements RoomService {
         Optional<Room> room = repository.findById(roomNo);
         if (room.isPresent()) {
             repository.updateRoom(roomNo);
+            System.out.println(roomNo);
         } else {
             throw new MyException(ROOM_NOT_FOUND);
         }
