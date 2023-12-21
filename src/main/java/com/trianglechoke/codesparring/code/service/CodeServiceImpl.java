@@ -82,14 +82,14 @@ public class CodeServiceImpl implements CodeService {
         List<Object[]> list = codeRepository.findByMemberNo(memberNo);
         for (Object[] objArr : list) {
 
-            String str = String.valueOf(objArr[3]);
+            String str = String.valueOf(objArr[2]);
             String[] s = str.split("\\.");
 
             MemberCodeDTO dto =
                     MemberCodeDTO.builder()
                             .memberNo(memberNo)
-                            .quizNo((Long) objArr[1])
-                            .quizCorrect((Integer) objArr[2])
+                            .quizNo((Long) objArr[3])
+                            .quizCorrect((Integer) objArr[0])
                             .quizUrl((String) objArr[4])
                             .quizDt(s[0])
                             .build();
