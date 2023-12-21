@@ -95,7 +95,9 @@ public class CodeSubmissionController {
 
         // 파일삭제
         Files.delete(Path.of(filePath + fileName + ".java"));
-        Files.delete(Path.of(filePath + fileName + ".class"));
+        if (Files.exists(Path.of(filePath + fileName + ".class"))) {
+            Files.delete(Path.of(filePath + fileName + ".class"));
+        }
 
         Integer correct = 0;
         if (answerCount == list.size()) correct = 1;
