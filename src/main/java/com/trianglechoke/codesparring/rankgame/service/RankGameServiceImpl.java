@@ -4,6 +4,7 @@ import com.trianglechoke.codesparring.exception.ErrorCode;
 import com.trianglechoke.codesparring.exception.MyException;
 import com.trianglechoke.codesparring.member.dao.MemberRepository;
 import com.trianglechoke.codesparring.member.entity.Member;
+import com.trianglechoke.codesparring.member.util.SecurityUtil;
 import com.trianglechoke.codesparring.quiz.dto.PageGroup;
 import com.trianglechoke.codesparring.rankgame.dao.RankGameRepository;
 import com.trianglechoke.codesparring.rankgame.dao.RankRoomRepository;
@@ -57,7 +58,7 @@ public class RankGameServiceImpl implements RankGameService {
         cnt += repository.count(example2);
         List<MyRankDTO> rankGameDTOList = new ArrayList<>();
 
-        if (cnt == 0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
+        if(cnt==0) throw new MyException(ErrorCode.RANK_GAME_NOT_FOUND);
 
         List<Object[]> list = repository.findListByMemberNo(memberNo, start, end);
         String tier = "";
