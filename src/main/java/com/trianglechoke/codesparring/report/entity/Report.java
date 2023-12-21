@@ -58,7 +58,7 @@ public class Report {
     private Quiz quiz;
 
     // 신고 내용
-    @Column(name = "report_content", columnDefinition = "VARCHAR2(100)")
+    @Column(name = "report_content", columnDefinition = "VARCHAR2(10000)")
     @NotNull
     private String reportContent;
 
@@ -68,7 +68,7 @@ public class Report {
     private Date reportDate;
 
     // 신고 코멘트
-    @Column(name = "report_comment", columnDefinition = "VARCHAR2(100)")
+    @Column(name = "report_comment", columnDefinition = "VARCHAR2(1000)")
     private String reportComment;
 
     // 신고 종류 (아직 종류 어떻게 나눌지 미정)

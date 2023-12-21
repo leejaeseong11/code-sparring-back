@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -81,17 +80,18 @@ public class CodeServiceImpl implements CodeService {
 
         List<MemberCodeDTO> mcDTOlist = new ArrayList<>();
         List<Object[]> list = codeRepository.findByMemberNo(memberNo);
-        System.out.println(list);
         for (Object[] objArr : list) {
-            Timestamp timestamp = (Timestamp) objArr[4];
-            LocalDateTime quizDt = timestamp.toLocalDateTime();
+
+            String str = String.valueOf(objArr[3]);
+            String[] s = str.split("\\.");
+
             MemberCodeDTO dto =
                     MemberCodeDTO.builder()
                             .memberNo(memberNo)
-                            .quizNo((Long) objArr[2])
-                            .quizCorrect((Integer) objArr[0])
-                            .quizUrl((String) objArr[3])
-                            .quizDt(quizDt)
+                            .quizNo((Long) objArr[1])
+                            .quizCorrect((Integer) objArr[2])
+                            .quizUrl((String) objArr[4])
+                            .quizDt(s[0])
                             .build();
             mcDTOlist.add(dto);
         }
