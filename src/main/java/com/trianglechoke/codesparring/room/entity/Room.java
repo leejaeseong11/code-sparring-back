@@ -56,7 +56,7 @@ public class Room {
     private Integer codeShare;
 
     // 방 제목
-    @Column(name = "room_title", columnDefinition = "VARCHAR2(50)")
+    @Column(name = "room_title", columnDefinition = "VARCHAR2(100)")
     @NotNull
     private String roomTitle;
 
