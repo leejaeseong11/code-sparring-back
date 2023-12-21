@@ -1,6 +1,5 @@
 package com.trianglechoke.codesparring.membercode.dto;
 
-
 import lombok.*;
 
 @Getter
