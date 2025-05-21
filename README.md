@@ -1,5 +1,9 @@
 ## code-sparring-back
 
+### ERD
+![코드스파링](https://github.com/user-attachments/assets/0e7b8040-6f3e-45b0-8e66-1d1ceeb96e02)
+
+
 ### 연결 설정
 
 - resources/application.properties
